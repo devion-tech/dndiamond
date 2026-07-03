@@ -276,7 +276,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     <div key={cat.name} className="space-y-4">
                       <h4 className="font-serif text-[11px] lg:text-xs xl:text-base font-bold tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
                         <Link
-                          href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}`}
+                          href={`/category/${cat?.slug}`}
                           className="hover:text-neutral-500 transition-colors"
                         >
                           {getDisplayCategoryName(cat.name)}
@@ -288,7 +288,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                             cat.subcategories.slice(0, 5).map((sub) => (
                               <li key={sub.name}>
                                 <Link
-                                  href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&style=${encodeURIComponent(sub.name.toLowerCase())}${sub._id ? `&subcategory_id=${sub._id}` : ""}`}
+                                  href={`/category/${cat?.slug}/${sub?.slug}`}
                                   className="hover:text-neutral-955 transition-colors block py-0.5"
                                 >
                                   {sub.name}

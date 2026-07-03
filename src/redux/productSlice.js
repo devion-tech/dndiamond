@@ -42,7 +42,7 @@ export const fetchProducts = createAsyncThunk(
       throw new Error("Failed to fetch products");
     }
     const data = await response.json();
-    return data.data?.products || [];
+    return data.data || [];
   },
 );
 
@@ -89,6 +89,7 @@ const productSlice = createSlice({
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.items = [];
       })
       .addCase(fetchProductDetail.pending, (state) => {
         state.loading = true;

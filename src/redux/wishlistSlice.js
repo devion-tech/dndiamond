@@ -153,8 +153,10 @@ const wishlistSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(toggleWishlist.fulfilled, (state, action) => {
-        if (action.payload && Array.isArray(action.payload)) {
+        if (action.payload) {
+          console.log("action.payload :>> ", action.payload);
           state.items = action.payload;
+          state.total = action.payload?.data?.count || 0;
         }
       });
   },

@@ -72,7 +72,6 @@ export default function ProductCard({ item }) {
         setWishlisted(wishlisted);
       }
 
-      // Optional success message
       toast.success(response?.payload?.message);
     } catch (error) {
       setWishlisted(wishlisted);

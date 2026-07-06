@@ -195,12 +195,13 @@ export default function ProductDetail({ params }) {
     <Layout>
       <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 font-sans">
         {/* Back Button */}
-        <Link
-          href="/category"
+        <button
+          onClick={() => router.back()}
           className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 uppercase tracking-wider mb-8 transition-colors cursor-pointer"
         >
-          <FaArrowLeft size={10} /> Back to Catalog
-        </Link>
+          <FaArrowLeft size={10} />
+          Back to Catalog
+        </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column: Product Gallery */}

@@ -107,6 +107,8 @@ function CatalogContent() {
       return {
         id: p._id,
         title: p.name,
+        slug: p.slug,
+        is_wishlist: p.is_wishlist || false,
         category: resolveCategoryName(p.category_id, p.subcategory_id),
         colors: colors && colors.length > 0 ? colors[0].values : [],
         image:

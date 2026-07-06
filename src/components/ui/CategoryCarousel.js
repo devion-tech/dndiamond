@@ -89,9 +89,9 @@ export default function CategoryCarousel() {
         className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar pb-4 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-x-visible lg:pb-0"
       >
         {apiCategories.map((cat) => {
-          const dbCat = getDBCategory(cat.name);
+          const dbCat = cat?.slug;
           const img = cat?.image;
-          const path = `/category?category=${encodeURIComponent(dbCat)}`;
+          const path = `/category/${dbCat}`;
           const displayName = cat.name.toUpperCase();
 
           return (

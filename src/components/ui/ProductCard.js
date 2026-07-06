@@ -6,18 +6,20 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
 import { toggleWishlistApi } from "@/slices/wishlistApiSlice";
+import toast from "react-hot-toast";
 
 const colorMap = Object.fromEntries(
   colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
 );
 
 export default function ProductCard({ item }) {
+  console.log("item :>> ", item);
   const { token } = useStore();
-  const { isWishlisted, formatPrice } = useStore();
+  const { formatPrice } = useStore();
   const [isToggling, setIsToggling] = useState(false);
-  const [localWishlisted, setLocalWishlisted] = useState(isWishlisted(item.id));
-  const wishlisted = isWishlisted(item.id);
+  const [wishlisted, setWishlisted] = useState(item?.is_wishlist);
   const [hasError, setHasError] = useState(false);
+
   const colorList = item?.colors || [];
   const hasObjects = colorList.length > 0 && typeof colorList[0] === "object";
   const defaultVal = hasObjects ? colorList[0]?.value : colorList[0];
@@ -44,18 +46,27 @@ export default function ProductCard({ item }) {
   const handleWishlistClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+
     if (isToggling) return;
-    
+
     const newWishlistedState = !wishlisted;
-    setLocalWishlisted(newWishlistedState);
+
+    setWishlisted(newWishlistedState);
     setIsToggling(true);
     setHasError(false);
-    
+
     try {
-      await toggleWishlistApi({ product: item, token });
+      const response = await toggleWishlistApi({
+        product: item,
+      });
+
+      // Optional success message
+      toast.success(response.message);
     } catch (error) {
-      setLocalWishlisted(wishlisted);
+      setWishlisted(wishlisted);
       setHasError(true);
+
+      toast.error(error.message || "Failed to update wishlist.");
     } finally {
       setIsToggling(false);
     }
@@ -70,7 +81,7 @@ export default function ProductCard({ item }) {
         <button
           onClick={handleWishlistClick}
           disabled={isToggling}
-          className={`absolute top-4 right-4 z-20 p-2.5 transition-colors bg-white/60 hover:bg-white rounded-full shadow-2xs backdrop-blur-xs cursor-pointer flex items-center justify-center ${wishlisted ? 'text-red-600 hover:text-red-700' : 'text-neutral-400 hover:text-neutral-900'}`}
+          className={`absolute top-4 right-4 z-20 p-2.5 transition-colors bg-white/60 hover:bg-white rounded-full shadow-2xs backdrop-blur-xs cursor-pointer flex items-center justify-center ${wishlisted ? "text-red-600 hover:text-red-700" : "text-neutral-400 hover:text-neutral-900"}`}
           aria-label="Add to Wishlist"
         >
           {wishlisted ? (

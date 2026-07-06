@@ -106,6 +106,8 @@ function CatalogContent() {
       return {
         id: p._id,
         title: p.name,
+        slug: p.slug,
+        is_wishlist: p.is_wishlist || false,
         category: resolveCategoryName(p.category_id, p.subcategory_id),
         colors: colors && colors.length > 0 ? colors[0].values : [],
         image:
@@ -119,79 +121,79 @@ function CatalogContent() {
   }, [data]);
 
   // Determine the source list
-  const productsSource = apiProducts;
+  const productsSource = apiProducts || [];
 
   // Apply filters and sorting dynamically
-  const filteredJewelry = productsSource.filter((item) => {
-    // Search filter
-    if (
-      search &&
-      !item.title.toLowerCase().includes(search.toLowerCase()) &&
-      !item.category.toLowerCase().includes(search.toLowerCase())
-    ) {
-      return false;
-    }
+  // const filteredJewelry = productsSource.filter((item) => {
+  //   // Search filter
+  //   if (
+  //     search &&
+  //     !item.title.toLowerCase().includes(search.toLowerCase()) &&
+  //     !item.category.toLowerCase().includes(search.toLowerCase())
+  //   ) {
+  //     return false;
+  //   }
 
-    // Category filter
-    if (selectedCategory && item.category !== selectedCategory) {
-      return false;
-    }
+  //   // Category filter
+  //   if (selectedCategory && item.category !== selectedCategory) {
+  //     return false;
+  //   }
 
-    // Origin filter
-    if (selectedOrigin && item.origin !== selectedOrigin) {
-      return false;
-    }
+  //   // Origin filter
+  //   if (selectedOrigin && item.origin !== selectedOrigin) {
+  //     return false;
+  //   }
 
-    // Style/subcategory filter
-    if (
-      selectedStyle &&
-      (!item.style ||
-        !item.style.toLowerCase().includes(selectedStyle.toLowerCase()))
-    ) {
-      return false;
-    }
+  //   // Style/subcategory filter
+  //   if (
+  //     selectedStyle &&
+  //     (!item.style ||
+  //       !item.style.toLowerCase().includes(selectedStyle.toLowerCase()))
+  //   ) {
+  //     return false;
+  //   }
 
-    // Metal type filter
-    if (selectedMetal && !item.metalType.includes(selectedMetal)) {
-      return false;
-    }
+  //   // Metal type filter
+  //   if (selectedMetal && !item.metalType.includes(selectedMetal)) {
+  //     return false;
+  //   }
 
-    // Carat size filter check
-    if (selectedCaratRange) {
-      const hasMatchingCarat =
-        item.diamondWeight &&
-        item.diamondWeight.some((w) => {
-          if (selectedCaratRange === "low") return w <= 0.5;
-          if (selectedCaratRange === "mid") return w > 0.5 && w <= 1.0;
-          if (selectedCaratRange === "high") return w > 1.0;
-          return true;
-        });
-      if (!hasMatchingCarat) return false;
-    }
+  //   // Carat size filter check
+  //   if (selectedCaratRange) {
+  //     const hasMatchingCarat =
+  //       item.diamondWeight &&
+  //       item.diamondWeight.some((w) => {
+  //         if (selectedCaratRange === "low") return w <= 0.5;
+  //         if (selectedCaratRange === "mid") return w > 0.5 && w <= 1.0;
+  //         if (selectedCaratRange === "high") return w > 1.0;
+  //         return true;
+  //       });
+  //     if (!hasMatchingCarat) return false;
+  //   }
 
-    // Price range filter
-    const defaultMetal = item.metalType ? item.metalType[0] : "14K Gold";
-    const defaultCarat = item.diamondWeight ? item.diamondWeight[0] : 0.5;
-    const itemPrice = calculatePrice(item, defaultMetal, defaultCarat);
-    if (itemPrice > maxPrice) {
-      return false;
-    }
+  //   // Price range filter
+  //   const defaultMetal = item.metalType ? item.metalType[0] : "14K Gold";
+  //   const defaultCarat = item.diamondWeight ? item.diamondWeight[0] : 0.5;
+  //   const itemPrice = calculatePrice(item, defaultMetal, defaultCarat);
+  //   if (itemPrice > maxPrice) {
+  //     return false;
+  //   }
 
-    return true;
-  });
+  //   return true;
+  // });
 
   // Apply Sorting
-  const sortedJewelry = [...filteredJewelry].sort((a, b) => {
-    const defaultMetalA = a.metalType ? a.metalType[0] : "14K Gold";
-    const defaultCaratA = a.diamondWeight ? a.diamondWeight[0] : 0.5;
-    const priceA = calculatePrice(a, defaultMetalA, defaultCaratA);
+  // const sortedJewelry = [...filteredJewelry].sort((a, b) => {
+  //   const defaultMetalA = a.metalType ? a.metalType[0] : "14K Gold";
+  //   const defaultCaratA = a.diamondWeight ? a.diamondWeight[0] : 0.5;
+  //   const priceA = calculatePrice(a, defaultMetalA, defaultCaratA);
 
-    const defaultMetalB = b.metalType ? b.metalType[0] : "14K Gold";
-    const defaultCaratB = b.diamondWeight ? b.diamondWeight[0] : 0.5;
-    const priceB = calculatePrice(b, defaultMetalB, defaultCaratB);
+  //   const defaultMetalB = b.metalType ? b.metalType[0] : "14K Gold";
+  //   const defaultCaratB = b.diamondWeight ? b.diamondWeight[0] : 0.5;
+  //   const priceB = calculatePrice(b, defaultMetalB, defaultCaratB);
 
-    return sortOrder === "ASC" ? priceA - priceB : priceB - priceA;
-  });
+  //   return sortOrder === "ASC" ? priceA - priceB : priceB - priceA;
+  // });
 
   const resetFilters = () => {
     setSearch("");
@@ -232,7 +234,7 @@ function CatalogContent() {
           </button>
           <span className="h-4 w-px bg-neutral-200 hidden sm:inline-block"></span>
           <span className="text-neutral-400 font-medium tracking-widest hidden sm:inline-block">
-            {sortedJewelry.length} Products Found
+            {productsSource?.length} Products Found
           </span>
         </div>
 
@@ -271,7 +273,7 @@ function CatalogContent() {
         accordions={accordions}
         toggleAccordion={toggleAccordion}
         resetFilters={resetFilters}
-        productCount={sortedJewelry.length}
+        productCount={productsSource?.length}
         formatPrice={formatPrice}
         hideCategory={true}
       />
@@ -285,9 +287,9 @@ function CatalogContent() {
               Loading Atelier Pieces...
             </span>
           </div>
-        ) : sortedJewelry.length > 0 ? (
+        ) : productsSource?.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-12 animate-fade-in">
-            {sortedJewelry.map((item) => (
+            {productsSource?.map((item) => (
               <ProductCard key={item.id} item={item} />
             ))}
           </div>

@@ -5,15 +5,16 @@ import Link from "next/link";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
-import { toggleWishlistApi } from "@/slices/wishlistApiSlice";
 import toast from "react-hot-toast";
+import { toggleWishlist } from "@/redux/wishlistSlice";
+import { getAuthHeaders } from "@/common/token";
+import { useDispatch } from "react-redux";
 
 const colorMap = Object.fromEntries(
   colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
 );
 
 export default function ProductCard({ item }) {
-  console.log("item :>> ", item);
   const { token } = useStore();
   const { formatPrice } = useStore();
   const [isToggling, setIsToggling] = useState(false);
@@ -26,6 +27,7 @@ export default function ProductCard({ item }) {
   const [selectedColor, setSelectedColor] = useState(defaultVal || null);
 
   const getHex = (v) => colorMap[v?.toLowerCase()] || "#cccccc";
+  const dispatch = useDispatch();
 
   const handleColorSelect = (e, color) => {
     e.preventDefault();
@@ -46,8 +48,12 @@ export default function ProductCard({ item }) {
   const handleWishlistClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
+    const headers = getAuthHeaders();
     if (isToggling) return;
+    if (!headers.Authorization) {
+      toast.error("Please log in to add items to your wishlist.");
+      return;
+    }
 
     const newWishlistedState = !wishlisted;
 
@@ -56,12 +62,18 @@ export default function ProductCard({ item }) {
     setHasError(false);
 
     try {
-      const response = await toggleWishlistApi({
-        product: item,
-      });
+      const response = await dispatch(
+        toggleWishlist({
+          product_id: item?.id,
+        }),
+      );
+      console.log("response :>> ", response);
+      if (!response?.payload?.success) {
+        setWishlisted(wishlisted);
+      }
 
       // Optional success message
-      toast.success(response.message);
+      toast.success(response?.payload?.message);
     } catch (error) {
       setWishlisted(wishlisted);
       setHasError(true);

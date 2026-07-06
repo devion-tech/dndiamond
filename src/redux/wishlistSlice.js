@@ -1,3 +1,4 @@
+import { getAuthHeaders } from "@/common/token";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const resolveCategoryName = (categoryField, subcategoryField) => {
@@ -29,32 +30,18 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
 
 export const toggleWishlist = createAsyncThunk(
   "wishlist/toggleWishlist",
-  async ({ product, token }, { dispatch }) => {
+  async ({ product_id }, { dispatch }) => {
+    const headers = getAuthHeaders();
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    if (!token) {
-      if (typeof window !== "undefined") {
-        const local = localStorage.getItem("praya_wishlist");
-        const list = local ? JSON.parse(local) : [];
-        const idx = list.findIndex((item) => item.id === product.id);
-        if (idx !== -1) {
-          list.splice(idx, 1);
-        } else {
-          list.push(product);
-        }
-        localStorage.setItem("praya_wishlist", JSON.stringify(list));
-        return list;
-      }
-      return [];
-    }
     try {
       const res = await fetch(`${baseUrl}/api/wishlist/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...headers,
         },
-        body: JSON.stringify({ product_id: product.id }),
+        body: JSON.stringify({ product_id: product_id }),
       });
       if (!res.ok) {
         throw new Error(`Failed to toggle wishlist: ${res.status}`);
@@ -84,48 +71,38 @@ export const fetchWishlist = createAsyncThunk(
     });
     if (!res.ok) throw new Error("Failed to fetch wishlist");
     const data = await res.json();
-    return data.data?.products || [];
+    return data.data || [];
   },
 );
 
-// export const toggleWishlist = createAsyncThunk(
-//     "wishlist/toggleWishlist",
-//     async ({ product, token }, { dispatch }) => {
-//         if (!token) {
-//             // Guest Wishlist fallback using localStorage
-//             if (typeof window !== "undefined") {
-//                 const local = localStorage.getItem("praya_wishlist");
-//                 const list = local ? JSON.parse(local) : [];
-//                 const idx = list.findIndex(item => item.id === product.id);
-//                 if (idx !== -1) {
-//                     list.splice(idx, 1);
-//                 } else {
-//                     list.push(product);
-//                 }
-//                 localStorage.setItem("praya_wishlist", JSON.stringify(list));
-//                 return list;
-//             }
-//             return [];
-//         }
-//         const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-//         const res = await fetch(`${baseUrl}/api/wishlist/`, {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 "Authorization": `Bearer ${token}`
-//             },
-//             body: JSON.stringify({ product_id: product.id })
-//         });
-//         if (res.ok) {
-//             dispatch(fetchWishlist({ token }));
-//         }
-//     }
-// );
+export const toggleWishlistApi = async ({ product }) => {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+  const headers = getAuthHeaders();
+  console.log("headers :>> ", headers);
+  const res = await fetch(`${baseUrl}/api/wishlist/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    },
+    body: JSON.stringify({ product_id: product.id }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to update wishlist.");
+  }
+
+  return data;
+};
 
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState: {
     items: [],
+    total: 0,
     loading: false,
     error: null,
   },
@@ -142,7 +119,8 @@ const wishlistSlice = createSlice({
       })
       .addCase(fetchWishlist.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload.map((p) => {
+        state.total = action.payload?.total || 0;
+        state.items = action.payload?.products?.map((p) => {
           if (p && (p._id || p.id)) {
             return {
               id: p._id || p.id,

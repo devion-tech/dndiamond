@@ -43,7 +43,9 @@ export function StoreProvider({ children }) {
   const { token, user, guestId } = useSelector((state) => state.auth);
   const cart = useSelector((state) => state.cart.items);
   const wishlist = useSelector((state) => state.wishlist.items);
-
+  const wishlistTotal = useSelector((state) => state.wishlist.total);
+  console.log("wishlist :>> ", wishlist);
+  console.log("wishlistTotal :>> ", wishlistTotal);
   // Dynamic price calculation formula
   const calculatePrice = (item, metalType, caratWeight) => {
     let metalMultiplier = 1.0;
@@ -359,6 +361,7 @@ export function StoreProvider({ children }) {
         goldPricePerGram,
         cart,
         wishlist,
+        wishlistTotal,
         inquiries,
         appliedCoupon,
         region,

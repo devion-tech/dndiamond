@@ -1,3 +1,4 @@
+import { getAuthHeaders } from "@/common/token";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchProducts = createAsyncThunk(
@@ -5,6 +6,7 @@ export const fetchProducts = createAsyncThunk(
   async (params = {}) => {
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+    const headers = getAuthHeaders();
 
     const body = {
       page: params.page || 1,
@@ -34,6 +36,7 @@ export const fetchProducts = createAsyncThunk(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...headers,
       },
       body: JSON.stringify(body),
     });
@@ -51,6 +54,7 @@ export const fetchProductDetail = createAsyncThunk(
   async (productId) => {
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+
     const response = await fetch(`${baseUrl}/api/product/${productId}`);
     if (!response.ok) {
       throw new Error("Failed to fetch product details");

@@ -76,6 +76,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const {
     cart,
     wishlist,
+    wishlistTotal,
     jewelry,
     diamonds,
     region,
@@ -384,9 +385,9 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             aria-label="View Wishlist"
           >
             <FaHeart size={15} />
-            {wishlist.length > 0 && (
+            {wishlistTotal > 0 && (
               <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-neutral-800 text-[8px] font-semibold text-white">
-                {wishlist.length}
+                {wishlistTotal}
               </span>
             )}
           </button>
@@ -419,14 +420,14 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       {user.name || user.email}
                     </p>
                   </div>
-                  <a
+                  {/* <a
                     href="http://localhost:3001"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-center"
                   >
                     Open Admin Portal
-                  </a>
+                  </a> */}
                   <button
                     onClick={logoutUser}
                     className="w-full text-center mt-1.5 rounded-sm px-2 py-1.5 text-[10px] font-bold text-red-500 hover:bg-red-50 transition-all uppercase tracking-wider cursor-pointer"

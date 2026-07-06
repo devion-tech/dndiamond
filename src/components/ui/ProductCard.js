@@ -1,18 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
+import { toggleWishlistApi } from "@/slices/wishlistApiSlice";
 
 const colorMap = Object.fromEntries(
   colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
 );
 
 export default function ProductCard({ item }) {
-  const { isWishlisted, toggleWishlist, formatPrice } = useStore();
+  const { token } = useStore();
+  const { isWishlisted, formatPrice } = useStore();
+  const [isToggling, setIsToggling] = useState(false);
+  const [localWishlisted, setLocalWishlisted] = useState(isWishlisted(item.id));
   const wishlisted = isWishlisted(item.id);
+  const [hasError, setHasError] = useState(false);
   const colorList = item?.colors || [];
   const hasObjects = colorList.length > 0 && typeof colorList[0] === "object";
   const defaultVal = hasObjects ? colorList[0]?.value : colorList[0];
@@ -36,25 +41,40 @@ export default function ProductCard({ item }) {
     return item.image;
   })();
 
-  const handleWishlistClick = (e) => {
+  const handleWishlistClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleWishlist(item);
+    if (isToggling) return;
+    
+    const newWishlistedState = !wishlisted;
+    setLocalWishlisted(newWishlistedState);
+    setIsToggling(true);
+    setHasError(false);
+    
+    try {
+      await toggleWishlistApi({ product: item, token });
+    } catch (error) {
+      setLocalWishlisted(wishlisted);
+      setHasError(true);
+    } finally {
+      setIsToggling(false);
+    }
   };
 
   return (
     <Link
-      href={`/product/${item.id}`}
+      href={`/product/${item?.slug}`}
       className="group relative flex flex-col justify-between bg-white overflow-hidden transition-all duration-500 h-full p-4 hover:shadow-xs"
     >
       <div className="relative aspect-square w-full bg-[#FAFAFA] flex items-center justify-center overflow-hidden rounded-xs p-8">
         <button
           onClick={handleWishlistClick}
-          className="absolute top-4 right-4 z-20 p-2.5 text-neutral-400 hover:text-neutral-900 transition-colors bg-white/60 hover:bg-white rounded-full shadow-2xs backdrop-blur-xs cursor-pointer flex items-center justify-center"
+          disabled={isToggling}
+          className={`absolute top-4 right-4 z-20 p-2.5 transition-colors bg-white/60 hover:bg-white rounded-full shadow-2xs backdrop-blur-xs cursor-pointer flex items-center justify-center ${wishlisted ? 'text-red-600 hover:text-red-700' : 'text-neutral-400 hover:text-neutral-900'}`}
           aria-label="Add to Wishlist"
         >
           {wishlisted ? (
-            <FaHeart className="text-neutral-900" size={12} />
+            <FaHeart className="text-red-600" size={12} />
           ) : (
             <FaRegHeart size={12} />
           )}

@@ -66,7 +66,7 @@ export const fetchWishlist = createAsyncThunk(
     }
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const res = await fetch(`${baseUrl}/api/wishlist/?page=1&limit=10`, {
+    const res = await fetch(`${baseUrl}/api/wishlist/?page=1&limit=50`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) throw new Error("Failed to fetch wishlist");
@@ -118,6 +118,7 @@ const wishlistSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchWishlist.fulfilled, (state, action) => {
+        console.log("action.payload?.products :>> ", action.payload?.products);
         state.loading = false;
         state.total = action.payload?.total || 0;
         state.items = action.payload?.products?.map((p) => {

@@ -6,26 +6,15 @@ import {
   FaTrash,
   FaShoppingCart,
   FaHeartBroken,
-  FaEye,
 } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import Link from "next/link";
 
 export default function WishlistDrawer({ isOpen, onClose }) {
-  const { wishlist, toggleWishlist, addToCart, calculatePrice, formatPrice } =
+  const { wishlist, toggleWishlist, calculatePrice, formatPrice } =
     useStore();
 
   if (!isOpen) return null;
-
-  const handleMoveToCart = (item) => {
-    // Use default configuration details
-    const defaultMetal = item.metalType ? item.metalType[0] : "14K Gold";
-    const defaultCarat = item.diamondWeight ? item.diamondWeight[0] : 0.5;
-    const price = calculatePrice(item, defaultMetal, defaultCarat);
-
-    addToCart(item, defaultMetal, defaultCarat, price);
-    toggleWishlist(item); // Remove from wishlist after moving
-  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden font-sans">
@@ -107,19 +96,12 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleMoveToCart(item)}
+                      <Link
+                        href={`/product/${item.id}`}
+                        onClick={onClose}
                         className="btn-gold px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
                       >
                         <FaShoppingCart size={9} /> Move to Cart
-                      </button>
-
-                      <Link
-                        href={`/category/${item.id}`}
-                        onClick={onClose}
-                        className="px-2.5 py-1.5 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer"
-                      >
-                        <FaEye size={9} /> View
                       </Link>
                     </div>
                   </div>

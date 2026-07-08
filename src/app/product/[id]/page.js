@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect, use, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -17,6 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail, clearSelectedProduct } from "@/redux/productSlice";
 import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
+import { colors as colorOptions } from "@/data/initialData";
+
+const colorMap = Object.fromEntries(
+  colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
+);
 
 const resolveCategoryName = (categoryField, subcategoryField) => {
   if (
@@ -45,6 +50,8 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
   return idMap[id] || "Ring";
 };
 
+const getHex = (v) => colorMap[v?.toLowerCase()] || "#cccccc";
+
 export default function ProductDetail({ params }) {
   const router = useRouter();
   const resolvedParams = use(params);
@@ -62,13 +69,12 @@ export default function ProductDetail({ params }) {
   const { selectedProduct: rawProduct, error: apiError } = useSelector(
     (state) => state.products,
   );
-  const [product, setProduct] = useState(null);
 
-  // Dynamic selection states
-  const [selectedMetal, setSelectedMetal] = useState("");
-  const [selectedCarat, setSelectedCarat] = useState(0.5);
+  const [product, setProduct] = useState(null);
+  const [productOptions, setProductOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const [selectedImage, setSelectedImage] = useState(0);
   const [currentPrice, setCurrentPrice] = useState(0);
-  const [originalPrice, setOriginalPrice] = useState(0);
   const [successAdded, setSuccessAdded] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
 
@@ -86,35 +92,43 @@ export default function ProductDetail({ params }) {
   useEffect(() => {
     if (rawProduct) {
       const p = rawProduct;
-      const diamondCost = p.pricing?.diamond_cost || p.price || 600;
-      const gemstoneCost = p.pricing?.gemstone_cost || 0;
-      const additionalCost = p.pricing?.additional_cost || 150;
 
       const mapped = {
         id: p._id,
         title: p.name,
+        slug: p.slug,
         category: resolveCategoryName(p.category_id, p.subcategory_id),
         image:
           p.images && p.images[0]
             ? p.images[0]
             : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800",
+        images: p.images || [],
         description:
           p.description ||
           "Ethically sourced certified diamond luxury masterpiece.",
         discount: p.discount || 0,
-        metalType: p.metalType || ["14K Gold", "18K Gold", "Platinum"],
-        diamondWeight: p.diamondWeight || [0.5, 0.75, 1.0],
         goldWeight: p.weight || 2.5,
-        diamondPrice: diamondCost + gemstoneCost,
-        makingCharges: additionalCost,
+        price: p.price || 0,
+        display_price: p.display_price || 0,
         style: p.subcategory_id?.name || "",
-        origin: p.origin || "natural",
         isFromApi: true,
       };
 
+      // Extract options from rawProduct
+      const options = p.options || [];
+
+      // Build default selected options (first non-disabled value for each)
+      const defaults = {};
+      options.forEach((opt) => {
+        const firstEnabled = opt.values?.find((v) => !v.is_disabled);
+        if (firstEnabled) {
+          defaults[opt.name] = firstEnabled.value;
+        }
+      });
+
       setProduct(mapped);
-      setSelectedMetal(mapped.metalType[0]);
-      setSelectedCarat(mapped.diamondWeight[0]);
+      setProductOptions(options);
+      setSelectedOptions(defaults);
       setLoadingError(false);
     }
   }, [rawProduct]);
@@ -125,27 +139,53 @@ export default function ProductDetail({ params }) {
     }
   }, [apiError]);
 
-  // Recalculate price dynamically when options change
+  // Compute current price from selected gold_type option
   useEffect(() => {
-    if (product && selectedMetal && selectedCarat) {
-      const calculated = calculatePrice(product, selectedMetal, selectedCarat);
-      setCurrentPrice(calculated);
-
-      // Compute raw original price before discount
-      let metalMultiplier = 1.0;
-      if (selectedMetal === "18K Gold") metalMultiplier = 0.75;
-      else if (selectedMetal === "14K Gold") metalMultiplier = 0.58;
-      else if (selectedMetal === "Platinum") metalMultiplier = 1.35;
-
-      const goldVal = (product.goldWeight || 0) * metalMultiplier * 75.0;
-      const baseCarat = product.diamondWeight ? product.diamondWeight[0] : 0.5;
-      const gemMultiplier = Math.pow(selectedCarat / baseCarat, 1.8);
-      const gemVal = (product.diamondPrice || 0) * gemMultiplier;
-      const laborVal = product.makingCharges || 0;
-
-      setOriginalPrice(Math.round(goldVal + gemVal + laborVal));
+    if (product && selectedOptions.gold_type) {
+      const goldTypeOption = productOptions.find(
+        (o) => o.name === "gold_type",
+      );
+      const selected = goldTypeOption?.values?.find(
+        (v) => v.value === selectedOptions.gold_type,
+      );
+      if (selected?.price) {
+        setCurrentPrice(selected.price);
+      } else {
+        setCurrentPrice(product.display_price || product.price || 0);
+      }
     }
-  }, [product, selectedMetal, selectedCarat, calculatePrice]);
+  }, [product, productOptions, selectedOptions.gold_type]);
+
+  // Handle option change
+  const handleOptionChange = (optionName, value) => {
+    setSelectedOptions((prev) => ({ ...prev, [optionName]: value }));
+    // Reset to first image when color changes
+    if (optionName === "color" || optionName === "colors") {
+      setSelectedImage(0);
+    }
+  };
+
+  // Build gallery images: color image first (if color option exists) + product images
+  const galleryImages = useMemo(() => {
+    const colorOpt = productOptions.find(
+      (o) => o.name === "color" || o.name === "colors",
+    );
+    const colorVal = selectedOptions.color || selectedOptions.colors;
+    const images = product?.images || [];
+    const fallback = "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800";
+
+    if (colorOpt && colorVal) {
+      const match = colorOpt.values?.find((v) => v.value === colorVal);
+      const colorImage = match?.image;
+      if (colorImage) {
+        return [colorImage, ...images.filter((img) => img !== colorImage)];
+      }
+    }
+    return images.length > 0 ? images : [fallback];
+  }, [selectedOptions, productOptions, product]);
+
+  // Current displayed image
+  const currentImage = galleryImages[selectedImage] || galleryImages[0];
 
   if (loadingError) {
     return (
@@ -186,9 +226,134 @@ export default function ProductDetail({ params }) {
   const wishlisted = isWishlisted(product.id);
 
   const handleAddToCart = () => {
-    addToCart(product, selectedMetal, selectedCarat, currentPrice);
+    addToCart(product, selectedOptions, currentPrice);
     setSuccessAdded(true);
     setTimeout(() => setSuccessAdded(false), 3000);
+  };
+
+  // Render option selector based on option name
+  const renderOption = (option, index) => {
+    const { name, values } = option;
+    const isColor =
+      name === "color" || name === "colors";
+    const isGoldType = name === "gold_type";
+    const isSize = name === "size" || name === "sizes";
+    const selectedVal = selectedOptions[name];
+    const stepNum = index + 1;
+
+    const labelMap = {
+      color: "Select Color",
+      colors: "Select Color",
+      gold_type: "Select Gold Type",
+      size: "Select Size",
+      sizes: "Select Size",
+    };
+
+    return (
+      <div key={name} className="space-y-2">
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+          {stepNum}. {labelMap[name] || name}
+        </label>
+
+        {isColor ? (
+          <div className="flex items-center gap-3">
+            {values.map((val, i) => {
+              const hex = getHex(val.value);
+              const isSelected = selectedVal === val.value;
+              return (
+                <button
+                  key={i}
+                  onClick={() =>
+                    !val.is_disabled && handleOptionChange(name, val.value)
+                  }
+                  disabled={val.is_disabled}
+                  className={`w-8 h-8 rounded-full border-2 transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? "border-slate-800 scale-110 ring-2 ring-slate-800/20"
+                      : "border-slate-200 hover:border-slate-400"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  style={{ backgroundColor: hex }}
+                  title={val.value}
+                  aria-label={val.value}
+                />
+              );
+            })}
+          </div>
+        ) : isGoldType ? (
+          <div className="flex flex-wrap gap-2.5">
+            {values.map((val, i) => {
+              const isSelected = selectedVal === val.value;
+              return (
+                <button
+                  key={i}
+                  onClick={() =>
+                    !val.is_disabled && handleOptionChange(name, val.value)
+                  }
+                  disabled={val.is_disabled}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                    isSelected
+                      ? "bg-slate-800 text-white border-slate-800"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                >
+                  {val.value}
+                </button>
+              );
+            })}
+          </div>
+        ) : isSize ? (
+          <div className="flex flex-wrap gap-2.5">
+            {values.map((val, i) => {
+              const isSelected = selectedVal === val.value;
+              return (
+                <button
+                  key={i}
+                  onClick={() =>
+                    !val.is_disabled && handleOptionChange(name, val.value)
+                  }
+                  disabled={val.is_disabled}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${
+                    isSelected
+                      ? "bg-primary text-white border-primary"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                >
+                  {val.value}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-2.5">
+            {values.map((val, i) => {
+              const isSelected = selectedVal === val.value;
+              return (
+                <button
+                  key={i}
+                  onClick={() =>
+                    !val.is_disabled && handleOptionChange(name, val.value)
+                  }
+                  disabled={val.is_disabled}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                    isSelected
+                      ? "bg-slate-800 text-white border-slate-800"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                >
+                  {val.value}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {isColor && selectedVal && (
+          <span className="text-[10px] text-slate-400 font-semibold tracking-wider">
+            {selectedVal}
+          </span>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -208,10 +373,7 @@ export default function ProductDetail({ params }) {
           <div className="space-y-4">
             <div className="aspect-square w-full rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-xs relative">
               <img
-                src={
-                  product.image ||
-                  "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800"
-                }
+                src={currentImage}
                 alt={product.title}
                 className="h-full w-full object-cover"
               />
@@ -222,24 +384,28 @@ export default function ProductDetail({ params }) {
               )}
             </div>
 
-            {/* Secondary Mock Thumbs */}
-            <div className="grid grid-cols-3 gap-4">
-              {[1, 2, 3].map((num) => (
-                <div
-                  key={num}
-                  className="aspect-square rounded-xl overflow-hidden border border-slate-100 bg-white hover:border-primary/50 transition-all cursor-pointer"
-                >
-                  <img
-                    src={
-                      product.image ||
-                      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400"
-                    }
-                    alt={`Angle ${num}`}
-                    className="h-full w-full object-cover opacity-75 hover:opacity-100 transition-opacity"
-                  />
-                </div>
-              ))}
-            </div>
+            {/* Thumbnails */}
+            {galleryImages.length > 1 && (
+              <div className="grid grid-cols-3 gap-4">
+                {galleryImages.map((img, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedImage(idx)}
+                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${
+                      selectedImage === idx
+                        ? "border-slate-800 ring-2 ring-slate-800/20"
+                        : "border-slate-100 hover:border-primary/50"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`View ${idx + 1}`}
+                      className="h-full w-full object-cover opacity-75 hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Custom Configuration */}
@@ -261,7 +427,7 @@ export default function ProductDetail({ params }) {
               </p>
             </div>
 
-            {/* Pricing Calculator Output */}
+            {/* Pricing */}
             <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-2">
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">
                 Configured Atelier Pricing
@@ -272,7 +438,7 @@ export default function ProductDetail({ params }) {
                 </span>
                 {product.discount > 0 && (
                   <span className="text-sm text-slate-400 line-through">
-                    {formatPrice(originalPrice)}
+                    {formatPrice(product.display_price || product.price)}
                   </span>
                 )}
               </div>
@@ -282,44 +448,10 @@ export default function ProductDetail({ params }) {
               </div>
             </div>
 
-            {/* Interactive Selection forms */}
+            {/* Dynamic Options from product.options */}
             <div className="space-y-5">
-              {/* Metal Purity choice */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-                  1. Select Metal Color & Purity
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {product.metalType.map((metal) => (
-                    <button
-                      key={metal}
-                      onClick={() => setSelectedMetal(metal)}
-                      className={`py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer text-center transition-all ${selectedMetal === metal ? "bg-slate-800 text-white border-slate-800" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"}`}
-                    >
-                      {metal}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Diamond Carats size choice */}
-              {product.diamondWeight && product.diamondWeight.length > 0 && (
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-                    2. Select Diamond Carat weight
-                  </label>
-                  <div className="flex flex-wrap gap-2.5">
-                    {product.diamondWeight.map((weight) => (
-                      <button
-                        key={weight}
-                        onClick={() => setSelectedCarat(weight)}
-                        className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${selectedCarat === weight ? "bg-primary text-white border-primary" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"}`}
-                      >
-                        {weight} Carats
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              {productOptions.map((option, index) =>
+                renderOption(option, index),
               )}
             </div>
 
@@ -383,10 +515,7 @@ export default function ProductDetail({ params }) {
                 Atelier Craftsmanship Notes
               </h4>
               <p className="text-slate-500">
-                {product.description} Each gemstone cluster is claw-set by hand
-                under a microscope to ensure perfect optical reflection
-                alignment and secure durability. Gold bands are forged and
-                finished at standard hallmark certification quality.
+                {product.description}
               </p>
             </div>
           </div>

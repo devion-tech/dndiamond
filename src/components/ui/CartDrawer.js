@@ -337,8 +337,8 @@ export default function CartDrawer({ isOpen, onClose }) {
                             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-5">
                                 {!isCheckoutMode ? (
                                     // Item List
-                                    cart.map((item) => (
-                                        <div key={item.cartId} className="flex gap-4 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-all bg-white">
+                                    cart.map((item, index) => (
+                                        <div key={index} className="flex gap-4 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-all bg-white">
                                             {item.image && item.image.includes("http") ? (
                                                 <img src={item.image} alt={item.title} className="h-20 w-20 object-cover rounded-lg border border-slate-100 shrink-0" />
                                             ) : (

@@ -44,8 +44,7 @@ export function StoreProvider({ children }) {
   const cart = useSelector((state) => state.cart.items);
   const wishlist = useSelector((state) => state.wishlist.items);
   const wishlistTotal = useSelector((state) => state.wishlist.total);
-  console.log("wishlist :>> ", wishlist);
-  console.log("wishlistTotal :>> ", wishlistTotal);
+
   // Dynamic price calculation formula
   const calculatePrice = (item, metalType, caratWeight) => {
     let metalMultiplier = 1.0;
@@ -147,8 +146,7 @@ export function StoreProvider({ children }) {
   // --- Cart Redux Wrapper ---
   const addToCart = async (
     product,
-    selectedMetal,
-    selectedCarat,
+    selectedOptions,
     finalPrice,
   ) => {
     dispatch(
@@ -156,10 +154,7 @@ export function StoreProvider({ children }) {
         guestId,
         productId: product.id,
         quantity: 1,
-        selectedOptions: {
-          goldType: selectedMetal,
-          carat: selectedCarat,
-        },
+        selectedOptions,
         token,
       }),
     );
@@ -210,7 +205,7 @@ export function StoreProvider({ children }) {
     );
   };
 
-  const isWishlisted = (id) => wishlist.some((item) => item.id === id);
+  const isWishlisted = (id) => wishlist?.some((item) => item.id === id);
 
   // --- Inquiries Actions ---
   const submitInquiry = (inquiryData) => {

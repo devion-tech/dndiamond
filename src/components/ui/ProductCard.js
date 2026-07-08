@@ -136,11 +136,10 @@ export default function ProductCard({ item }) {
                   key={index}
                   onClick={(e) => handleColorSelect(e, color)}
                   disabled={isDisabled}
-                  className={`w-5 h-5 rounded-full border-2 transition-all duration-200 cursor-pointer ${
-                    isSelected
-                      ? "border-neutral-900 scale-110"
-                      : "border-neutral-300 hover:border-neutral-500"
-                  } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
+                    ? "border-neutral-900 scale-110"
+                    : "border-neutral-300 hover:border-neutral-500"
+                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                   style={{ backgroundColor: hex }}
                   title={val}
                   aria-label={val}

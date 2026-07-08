@@ -663,10 +663,6 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-
-                {/* Marquee dark */}
-                <MarqueeStrip dark />
-
                 {/* WHAT WERE WE MADE FOR? */}
                 <section className="bg-[#0D0D0D] text-white py-24 sm:py-32">
                     <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">

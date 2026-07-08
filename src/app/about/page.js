@@ -818,10 +818,17 @@ export default function AboutPage() {
                         <p className="text-neutral-600 font-sans font-light text-sm sm:text-base leading-relaxed">
                             Our story is written in light, facet by facet, stone by stone. Every jewel we create is a testament to the pursuit of absolute perfection. Inspired by classical proportions and driven by modern innovation, our master artisans craft heirlooms that bridge the gap between temporary trends and eternal heritage.
                         </p>
-                        <div className="pt-4">
+                        <div className="pt-4 flex flex-wrap gap-4">
+                            <a
+                                href="/our-story"
+                                className="inline-flex items-center text-xs font-bold uppercase tracking-[0.25em] text-[#111111] hover:text-[#C8A96A] transition-colors duration-300 group"
+                            >
+                                Read Our Story
+                                <FaChevronRight className="ml-2 text-[10px] transform group-hover:translate-x-1 transition-transform duration-300" />
+                            </a>
                             <a
                                 href="/bespoke"
-                                className="inline-flex items-center text-xs font-bold uppercase tracking-[0.25em] text-[#111111] hover:text-[#C8A96A] transition-colors duration-300 group"
+                                className="inline-flex items-center text-xs font-bold uppercase tracking-[0.25em] text-[#C8A96A] hover:text-[#111111] transition-colors duration-300 group"
                             >
                                 Discover Bespoke Atelier
                                 <FaChevronRight className="ml-2 text-[10px] transform group-hover:translate-x-1 transition-transform duration-300" />
@@ -1400,13 +1407,21 @@ export default function AboutPage() {
                             Discover jewellery that reflects timeless elegance and extraordinary craftsmanship. Connect with our concierge to reserve a private atelier consultation.
                         </p>
                         
-                        <div className="pt-8">
+                        <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="/jewelry">
-                                <button className="group relative overflow-hidden px-10 py-4 bg-[#C8A96A] border border-[#C8A96A] text-[#111111] text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-500 focus:outline-none">
+                                <button className="group relative overflow-hidden px-10 py-4 bg-[#C8A96A] border border-[#C8A96A] text-[#111111] text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer">
                                     <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                                         Explore Collection
                                     </span>
                                     <span className="absolute inset-0 bg-[#111111] origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
+                                </button>
+                            </a>
+                            <a href="/contact">
+                                <button className="group relative overflow-hidden px-10 py-4 border border-white text-white text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer bg-transparent">
+                                    <span className="relative z-10 group-hover:text-[#111111] transition-colors duration-500">
+                                        Book Atelier Visit
+                                    </span>
+                                    <span className="absolute inset-0 bg-white origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                                 </button>
                             </a>
                         </div>

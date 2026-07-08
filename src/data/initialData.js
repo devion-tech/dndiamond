@@ -274,9 +274,9 @@ export const initialCoupons = [
 ];
 
 export const colors = [
-  { name: "rose gold", hex: "#B76E79" },
-  { name: "white gold", hex: "#F5F5F5" },
+  { name: "rose gold", hex: "#ECC5C0" },
+  { name: "white gold", hex: "#E9E9E9" },
   { name: "green", hex: "#008000" },
   { name: "platinum", hex: "#E5E4E2" },
-  { name: "yellow", hex: "#FFD700" },
+  { name: "yellow", hex: "#E5CE83" },
 ];

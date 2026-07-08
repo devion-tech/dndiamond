@@ -174,9 +174,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
-        console.log("action.payload :>> ", action.payload);
         state.loading = false;
         state.subtotal = action?.payload?.subtotal;
+        state.total_items = action?.payload?.total_items;
         state.items = action.payload?.items?.map((item) => {
           const p = item.product_id || {};
           return {

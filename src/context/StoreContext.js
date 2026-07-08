@@ -41,8 +41,7 @@ export function StoreProvider({ children }) {
 
   // Redux bindings
   const { token, user, guestId } = useSelector((state) => state.auth);
-  const cart = useSelector((state) => state.cart.items);
-  const cart_subtotal = useSelector((state) => state.cart.subtotal);
+  const cart = useSelector((state) => state.cart);
   const wishlist = useSelector((state) => state.wishlist.items);
   const wishlistTotal = useSelector((state) => state.wishlist.total);
 
@@ -226,7 +225,7 @@ export function StoreProvider({ children }) {
       id: orderId,
       date: new Date().toISOString().split("T")[0],
       status: "Pending",
-      items: cart,
+      items: cart?.items,
       totalAmount: orderTotal,
       paymentMethod: shippingInfo.paymentMethod,
       customerName: shippingInfo.name,
@@ -297,7 +296,7 @@ export function StoreProvider({ children }) {
     if (!coupon)
       return { success: false, message: "Invalid or inactive promo code." };
 
-    const subtotal = cart_subtotal;
+    const subtotal = cart?.subtotal || 0;
     if (subtotal < coupon.minOrderValue) {
       return {
         success: false,
@@ -318,7 +317,7 @@ export function StoreProvider({ children }) {
 
   // --- Subtotal & Pricing Aggregators ---
   const getCartSubtotal = () => {
-    const baseSub = cart_subtotal || 0;
+    const baseSub = cart?.subtotal || 0;
     return getConvertedPrice(baseSub);
   };
 
@@ -340,6 +339,7 @@ export function StoreProvider({ children }) {
     const tax = getTaxAmount();
     return Math.max(0, subtotal - discount + tax);
   };
+  console.log("cart :>> ", cart);
 
   return (
     <StoreContext.Provider
@@ -348,7 +348,8 @@ export function StoreProvider({ children }) {
         diamonds,
         coupons,
         goldPricePerGram,
-        cart,
+        cart: cart?.items || [],
+        totalItems: cart?.total_items || 0,
         wishlist,
         wishlistTotal,
         inquiries,
@@ -375,6 +376,7 @@ export function StoreProvider({ children }) {
         applyCouponCode,
         removeCoupon,
         getCartSubtotal,
+
         getDiscountAmount,
         getCartTotal,
         registerUser,

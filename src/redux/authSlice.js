@@ -36,7 +36,6 @@ export const loginUser = createAsyncThunk(
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      console.log("data :>> ", data);
       if (data.success && data?.data?.token) {
         localStorage.setItem("praya_token", data.data.token);
         const userObj = data.data.user || {
@@ -114,6 +113,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user;
+        state.guestId = null; // Clear guestId on successful login
         state.successMessage = "Vault access granted. Welcome.";
       })
       .addCase(loginUser.rejected, (state, action) => {

@@ -1,3 +1,4 @@
+import { getAuthHeaders } from "@/common/token";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const resolvePrice = (item, goldPricePerGram = 75.0) => {
@@ -28,52 +29,50 @@ const resolvePrice = (item, goldPricePerGram = 75.0) => {
 
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
-  async ({ guestId, token }) => {
+  async ({ guestId }) => {
+    const headers = getAuthHeaders();
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
     let url = `${baseUrl}/api/cart/getCart`;
-    const headers = {};
 
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    } else if (guestId) {
+    if (!headers["Authorization"]) {
       url += `?guest_id=${guestId}`;
-    } else {
-      return [];
     }
-
-    const res = await fetch(url, { headers });
+    const res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
+    });
     if (!res.ok) throw new Error("Failed to fetch cart");
     const data = await res.json();
-    return data.data?.items || [];
+    return data.data || [];
   },
 );
 
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ guestId, productId, quantity, selectedOptions, token }, { dispatch }) => {
+  async ({ guestId, productId, quantity, selectedOptions }, { dispatch }) => {
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+
     const body = {
       product_id: productId,
       quantity,
       selected_options: selectedOptions,
     };
-    if (token) {
-      body.guest_id = undefined;
-    } else {
-      body.guest_id = guestId;
-    }
-    const headers = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const headers = getAuthHeaders();
 
     const res = await fetch(`${baseUrl}/api/cart/`, {
       method: "POST",
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
       body: JSON.stringify(body),
     });
     if (res.ok) {
-      dispatch(fetchCart({ guestId, token }));
+      dispatch(fetchCart({ guestId }));
     }
   },
 );
@@ -159,6 +158,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: {
     items: [],
+    subtotal: 0,
     loading: false,
     error: null,
   },
@@ -174,21 +174,23 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
+        console.log("action.payload :>> ", action.payload);
         state.loading = false;
-        state.items = action.payload.map((item) => {
+        state.subtotal = action?.payload?.subtotal;
+        state.items = action.payload?.items?.map((item) => {
           const p = item.product_id || {};
-          const calculatedPrice = resolvePrice(item);
           return {
-            cartId: item._id,
+            cartId: item.item_id,
             id: p._id || "",
-            title: p.name || "Atelier Piece",
+            title: item?.product?.name || "Atelier Piece",
+
             category: p.subcategory_id?.name || p.category_id?.name || "Ring",
             image:
               p.images?.[0] ||
               "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
             metal: item.selected_options?.gold_type || "14K Gold",
-            carat: item.selected_options?.carat || 0.5,
-            price: calculatedPrice,
+            carat: item?.product?.weight || 0.5,
+            price: item?.total,
             quantity: item.quantity,
           };
         });

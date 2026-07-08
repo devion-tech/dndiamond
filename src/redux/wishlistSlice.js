@@ -143,7 +143,7 @@ const wishlistSlice = createSlice({
               diamondPrice: p.pricing?.diamond_cost || p.diamondPrice || 600,
               makingCharges:
                 p.pricing?.additional_cost || p.makingCharges || 150,
-              price: p.display_price || p.price || 600,
+              display_price: p?.display_price,
             };
           }
           return p; // guest fallback

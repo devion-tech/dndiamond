@@ -42,6 +42,7 @@ export function StoreProvider({ children }) {
   // Redux bindings
   const { token, user, guestId } = useSelector((state) => state.auth);
   const cart = useSelector((state) => state.cart.items);
+  const cart_subtotal = useSelector((state) => state.cart.subtotal);
   const wishlist = useSelector((state) => state.wishlist.items);
   const wishlistTotal = useSelector((state) => state.wishlist.total);
 
@@ -84,7 +85,7 @@ export function StoreProvider({ children }) {
     dispatch(initializeAuth()).then((res) => {
       const payload = res.payload;
       if (payload) {
-        dispatch(fetchCart({ guestId: payload.guestId, token: payload.token }));
+        dispatch(fetchCart({ guestId: payload.guestId }));
         dispatch(fetchWishlist({ token: payload.token }));
       }
     });
@@ -144,11 +145,7 @@ export function StoreProvider({ children }) {
   };
 
   // --- Cart Redux Wrapper ---
-  const addToCart = async (
-    product,
-    selectedOptions,
-    finalPrice,
-  ) => {
+  const addToCart = async (product, selectedOptions, finalPrice) => {
     dispatch(
       addToCartThunk({
         guestId,
@@ -276,7 +273,7 @@ export function StoreProvider({ children }) {
           body: JSON.stringify({ guest_id: guestId }),
         },
       );
-      dispatch(fetchCart({ guestId, token: authState.token }));
+      dispatch(fetchCart({ guestId }));
       dispatch(fetchWishlist({ token: authState.token }));
       return { success: true };
     }
@@ -288,7 +285,7 @@ export function StoreProvider({ children }) {
 
   const logoutUser = () => {
     dispatch(logoutUserThunk());
-    dispatch(fetchCart({ guestId, token: null }));
+    dispatch(fetchCart({ guestId }));
     dispatch(fetchWishlist({ token: null }));
   };
 
@@ -300,7 +297,7 @@ export function StoreProvider({ children }) {
     if (!coupon)
       return { success: false, message: "Invalid or inactive promo code." };
 
-    const subtotal = getCartSubtotal();
+    const subtotal = cart_subtotal;
     if (subtotal < coupon.minOrderValue) {
       return {
         success: false,
@@ -321,10 +318,7 @@ export function StoreProvider({ children }) {
 
   // --- Subtotal & Pricing Aggregators ---
   const getCartSubtotal = () => {
-    const baseSub = cart.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    );
+    const baseSub = cart_subtotal || 0;
     return getConvertedPrice(baseSub);
   };
 

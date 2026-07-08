@@ -142,9 +142,7 @@ export default function ProductDetail({ params }) {
   // Compute current price from selected gold_type option
   useEffect(() => {
     if (product && selectedOptions.gold_type) {
-      const goldTypeOption = productOptions.find(
-        (o) => o.name === "gold_type",
-      );
+      const goldTypeOption = productOptions.find((o) => o.name === "gold_type");
       const selected = goldTypeOption?.values?.find(
         (v) => v.value === selectedOptions.gold_type,
       );
@@ -172,7 +170,8 @@ export default function ProductDetail({ params }) {
     );
     const colorVal = selectedOptions.color || selectedOptions.colors;
     const images = product?.images || [];
-    const fallback = "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800";
+    const fallback =
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800";
 
     if (colorOpt && colorVal) {
       const match = colorOpt.values?.find((v) => v.value === colorVal);
@@ -234,8 +233,7 @@ export default function ProductDetail({ params }) {
   // Render option selector based on option name
   const renderOption = (option, index) => {
     const { name, values } = option;
-    const isColor =
-      name === "color" || name === "colors";
+    const isColor = name === "color" || name === "colors";
     const isGoldType = name === "gold_type";
     const isSize = name === "size" || name === "sizes";
     const selectedVal = selectedOptions[name];
@@ -514,9 +512,7 @@ export default function ProductDetail({ params }) {
               <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest">
                 Atelier Craftsmanship Notes
               </h4>
-              <p className="text-slate-500">
-                {product.description}
-              </p>
+              <p className="text-slate-500">{product.description}</p>
             </div>
           </div>
         </div>

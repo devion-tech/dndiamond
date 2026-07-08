@@ -11,8 +11,11 @@ import { useStore } from "@/context/StoreContext";
 import Link from "next/link";
 
 export default function WishlistDrawer({ isOpen, onClose }) {
-  const { wishlist, toggleWishlist, calculatePrice, formatPrice } =
-    useStore();
+  const { wishlist, toggleWishlist, calculatePrice, formatPrice } = useStore();
+
+  const { getRegionDetails } = useStore();
+  const { prefix } = getRegionDetails();
+  console.log("prefix :>> ", prefix);
 
   if (!isOpen) return null;
 
@@ -115,13 +118,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                       <FaTrash size={12} />
                     </button>
                     <span className="text-xs font-extrabold text-slate-900 mt-2">
-                      {formatPrice(
-                        calculatePrice(
-                          item,
-                          item.metalType?.[0] || "14K Gold",
-                          item.diamondWeight?.[0] || 0.5,
-                        ),
-                      )}
+                      {`${prefix}${item?.display_price}`}
                     </span>
                   </div>
                 </div>

@@ -82,12 +82,12 @@ export default function Footer() {
               </h4>
               <ul className="space-y-3 text-[11px] font-light">
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/contact"
                     className="hover:text-neutral-900 transition-colors"
                   >
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a
@@ -135,15 +135,15 @@ export default function Footer() {
                     href="/about"
                     className="hover:text-neutral-900 transition-colors"
                   >
-                    Origins
+                    About Us
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/about"
+                    href="/our-story"
                     className="hover:text-neutral-900 transition-colors"
                   >
-                    Our Purpose
+                    Our Story
                   </Link>
                 </li>
                 <li>
@@ -183,7 +183,7 @@ export default function Footer() {
                   apiCategories.map((cat) => (
                     <li key={cat.name}>
                       <Link
-                        href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}`}
+                        href={`/category/${cat?.slug}`}
                         className="hover:text-neutral-900 transition-colors"
                       >
                         {getDisplayCategoryName(cat.name)}

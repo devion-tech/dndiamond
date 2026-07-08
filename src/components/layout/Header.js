@@ -192,17 +192,17 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const filteredSearchItems =
     searchQuery.trim() !== ""
       ? [
-          ...jewelry.filter(
-            (j) =>
-              j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              j.category.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-          ...diamonds.filter(
-            (d) =>
-              d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-        ].slice(0, 5)
+        ...jewelry.filter(
+          (j) =>
+            j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            j.category.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+        ...diamonds.filter(
+          (d) =>
+            d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+      ].slice(0, 5)
       : [];
 
   const handleSearchSubmit = (e) => {
@@ -240,7 +240,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </button>
         </div>
       )}
-      <div className="mx-auto flex h-20 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8 relative">
+      <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8 relative">
         {/* Left Side: Mobile Toggle & Desktop Nav */}
         <div className="flex items-center gap-6 static h-full">
           {/* Mobile Menu Toggle */}
@@ -304,35 +304,35 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               </div>
             </div>
 
-            {/* Diamond */}
+            {/* Our Story */}
             <Link
-              href="/diamonds"
+              href="/our-story"
               className="text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
             >
-              Diamond
+              Our Story
             </Link>
 
-            {/* High Jewellary */}
-            <Link
-              href="/category?style=halo"
-              className="text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
-            >
-              High Jewellary
-            </Link>
-
-            {/* About */}
+            {/* About Us */}
             <Link
               href="/about"
               className="text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
             >
-              About
+              About Us
+            </Link>
+
+            {/* Contact */}
+            <Link
+              href="/contact"
+              className="text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
+            >
+              Contact
             </Link>
           </nav>
         </div>
         {/* Center: Brand Logo Text */}
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Link href="/">
-            <span className="font-serif text-xl sm:text-2xl xl:text-3xl font-light tracking-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
+            <span className="font-serif text-xl sm:text-2xl  font-light tracking-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
               DNDIAMOND
             </span>
           </Link>
@@ -574,17 +574,24 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               </Link>
               <Link
                 onClick={() => setMobileMenuOpen(false)}
-                href="/category?style=halo"
+                href="/our-story"
                 className="text-[11px] font-bold text-neutral-800 uppercase tracking-widest"
               >
-                High Jewellary
+                Our Story
               </Link>
               <Link
                 onClick={() => setMobileMenuOpen(false)}
                 href="/about"
                 className="text-[11px] font-bold text-neutral-800 uppercase tracking-widest"
               >
-                About us
+                About Us
+              </Link>
+              <Link
+                onClick={() => setMobileMenuOpen(false)}
+                href="/contact"
+                className="text-[11px] font-bold text-neutral-800 uppercase tracking-widest"
+              >
+                Contact Us
               </Link>
             </div>
           </nav>

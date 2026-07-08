@@ -50,7 +50,7 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
   return idMap[id] || "Ring";
 };
 
-const getHex = (v) => colorMap[v?.toLowerCase()] || "#cccccc";
+const getHex = (v) => colorMap[v?.toLowerCase()] || "#EDD680";
 
 export default function ProductDetail({ params }) {
   const router = useRouter();
@@ -77,6 +77,7 @@ export default function ProductDetail({ params }) {
   const [currentPrice, setCurrentPrice] = useState(0);
   const [successAdded, setSuccessAdded] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Fetch product details on mount/param change
   useEffect(() => {
@@ -142,9 +143,7 @@ export default function ProductDetail({ params }) {
   // Compute current price from selected gold_type option
   useEffect(() => {
     if (product && selectedOptions.gold_type) {
-      const goldTypeOption = productOptions.find(
-        (o) => o.name === "gold_type",
-      );
+      const goldTypeOption = productOptions.find((o) => o.name === "gold_type");
       const selected = goldTypeOption?.values?.find(
         (v) => v.value === selectedOptions.gold_type,
       );
@@ -172,7 +171,8 @@ export default function ProductDetail({ params }) {
     );
     const colorVal = selectedOptions.color || selectedOptions.colors;
     const images = product?.images || [];
-    const fallback = "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800";
+    const fallback =
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800";
 
     if (colorOpt && colorVal) {
       const match = colorOpt.values?.find((v) => v.value === colorVal);
@@ -234,8 +234,7 @@ export default function ProductDetail({ params }) {
   // Render option selector based on option name
   const renderOption = (option, index) => {
     const { name, values } = option;
-    const isColor =
-      name === "color" || name === "colors";
+    const isColor = name === "color" || name === "colors";
     const isGoldType = name === "gold_type";
     const isSize = name === "size" || name === "sizes";
     const selectedVal = selectedOptions[name];
@@ -267,11 +266,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`w-8 h-8 rounded-full border-2 transition-all duration-200 cursor-pointer ${
-                    isSelected
-                      ? "border-slate-800 scale-110 ring-2 ring-slate-800/20"
-                      : "border-slate-200 hover:border-slate-400"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`w-8 h-8 rounded-full border-2 transition-all duration-200 cursor-pointer ${isSelected
+                    ? "border-slate-800 scale-110 ring-2 ring-slate-800/20"
+                    : "border-slate-200 hover:border-slate-400"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                   style={{ backgroundColor: hex }}
                   title={val.value}
                   aria-label={val.value}
@@ -290,11 +288,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
-                    isSelected
-                      ? "bg-slate-800 text-white border-slate-800"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isSelected
+                    ? "bg-slate-800 text-white border-slate-800"
+                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -312,11 +309,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${
-                    isSelected
-                      ? "bg-primary text-white border-primary"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${isSelected
+                    ? "bg-primary text-white border-primary"
+                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -334,11 +330,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
-                    isSelected
-                      ? "bg-slate-800 text-white border-slate-800"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isSelected
+                    ? "bg-slate-800 text-white border-slate-800"
+                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -391,11 +386,10 @@ export default function ProductDetail({ params }) {
                   <div
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${
-                      selectedImage === idx
-                        ? "border-slate-800 ring-2 ring-slate-800/20"
-                        : "border-slate-100 hover:border-primary/50"
-                    }`}
+                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${selectedImage === idx
+                      ? "border-slate-800 ring-2 ring-slate-800/20"
+                      : "border-slate-100 hover:border-primary/50"
+                      }`}
                   >
                     <img
                       src={img}
@@ -410,7 +404,7 @@ export default function ProductDetail({ params }) {
 
           {/* Right Column: Custom Configuration */}
           <div className="text-left space-y-6 lg:pl-4">
-            <div className="space-y-2 border-b border-slate-100 pb-5">
+            <div className="space-y-3 border-b border-slate-100 pb-5">
               <div className="flex justify-between items-center">
                 <span className="text-xs text-primary font-bold uppercase tracking-[0.25em]">
                   {product.category}
@@ -422,17 +416,9 @@ export default function ProductDetail({ params }) {
               <h1 className="text-2xl sm:text-3xl font-serif font-medium text-slate-900 tracking-wide">
                 {product.title}
               </h1>
-              <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
-                Stock ID: {product.id} • Collection Style: {product.style}
-              </p>
-            </div>
 
-            {/* Pricing */}
-            <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-2">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">
-                Configured Atelier Pricing
-              </span>
-              <div className="flex items-baseline gap-2.5">
+              {/* Configured Price below Title */}
+              <div className="flex items-baseline gap-3 mt-1">
                 <span className="text-3xl font-extrabold text-slate-900">
                   {formatPrice(currentPrice)}
                 </span>
@@ -441,10 +427,19 @@ export default function ProductDetail({ params }) {
                     {formatPrice(product.display_price || product.price)}
                   </span>
                 )}
+                {product.discount > 0 && (
+                  <span className="text-[10px] bg-amber-500 text-white font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
+                    {product.discount}% Off
+                  </span>
+                )}
               </div>
-              <div className="flex justify-between text-[10px] text-slate-400 font-semibold uppercase tracking-wider border-t border-slate-200/50 pt-2">
+
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-400 font-bold uppercase tracking-wider pt-1">
+                <span>Stock ID: {product.id}</span>
+                <span>•</span>
+                <span>Collection Style: {product.style}</span>
+                <span>•</span>
                 <span>Metal Weight: {product.goldWeight || 0}g</span>
-                <span>Gold Rate: {formatPrice(75)}/g</span>
               </div>
             </div>
 
@@ -509,14 +504,101 @@ export default function ProductDetail({ params }) {
               ))}
             </div>
 
-            {/* Product Atelier Notes */}
-            <div className="space-y-2 text-xs font-light leading-relaxed border-t border-slate-100 pt-6">
-              <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest">
-                Atelier Craftsmanship Notes
-              </h4>
-              <p className="text-slate-500">
-                {product.description}
-              </p>
+            {/* Elegant Tabbed Details & Specifications */}
+            <div className="border-t border-slate-100 pt-6 space-y-4">
+              <div className="flex border-b border-slate-100 gap-6">
+                <button
+                  onClick={() => setActiveTab("overview")}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "overview"
+                    ? "border-slate-900 text-slate-900"
+                    : "border-transparent text-slate-400 hover:text-slate-600"
+                    }`}
+                >
+                  Overview
+                </button>
+                <button
+                  onClick={() => setActiveTab("specifications")}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "specifications"
+                    ? "border-slate-900 text-slate-900"
+                    : "border-transparent text-slate-400 hover:text-slate-600"
+                    }`}
+                >
+                  Specifications
+                </button>
+                <button
+                  onClick={() => setActiveTab("shipping")}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "shipping"
+                    ? "border-slate-900 text-slate-900"
+                    : "border-transparent text-slate-400 hover:text-slate-600"
+                    }`}
+                >
+                  Shipping & Warranty
+                </button>
+              </div>
+
+              {activeTab === "overview" && (
+                <div className="space-y-3 transition-opacity duration-300">
+                  <p className="text-xs text-slate-500 leading-relaxed font-light">
+                    {product.description}
+                  </p>
+                  <p className="text-xs text-slate-500 leading-relaxed font-light">
+                    Individually hand-set by master jewelers, this masterpiece exemplifies the DN Diamond commitment to exceptional fire, light performance, and bespoke craftsmanship.
+                  </p>
+                </div>
+              )}
+
+              {activeTab === "specifications" && (
+                <div className="space-y-4 transition-opacity duration-300">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5 text-xs">
+                    <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Metal Weight</span>
+                      <span className="text-slate-800 font-bold">{product.goldWeight || 2.5}g (approx.)</span>
+                    </div>
+                    <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Metal Composition</span>
+                      <span className="text-slate-800 font-bold">{selectedOptions.gold_type || "18K Solid Gold"}</span>
+                    </div>
+                    <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Diamond Selection</span>
+                      <span className="text-slate-800 font-bold">
+                        {rawProduct?.pricing?.diamond_cost > 0
+                          ? `Atelier Select (${formatPrice(rawProduct.pricing.diamond_cost)})`
+                          : "GIA Certified Brilliant Cut"}
+                      </span>
+                    </div>
+                    <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Diamond weight</span>
+                      <span className="text-slate-800 font-bold">
+                        {rawProduct?.diamondWeight
+                          ? `${rawProduct.diamondWeight.join(", ")} Carat`
+                          : "0.50 Carat (approx.)"}
+                      </span>
+                    </div>
+                    <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Diamond Specifications</span>
+                      <span className="text-slate-800 font-bold">Clarity: VS+ | Color: F-G</span>
+                    </div>
+                    <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Category & Style</span>
+                      <span className="text-slate-800 font-bold">{product.category} • {product.style || "Atelier Style"}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "shipping" && (
+                <div className="space-y-2 text-xs text-slate-500 leading-relaxed font-light transition-opacity duration-300">
+                  <p>
+                    <strong>FedEx Priority Shipping:</strong> Every shipment is fully insured, securely double-boxed, and requires a signature upon delivery.
+                  </p>
+                  <p>
+                    <strong>Lifetime Warranty:</strong> We guarantee the quality of our craftsmanship for a lifetime. Annual polishing and stone inspections are complimentary at our Hong Kong studio.
+                  </p>
+                  <p>
+                    <strong>30-Day Returns:</strong> If you are not fully satisfied, returns or resizing requests are accepted within 30 days of receipt.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

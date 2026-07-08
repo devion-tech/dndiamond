@@ -15,7 +15,6 @@ export default function WishlistDrawer({ isOpen, onClose }) {
 
   const { getRegionDetails } = useStore();
   const { prefix } = getRegionDetails();
-  console.log("prefix :>> ", prefix);
 
   if (!isOpen) return null;
 

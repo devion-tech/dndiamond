@@ -167,6 +167,7 @@ export function StoreProvider({ children }) {
   };
 
   const updateQuantity = async (cartId, quantity) => {
+    console.log("quantity, cartId :>> ", quantity);
     if (quantity <= 0) {
       await removeFromCart(cartId);
       return;
@@ -339,7 +340,6 @@ export function StoreProvider({ children }) {
     const tax = getTaxAmount();
     return Math.max(0, subtotal - discount + tax);
   };
-  console.log("cart :>> ", cart);
 
   return (
     <StoreContext.Provider

@@ -34,8 +34,10 @@ export const fetchCart = createAsyncThunk(
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
     let url = `${baseUrl}/api/cart/getCart`;
-
-    if (!headers["Authorization"]) {
+    const token = headers["Authorization"]
+      ? headers["Authorization"].split(" ")[1]
+      : null;
+    if (!headers["Authorization"] || token === "null") {
       url += `?guest_id=${guestId}`;
     }
     const res = await fetch(url, {
@@ -55,13 +57,20 @@ export const addToCart = createAsyncThunk(
   async ({ guestId, productId, quantity, selectedOptions }, { dispatch }) => {
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-
+    const headers = getAuthHeaders();
+    const token = headers["Authorization"]
+      ? headers["Authorization"].split(" ")[1]
+      : null;
     const body = {
       product_id: productId,
       quantity,
       selected_options: selectedOptions,
     };
-    const headers = getAuthHeaders();
+    if (!token || token === "null") {
+      body.guest_id = guestId;
+    }
+    console.log("add to cart --->>>>");
+    console.log("token :>> ", token);
 
     const res = await fetch(`${baseUrl}/api/cart/`, {
       method: "POST",
@@ -79,18 +88,25 @@ export const addToCart = createAsyncThunk(
 
 export const updateCart = createAsyncThunk(
   "cart/updateCart",
-  async ({ guestId, itemId, quantity, token }, { dispatch }) => {
+  async ({ guestId, itemId, quantity }, { dispatch }) => {
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const headers = getAuthHeaders();
 
     const body = { item_id: itemId, quantity };
-    if (!token) body.guest_id = guestId;
+    const token = headers["Authorization"]
+      ? headers["Authorization"].split(" ")[1]
+      : null;
+    if (!token || token === "null") {
+      body.guest_id = guestId;
+    }
 
     const res = await fetch(`${baseUrl}/api/cart/updateCart`, {
-      method: "POST",
-      headers,
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
       body: JSON.stringify(body),
     });
     if (res.ok) {
@@ -183,14 +199,14 @@ const cartSlice = createSlice({
             cartId: item.item_id,
             id: p._id || "",
             title: item?.product?.name || "Atelier Piece",
-
             category: p.subcategory_id?.name || p.category_id?.name || "Ring",
             image:
               p.images?.[0] ||
               "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
             metal: item.selected_options?.gold_type || "14K Gold",
             carat: item?.product?.weight || 0.5,
-            price: item?.total,
+            price: item?.current_price || 0,
+            total: item?.total || 0,
             quantity: item.quantity,
           };
         });

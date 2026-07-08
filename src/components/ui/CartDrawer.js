@@ -21,6 +21,7 @@ import confetti from "canvas-confetti";
 export default function CartDrawer({ isOpen, onClose }) {
   const {
     cart,
+    totalItems,
     updateQuantity,
     removeFromCart,
     appliedCoupon,
@@ -213,9 +214,9 @@ export default function CartDrawer({ isOpen, onClose }) {
                 Shopping Cart
               </h2>
               <span className="text-[10px] text-slate-400 font-semibold tracking-wider mt-0.5">
-                {cart.length === 0
+                {!totalItems
                   ? "Your bag is empty"
-                  : `${cart.reduce((tot, i) => tot + i.quantity, 0)} Items Added`}
+                  : `${totalItems} Items Added`}
               </span>
             </div>
             <button
@@ -739,7 +740,7 @@ export default function CartDrawer({ isOpen, onClose }) {
 
                       <div className="text-right shrink-0 flex flex-col justify-between">
                         <span className="text-xs font-extrabold text-slate-900">
-                          {formatPrice(item.price * item.quantity)}
+                          {formatPrice(item?.total)}
                         </span>
                         <span className="text-[9px] text-slate-400 font-medium">
                           {formatPrice(item.price)} each

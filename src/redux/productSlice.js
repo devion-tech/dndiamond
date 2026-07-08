@@ -10,7 +10,7 @@ export const fetchProducts = createAsyncThunk(
 
     const body = {
       page: params.page || 1,
-      limit: params.limit || 50,
+      limit: params.limit || 10,
     };
 
     if (params.product_type) {
@@ -45,7 +45,7 @@ export const fetchProducts = createAsyncThunk(
       throw new Error("Failed to fetch products");
     }
     const data = await response.json();
-    return data.data || [];
+    return data.data || { products: [], pagination: {} };
   },
 );
 
@@ -71,29 +71,49 @@ const productSlice = createSlice({
   name: "products",
   initialState: {
     items: [],
+    pagination: {},
     selectedProduct: null,
     loading: false,
+    loadingMore: false,
     error: null,
   },
   reducers: {
     clearSelectedProduct: (state) => {
       state.selectedProduct = null;
     },
+    clearProducts: (state) => {
+      state.items = [];
+      state.pagination = {};
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state) => {
-        state.loading = true;
+      .addCase(fetchProducts.pending, (state, action) => {
         state.error = null;
+        if ((action.meta.arg.page || 1) === 1) {
+          state.loading = true;
+        } else {
+          state.loadingMore = true;
+        }
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.loadingMore = false;
+        const { products = [], pagination = {} } = action.payload;
+        if ((action.meta.arg.page || 1) === 1) {
+          state.items = products;
+        } else {
+          state.items = [...state.items, ...products];
+        }
+        state.pagination = pagination;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
+        state.loadingMore = false;
         state.error = action.error.message;
-        state.items = [];
+        if ((action.meta.arg.page || 1) === 1) {
+          state.items = [];
+        }
       })
       .addCase(fetchProductDetail.pending, (state) => {
         state.loading = true;
@@ -111,5 +131,5 @@ const productSlice = createSlice({
   },
 });
 
-export const { clearSelectedProduct } = productSlice.actions;
+export const { clearSelectedProduct, clearProducts } = productSlice.actions;
 export default productSlice.reducer;

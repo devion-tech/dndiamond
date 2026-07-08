@@ -1,11 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, Suspense, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  Suspense,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { FaFilter } from "react-icons/fa";
 import FilterDrawer from "@/components/ui/FilterDrawer";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "@/redux/productSlice";
+import { fetchProducts, clearProducts } from "@/redux/productSlice";
 import Layout from "@/components/layout/Layout";
 import ProductCard from "@/components/ui/ProductCard";
 import { useStore } from "@/context/StoreContext";
@@ -38,7 +45,6 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
 };
 
 function CatalogContent() {
-  //   const searchParams = useSearchParams();
   const { calculatePrice, formatPrice } = useStore();
 
   // Filters state
@@ -49,12 +55,13 @@ function CatalogContent() {
   const [selectedCaratRange, setSelectedCaratRange] = useState("");
   const [selectedOrigin, setSelectedOrigin] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("");
-  const [sortOrder, setSortOrder] = useState("DESC"); // DESC or ASC
+  const [sortOrder, setSortOrder] = useState("DESC");
 
   const { subcategoryslug } = useParams();
 
   // API fetching states
   const [subcategoryId, setSubcategoryId] = useState("");
+  const [page, setPage] = useState(1);
 
   // Filter drawer and accordion states
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
@@ -71,36 +78,62 @@ function CatalogContent() {
     setAccordions((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // Sync filters with URL search params on mount
-  //   useEffect(() => {
-  //     const catParam = searchParams.get("category");
-  //     const searchParam = searchParams.get("search");
-  //     const originParam = searchParams.get("origin");
-  //     const styleParam = searchParams.get("style");
-  //     const subcatParam = searchParams.get("subcategory_id");
-
-  //     if (catParam) setSelectedCategory(catParam);
-  //     if (searchParam) setSearch(searchParam);
-  //     if (originParam) setSelectedOrigin(originParam);
-  //     if (styleParam) setSelectedStyle(styleParam);
-  //     if (subcatParam) {
-  //       setSubcategoryId(subcatParam);
-  //     } else {
-  //       setSubcategoryId("");
-  //     }
-  //   }, [searchParams]);
-
   const dispatch = useDispatch();
-  const { items: rawProducts, loading: apiLoading } = useSelector(
-    (state) => state.products,
-  );
-  const data = rawProducts?.products || [];
+  const {
+    items: rawProducts,
+    loading: apiLoading,
+    loadingMore,
+    pagination,
+  } = useSelector((state) => state.products);
+
+  const totalPages = pagination?.total_pages || 1;
+  const currentPage = pagination?.page || 1;
 
   // Fetch products dynamically from Redux
   useEffect(() => {
-    dispatch(fetchProducts({ limit: 50, subcategory_slug: subcategoryslug }));
-  }, [dispatch, subcategoryId]);
+    setPage(1);
+    dispatch(clearProducts());
+    dispatch(
+      fetchProducts({ page: 1, limit: 10, subcategory_slug: subcategoryslug }),
+    );
+  }, [dispatch, subcategoryslug]);
 
+  // Fetch next page
+  const loadMore = useCallback(() => {
+    if (loadingMore || currentPage >= totalPages) return;
+    const nextPage = currentPage + 1;
+    setPage(nextPage);
+    dispatch(
+      fetchProducts({
+        page: nextPage,
+        limit: 10,
+        subcategory_slug: subcategoryslug,
+      }),
+    );
+  }, [dispatch, loadingMore, currentPage, totalPages, subcategoryslug]);
+
+  // IntersectionObserver for infinite scroll
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(sentinel);
+
+    return () => observer.disconnect();
+  }, [loadMore]);
+
+  const data = rawProducts || [];
   const apiProducts = useMemo(() => {
     return data.map((p) => {
       const colors = p?.options?.filter((opt) => opt.name === "colors") || [];
@@ -289,11 +322,27 @@ function CatalogContent() {
             </span>
           </div>
         ) : productsSource?.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-12 animate-fade-in">
-            {productsSource.map((item) => (
-              <ProductCard key={item.id} item={item} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-12 animate-fade-in">
+              {productsSource.map((item) => (
+                <ProductCard key={item.id} item={item} />
+              ))}
+            </div>
+            {/* Sentinel for infinite scroll */}
+            <div ref={sentinelRef} className="h-4" />
+            {loadingMore && (
+              <div className="flex justify-center py-8">
+                <div className="h-6 w-6 border-2 border-neutral-900 border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
+            {!loadingMore && currentPage >= totalPages && productsSource.length > 0 && (
+              <div className="text-center py-8">
+                <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-[0.2em]">
+                  You've seen all products
+                </span>
+              </div>
+            )}
+          </>
         ) : (
           <div className="flex flex-col justify-center items-center text-center py-32 px-4 bg-white border border-neutral-100 rounded-sm space-y-5 max-w-lg mx-auto">
             <span className="font-serif italic text-3xl text-neutral-300">

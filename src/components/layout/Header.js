@@ -17,6 +17,7 @@ import {
   FaQrcode,
 } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
+import AuthModal from "../ui/AuthModal";
 
 // Fallback categories removed to make the component fully dynamic.
 
@@ -686,15 +687,21 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         </div>
       )}
       {/* 5. Luxury Authentication Modal */}
-      {authModalOpen && (
-        <>
-          {/* Backdrop */}
+      <AuthModal
+        setOpen={setAuthModalOpen}
+        open={authModalOpen}
+        authMode={authMode}
+        setAuthMode={setAuthMode}
+        handleLoginSubmit={handleLoginSubmit}
+        authLoading={authLoading}
+      />
+      {/* {authModalOpen && ( */}
+      {/* <>
           <div
             onClick={() => setAuthModalOpen(false)}
             className="fixed inset-0 bg-neutral-900/40 backdrop-blur-xs z-50 transition-opacity duration-300"
           />
 
-          {/* Modal Content */}
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md p-8 shadow-2xl z-50 rounded-xs border border-neutral-100 text-left animate-fade-in font-sans">
             <div className="flex justify-between items-center border-b border-neutral-100 pb-4 mb-6">
               <span className="text-xs font-bold tracking-[0.25em] text-neutral-800 uppercase">
@@ -845,8 +852,8 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               </form>
             )}
           </div>
-        </>
-      )}
+        </> */}
+      {/* )} */}
     </header>
   );
 }

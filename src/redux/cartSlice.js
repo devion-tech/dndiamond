@@ -194,14 +194,14 @@ const cartSlice = createSlice({
         state.subtotal = action?.payload?.subtotal;
         state.total_items = action?.payload?.total_items;
         state.items = action.payload?.items?.map((item) => {
-          const p = item.product_id || {};
+          const p = item.product || {};
           return {
             cartId: item.item_id,
             id: p._id || "",
             title: item?.product?.name || "Atelier Piece",
             category: p.subcategory_id?.name || p.category_id?.name || "Ring",
             image:
-              p.images?.[0] ||
+              item?.product?.images?.[0] ||
               "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
             metal: item.selected_options?.gold_type || "14K Gold",
             carat: item?.product?.weight || 0.5,

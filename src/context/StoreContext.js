@@ -145,7 +145,7 @@ export function StoreProvider({ children }) {
 
   // --- Cart Redux Wrapper ---
   const addToCart = async (product, selectedOptions, finalPrice) => {
-    dispatch(
+    return dispatch(
       addToCartThunk({
         guestId,
         productId: product.id,
@@ -153,7 +153,7 @@ export function StoreProvider({ children }) {
         selectedOptions,
         token,
       }),
-    );
+    ).unwrap();
   };
 
   const removeFromCart = async (cartId) => {

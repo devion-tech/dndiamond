@@ -225,10 +225,15 @@ export default function ProductDetail({ params }) {
 
   const wishlisted = isWishlisted(product.id);
 
-  const handleAddToCart = () => {
-    addToCart(product, selectedOptions, currentPrice);
-    setSuccessAdded(true);
-    setTimeout(() => setSuccessAdded(false), 3000);
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(product, selectedOptions, currentPrice);
+
+      setSuccessAdded(true);
+      setTimeout(() => setSuccessAdded(false), 3000);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Render option selector based on option name

@@ -51,11 +51,21 @@ export const fetchProducts = createAsyncThunk(
 
 export const fetchProductDetail = createAsyncThunk(
   "products/fetchProductDetail",
-  async (productId) => {
+  async ({ productId, guestId }) => {
     const baseUrl =
       process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+    const headers = getAuthHeaders();
 
-    const response = await fetch(`${baseUrl}/api/product/${productId}`);
+    const response = await fetch(
+      `${baseUrl}/api/product/${productId}?guestId=${guestId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+      },
+    );
+
     if (!response.ok) {
       throw new Error("Failed to fetch product details");
     }

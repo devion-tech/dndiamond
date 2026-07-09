@@ -58,12 +58,14 @@ export default function ProductDetail({ params }) {
   const productId = resolvedParams.id;
 
   const {
+    guestId,
     calculatePrice,
     addToCart,
     toggleWishlist,
     isWishlisted,
     formatPrice,
   } = useStore();
+  console.log("guestId :>> ", guestId);
 
   const dispatch = useDispatch();
   const { selectedProduct: rawProduct, error: apiError } = useSelector(
@@ -82,12 +84,12 @@ export default function ProductDetail({ params }) {
   // Fetch product details on mount/param change
   useEffect(() => {
     if (productId) {
-      dispatch(fetchProductDetail(productId));
+      dispatch(fetchProductDetail({ productId, guestId }));
     }
     return () => {
       dispatch(clearSelectedProduct());
     };
-  }, [dispatch, productId]);
+  }, [dispatch, productId, guestId]);
 
   // Update local state when rawProduct updates
   useEffect(() => {

@@ -35,7 +35,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                 My Wishlist
               </h2>
               <span className="text-[10px] text-slate-400 font-semibold tracking-wider mt-0.5">
-                {wishlist.length === 0
+                {!wishlist || wishlist.length === 0
                   ? "No favorites added yet"
                   : `${wishlist.length} Items Saved`}
               </span>
@@ -49,7 +49,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
           </div>
 
           {/* Content Body */}
-          {wishlist.length === 0 ? (
+          {wishlist && wishlist.length === 0 ? (
             <div className="flex-1 flex flex-col justify-center items-center text-center p-8 space-y-4">
               <div className="h-16 w-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center text-slate-350 mb-2">
                 <FaHeartBroken size={20} />
@@ -57,7 +57,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
               <h3 className="text-sm font-bold text-slate-800 tracking-wider">
                 Your wishlist is empty
               </h3>
-              <p className="text-xs text-slate-400 max-w-[240px] leading-relaxed font-light">
+              <p className="text-xs text-slate-400 max-w-60 leading-relaxed font-light">
                 Add items you love to your wishlist to keep track of them for
                 later purchases.
               </p>
@@ -70,7 +70,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-              {wishlist.map((item) => (
+              {wishlist && wishlist.map((item) => (
                 <div
                   key={item.id}
                   className="flex gap-4 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-all bg-white relative group"

@@ -33,8 +33,8 @@ const registerSchema = yup.object({
     .required("Password is required"),
 });
 
-function AuthModal(props) {
-  const { setOpen, open } = props;
+function AuthModal() {
+  const { loginUser, registerUser, authModalOpen, setAuthModalOpen } = useStore();
   const [authError, setAuthError] = useState("");
   const [authMode, setAuthMode] = useState("login");
   const [authSuccess, setAuthSuccess] = useState("");
@@ -46,7 +46,6 @@ function AuthModal(props) {
     phone: "",
   });
   const [errors, setErrors] = useState({});
-  const { loginUser, registerUser } = useStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,7 +87,7 @@ function AuthModal(props) {
       if (data && data.success) {
         setAuthSuccess("Vault access granted. Welcome.");
         setTimeout(() => {
-          setOpen(false);
+          setAuthModalOpen(false);
           setAuthSuccess("");
           setFields({ email: "", password: "", name: "", phone: "" });
         }, 1000);
@@ -154,11 +153,11 @@ function AuthModal(props) {
     }`;
 
   return (
-    <div>
-      {open && (
+    <>
+      {authModalOpen && (
         <>
           <div
-            onClick={() => setOpen(false)}
+            onClick={() => setAuthModalOpen(false)}
             className="fixed inset-0 bg-neutral-900/40 backdrop-blur-xs z-50 transition-opacity duration-300"
           />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md p-8 shadow-2xl z-50 rounded-xs border border-neutral-100 text-left animate-fade-in font-sans">
@@ -167,7 +166,7 @@ function AuthModal(props) {
                 {authMode === "login" ? "Sign In" : "Register Profile"}
               </span>
               <button
-                onClick={() => setOpen(false)}
+                onClick={() => setAuthModalOpen(false)}
                 className="text-neutral-400 hover:text-neutral-900 transition-colors p-1"
                 aria-label="Close Auth Modal"
               >
@@ -351,7 +350,7 @@ function AuthModal(props) {
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }
 

@@ -38,6 +38,7 @@ export function StoreProvider({ children }) {
   const [inquiries, setInquiries] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [region, setRegion] = useState("HK"); // "HK", "AU", "NZ"
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   // Redux bindings
   const { token, user, guestId } = useSelector((state) => state.auth);
@@ -358,6 +359,8 @@ export function StoreProvider({ children }) {
         guestId,
         user,
         token,
+        authModalOpen,
+        setAuthModalOpen,
         saveRegion,
         getRegionDetails,
         getConvertedPrice,
@@ -376,7 +379,6 @@ export function StoreProvider({ children }) {
         applyCouponCode,
         removeCoupon,
         getCartSubtotal,
-
         getDiscountAmount,
         getCartTotal,
         registerUser,

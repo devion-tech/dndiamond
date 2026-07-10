@@ -87,6 +87,8 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
     loginUser,
     registerUser,
     logoutUser,
+    authModalOpen,
+    setAuthModalOpen,
   } = useStore();
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -99,7 +101,6 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const hoverTimeoutRef = useRef(null);
 
   // Auth states
-  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -687,173 +688,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         </div>
       )}
       {/* 5. Luxury Authentication Modal */}
-      <AuthModal
-        setOpen={setAuthModalOpen}
-        open={authModalOpen}
-        authMode={authMode}
-        setAuthMode={setAuthMode}
-        handleLoginSubmit={handleLoginSubmit}
-        authLoading={authLoading}
-      />
-      {/* {authModalOpen && ( */}
-      {/* <>
-          <div
-            onClick={() => setAuthModalOpen(false)}
-            className="fixed inset-0 bg-neutral-900/40 backdrop-blur-xs z-50 transition-opacity duration-300"
-          />
-
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md p-8 shadow-2xl z-50 rounded-xs border border-neutral-100 text-left animate-fade-in font-sans">
-            <div className="flex justify-between items-center border-b border-neutral-100 pb-4 mb-6">
-              <span className="text-xs font-bold tracking-[0.25em] text-neutral-800 uppercase">
-                {authMode === "login" ? "Sign In" : "Register Profile"}
-              </span>
-              <button
-                onClick={() => setAuthModalOpen(false)}
-                className="text-neutral-400 hover:text-neutral-900 transition-colors p-1"
-                aria-label="Close Auth Modal"
-              >
-                <FaTimes size={16} />
-              </button>
-            </div>
-
-            {authError && (
-              <div className="mb-4 p-3 bg-red-50 text-red-600 text-[10px] font-bold uppercase tracking-wider rounded-xs">
-                {authError}
-              </div>
-            )}
-
-            {authSuccess && (
-              <div className="mb-4 p-3 bg-green-50 text-green-600 text-[10px] font-bold uppercase tracking-wider rounded-xs">
-                {authSuccess}
-              </div>
-            )}
-
-            {authMode === "login" ? (
-              <form onSubmit={handleLoginSubmit} className="space-y-4">
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-950 transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-950 transition-all"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={authLoading}
-                  className="w-full bg-neutral-950 hover:bg-neutral-900 text-white text-[10px] font-bold py-3 uppercase tracking-widest transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  {authLoading ? "Verifying..." : "Access Vault"}
-                </button>
-                <div className="text-center pt-3 border-t border-neutral-100">
-                  <span className="text-[9px] text-neutral-400 uppercase tracking-wider font-semibold">
-                    New to Atelier?
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAuthMode("register");
-                      setAuthError("");
-                    }}
-                    className="ml-1 text-[9px] text-neutral-800 hover:underline uppercase tracking-wider font-extrabold"
-                  >
-                    Create Account
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <form onSubmit={handleRegisterSubmit} className="space-y-4">
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={regName}
-                    onChange={(e) => setRegName(e.target.value)}
-                    className="w-full border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-950 transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={regEmail}
-                    onChange={(e) => setRegEmail(e.target.value)}
-                    className="w-full border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-950 transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Phone Number
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={regPhone}
-                    onChange={(e) => setRegPhone(e.target.value)}
-                    className="w-full border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-950 transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    required
-                    value={regPassword}
-                    onChange={(e) => setRegPassword(e.target.value)}
-                    className="w-full border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-950 transition-all"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={authLoading}
-                  className="w-full bg-neutral-950 hover:bg-neutral-900 text-white text-[10px] font-bold py-3 uppercase tracking-widest transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  {authLoading ? "Creating..." : "Register Vault"}
-                </button>
-                <div className="text-center pt-3 border-t border-neutral-100">
-                  <span className="text-[9px] text-neutral-400 uppercase tracking-wider font-semibold">
-                    Already registered?
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAuthMode("login");
-                      setAuthError("");
-                    }}
-                    className="ml-1 text-[9px] text-neutral-800 hover:underline uppercase tracking-wider font-extrabold"
-                  >
-                    Sign In
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </> */}
-      {/* )} */}
+      <AuthModal />
     </header>
   );
 }

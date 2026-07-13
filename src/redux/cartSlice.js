@@ -205,7 +205,7 @@ const cartSlice = createSlice({
               "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
             metal: item.selected_options?.gold_type || "14K Gold",
             carat: item?.product?.weight || 0.5,
-            price: item?.current_price || 0,
+            price: item?.price_snapshot || 0,
             total: item?.total || 0,
             quantity: item.quantity,
           };

@@ -99,6 +99,16 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
   const [isJewelryHovered, setIsJewelryHovered] = useState(false);
   const hoverTimeoutRef = useRef(null);
+  const [jewelryTab, setJewelryTab] = useState("labgrown"); // "labgrown" or "natural"
+
+  const handleTabClick = (tab) => {
+    setJewelryTab(tab);
+    // Developer placeholder: User mentioned they will setup login when clicked
+    // E.g., if (tab === "natural" && !user) {
+    //   setAuthMode("login");
+    //   setAuthModalOpen(true);
+    // }
+  };
 
   // Auth states
   const [authMode, setAuthMode] = useState("login");
@@ -194,17 +204,17 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const filteredSearchItems =
     searchQuery.trim() !== ""
       ? [
-          ...jewelry.filter(
-            (j) =>
-              j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              j.category.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-          ...diamonds.filter(
-            (d) =>
-              d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-        ].slice(0, 5)
+        ...jewelry.filter(
+          (j) =>
+            j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            j.category.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+        ...diamonds.filter(
+          (d) =>
+            d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+      ].slice(0, 5)
       : [];
 
   const handleSearchSubmit = (e) => {
@@ -242,13 +252,13 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </button>
         </div>
       )}
-      <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8 relative">
+      <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between px-2 min-[375px]:px-4 sm:px-6 lg:px-8 relative">
         {/* Left Side: Mobile Toggle & Desktop Nav */}
-        <div className="flex items-center gap-6 static h-full">
+        <div className="flex items-center gap-2 min-[375px]:gap-4 md:gap-6 static h-full">
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-neutral-700 hover:text-neutral-900 md:hidden focus:outline-none"
+            className="p-1 min-[375px]:p-2 text-neutral-700 hover:text-neutral-900 md:hidden focus:outline-none"
             aria-label="Toggle Menu"
           >
             {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
@@ -261,7 +271,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-all duration-300">
+              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-all duration-300">
                 <span>Jewelry</span>
                 <FaChevronDown
                   size={7}
@@ -271,15 +281,38 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
               {/* Mega Menu Container */}
               <div
-                className={`absolute left-4 right-4 top-full ${isJewelryHovered ? "flex" : "hidden"} bg-white border border-neutral-100 rounded-sm p-8 shadow-xl animate-fade-in z-50 justify-between gap-8 text-left cursor-default`}
+                className={`absolute left-4 right-4 top-full ${isJewelryHovered ? "flex" : "hidden"} flex-col bg-white border border-neutral-100 rounded-sm p-8 shadow-xl animate-fade-in z-50 text-left cursor-default`}
               >
+                {/* Tabs Selector */}
+                <div className="flex justify-center border-b border-neutral-100 pb-4 mb-6 gap-8 w-full">
+                  <button
+                    onClick={() => handleTabClick("labgrown")}
+                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${jewelryTab === "labgrown"
+                      ? "border-neutral-900 text-neutral-900"
+                      : "border-transparent text-neutral-400 hover:text-neutral-600"
+                      }`}
+                  >
+                    Lab Grown
+                  </button>
+                  <button
+                    onClick={() => handleTabClick("natural")}
+                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${jewelryTab === "natural"
+                      ? "border-neutral-900 text-neutral-900"
+                      : "border-transparent text-neutral-400 hover:text-neutral-600"
+                      }`}
+                  >
+                    Natural
+                  </button>
+                </div>
+
                 {/* Left Part: 4 columns for categories */}
-                <div className="grid grid-cols-4 gap-8 flex-1">
+                <div className="grid grid-cols-4 gap-8 w-full">
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-4">
                       <h4 className="font-serif text-[11px] lg:text-xs xl:text-base font-bold tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
                         <Link
-                          href={`/category/${cat?.slug}`}
+                          href={`/category/${cat?.slug}?origin=${jewelryTab}`}
+                          onClick={() => setIsJewelryHovered(false)}
                           className="hover:text-neutral-500 transition-colors"
                         >
                           {getDisplayCategoryName(cat.name)}
@@ -291,7 +324,8 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                             cat.subcategories.slice(0, 5).map((sub) => (
                               <li key={sub.name}>
                                 <Link
-                                  href={`/category/${cat?.slug}/${sub?.slug}`}
+                                  href={`/category/${cat?.slug}/${sub?.slug}?origin=${jewelryTab}`}
+                                  onClick={() => setIsJewelryHovered(false)}
                                   className="hover:text-neutral-955 transition-colors block py-0.5"
                                 >
                                   {sub.name}
@@ -306,18 +340,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               </div>
             </div>
 
-            {/* Our Story */}
-            <Link
-              href="/our-story"
-              className="text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
-            >
-              Our Story
-            </Link>
+
 
             {/* About Us */}
             <Link
               href="/about"
-              className="text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
+              className="text-[11px] sm:text-xs xl:text-xs font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
             >
               About Us
             </Link>
@@ -325,7 +353,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             {/* Contact */}
             <Link
               href="/contact"
-              className="text-[11px] sm:text-xs xl:text-sm font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
+              className="text-[11px] sm:text-xs xl:text-xs font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
             >
               Contact
             </Link>
@@ -334,12 +362,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         {/* Center: Brand Logo Text */}
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Link href="/">
-            <span className="font-serif text-xl sm:text-2xl  font-light tracking-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
+            <span className="text-[11px] min-[375px]:text-sm sm:text-lg md:text-2xl font-light tracking-[0.15em] sm:tracking-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
               DNDIAMOND
             </span>
           </Link>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 min-[375px]:gap-2.5 md:gap-3">
           {/* Search Bar */}
           <div className="hidden sm:flex items-center border-b border-neutral-200 py-1 mr-2">
             <input
@@ -395,7 +423,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </button>
 
           {/* 3. Profile */}
-          <div className="relative group">
+          <div className="relative group hidden md:block">
             <button
               onClick={() => {
                 if (!user) {
@@ -471,7 +499,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </div>
 
           {/* 4. Country Selector */}
-          <div className="relative group">
+          <div className="relative group hidden md:block">
             <button
               className="flex items-center gap-0.5 p-2 text-neutral-700 hover:text-neutral-900 transition-colors text-[10px] lg:text-xs xl:text-sm font-bold tracking-wider uppercase cursor-pointer"
               aria-label="Country Selector"
@@ -505,7 +533,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         </div>
       </div>
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full border-b border-neutral-200 bg-white px-6 py-4 shadow-lg animate-fade-in text-left z-50">
+        <div className="md:hidden absolute top-full left-0 w-full border-b border-neutral-200 bg-white px-6 py-4 shadow-lg animate-fade-in text-left z-50 max-h-[80vh] overflow-y-auto">
           <nav className="flex flex-col gap-4">
             <div>
               <button
@@ -520,15 +548,36 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               </button>
               {mobileJewelryOpen && (
                 <div className="pl-3 mt-3 space-y-4 border-l border-neutral-100 animate-fade-in">
+                  {/* Mobile Tab Switcher */}
+                  <div className="flex border-b border-neutral-100 pb-2 mb-2 gap-4">
+                    <button
+                      onClick={() => handleTabClick("labgrown")}
+                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${jewelryTab === "labgrown"
+                        ? "border-neutral-900 text-neutral-900"
+                        : "border-transparent text-neutral-400"
+                        }`}
+                    >
+                      Lab Grown
+                    </button>
+                    <button
+                      onClick={() => handleTabClick("natural")}
+                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${jewelryTab === "natural"
+                        ? "border-neutral-900 text-neutral-900"
+                        : "border-transparent text-neutral-400"
+                        }`}
+                    >
+                      Natural
+                    </button>
+                  </div>
                   <Link
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setMobileJewelryOpen(false);
                     }}
-                    href="/category"
+                    href={`/category?origin=${jewelryTab}`}
                     className="block text-[11px] font-bold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest"
                   >
-                    Shop All Jewelry
+                    Shop All {jewelryTab === "labgrown" ? "Lab Grown" : "Natural"} Jewelry
                   </Link>
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-1.5">
@@ -541,7 +590,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                             setMobileMenuOpen(false);
                             setMobileJewelryOpen(false);
                           }}
-                          href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}`}
+                          href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&origin=${jewelryTab}`}
                           className="text-[10px] font-semibold text-neutral-700 hover:text-neutral-950 py-0.5"
                         >
                           All {getDisplayCategoryName(cat.name)}
@@ -554,7 +603,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                                 setMobileMenuOpen(false);
                                 setMobileJewelryOpen(false);
                               }}
-                              href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&style=${encodeURIComponent(sub.name.toLowerCase())}${sub._id ? `&subcategory_id=${sub._id}` : ""}`}
+                              href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&style=${encodeURIComponent(sub.name.toLowerCase())}&origin=${jewelryTab}${sub._id ? `&subcategory_id=${sub._id}` : ""}`}
                               className="text-[10px] font-semibold text-neutral-700 hover:text-neutral-955 py-0.5"
                             >
                               {sub.name}
@@ -595,6 +644,83 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               >
                 Contact Us
               </Link>
+            </div>
+
+            {/* Mobile Profile & Country Selector */}
+            <div className="border-t border-neutral-100 pt-4 mt-2 space-y-4">
+              {/* Account/Profile */}
+              <div className="space-y-2">
+                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">
+                  Account
+                </p>
+                {user ? (
+                  <div className="space-y-2 pl-2">
+                    <p className="text-[10px] font-semibold text-neutral-700">
+                      Welcome, <span className="text-neutral-900 font-bold">{user.name || user.email}</span>
+                    </p>
+                    <button
+                      onClick={() => {
+                        logoutUser();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="text-[10px] font-bold text-red-500 uppercase tracking-wider block cursor-pointer"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-4 pl-2">
+                    <button
+                      onClick={() => {
+                        setAuthMode("login");
+                        setAuthModalOpen(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="text-[10px] font-bold text-neutral-800 uppercase tracking-widest cursor-pointer"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => {
+                        setAuthMode("register");
+                        setAuthModalOpen(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest cursor-pointer"
+                    >
+                      Create Account
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Region Selector */}
+              <div className="space-y-2 pb-2">
+                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">
+                  Region
+                </p>
+                <div className="flex gap-2 pl-2 flex-wrap">
+                  {[
+                    { code: "HK", label: "HK (HKD)" },
+                    { code: "AU", label: "AU (AUD)" },
+                    { code: "NZ", label: "NZ (NZD)" },
+                  ].map((reg) => (
+                    <button
+                      key={reg.code}
+                      onClick={() => {
+                        saveRegion(reg.code);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`px-2 py-1 text-[9px] font-bold tracking-wider rounded-sm uppercase transition-all border cursor-pointer ${region === reg.code
+                        ? "bg-neutral-900 text-white border-neutral-900"
+                        : "text-neutral-500 bg-neutral-50 border-neutral-200"
+                        }`}
+                    >
+                      {reg.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </nav>
         </div>

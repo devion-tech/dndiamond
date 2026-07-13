@@ -6,6 +6,7 @@ import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
 import CategoryCarousel from "@/components/ui/CategoryCarousel";
 import ExploreDiamonds from "@/components/ui/ExploreDiamonds";
+import ProductCard from "@/components/ui/ProductCard";
 
 const BEST_SELLERS = [
     { id: "JW-101", name: "Classic Diamond Halo Ring", price: 4150, img: "/bestsellers/RF16377DD-03-W.webp" },
@@ -37,7 +38,7 @@ const SLIDES = [
         title: "Crafted Specifically\nFor Your Story.",
         description: "Work directly with our master bench jewellers to design a unique custom piece engineered to endure for generations.",
         buttonText: "Reserve Consultation",
-        img: "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=1920",
+        img: "https://earthlyjewels.co/cdn/shop/files/desktop_bannerc1-3.jpg?v=1782132412&width=1800",
         link: "/bespoke"
     },
     {
@@ -45,7 +46,7 @@ const SLIDES = [
         title: "GIA Conflict-Free\nMasterpieces.",
         description: "Every diamond carries an official GIA laser-inscribed registration, guaranteeing unmatched clarity, color, and provenance.",
         buttonText: "Explore Diamonds",
-        img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1920",
+        img: "https://www.chatham.com/cdn/shop/files/Color-Engagement-Rings-Feature-Image-1_ac52e2f6-86e5-4610-aa9d-3954446f0ef0.jpg?v=1758731031",
         link: "/diamonds"
     },
     {
@@ -53,7 +54,7 @@ const SLIDES = [
         title: "A Legacy Of\nPure Precision.",
         description: "Drawing inspiration from classical proportions and symmetry. Explore our collection of hand-forged gold and platinum masterpieces.",
         buttonText: "About DN Diamond",
-        img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920",
+        img: "https://ecommo--ion.bluenile.com/static-dyo-bn/Necklaces.e5191.jpg",
         link: "/about"
     }
 ];
@@ -111,30 +112,152 @@ function MarqueeStrip({ dark }) {
     );
 }
 
-function BestSellersGrid({ formatPrice }) {
+function BestSellersGrid() {
     const gridRef = useRef(null);
     useReveal(gridRef, { stagger: 0.1, y: 28, duration: 0.7, start: "top 82%" });
     return (
-        <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-5 gap-x-5 gap-y-8">
-            {BEST_SELLERS.map(prod => (
-                <BestSellerCard key={prod.id} prod={prod} formatPrice={formatPrice} />
-            ))}
+        <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-12">
+            {BEST_SELLERS.map(prod => {
+                const mappedProd = {
+                    id: prod.id,
+                    title: prod.name,
+                    display_price: prod.price,
+                    image: prod.img,
+                    slug: prod.id,
+                    colors: [],
+                    is_wishlist: false
+                };
+                return (
+                    <div key={prod.id} className="opacity-0 h-full">
+                        <ProductCard item={mappedProd} />
+                    </div>
+                );
+            })}
         </div>
     );
 }
 
-function BestSellerCard({ prod, formatPrice }) {
-    const imgRef = useRef(null);
-    const onEnter = () => import("gsap").then(({ gsap }) => gsap.to(imgRef.current, { scale: 1.05, duration: 0.6, ease: "power2.out" }));
-    const onLeave = () => import("gsap").then(({ gsap }) => gsap.to(imgRef.current, { scale: 1, duration: 0.5, ease: "power2.inOut" }));
+const FAQ_ITEMS = [
+    {
+        question: "How long does delivery take?",
+        answer: "Standard delivery takes 5–7 business days. Express shipping (2–3 days) is available at checkout."
+    },
+    {
+        question: "Are your jewellery pieces certified and hallmarked?",
+        answer: "Yes, all our jewellery pieces are officially certified and hallmarked. Every diamond above 0.5 carats is accompanied by an original GIA or IGI certificate, ensuring its color, clarity, cut, and weight are verified to international standards."
+    },
+    {
+        question: "Can I request a bespoke piece?",
+        answer: "Absolutely. We specialise in custom fine jewellery. You can collaborate directly with our designers and master craftspeople to create a unique piece from select diamonds and precious metals. Please visit our Bespoke section or schedule a consultation."
+    },
+    {
+        question: "What is your return policy?",
+        answer: "We offer a 30-day return policy for standard, non-customised jewellery items in their original, unworn condition. Customised and bespoke designs are final sale due to their unique, individual nature, but are covered under our lifetime craftsmanship warranty."
+    }
+];
+
+function FAQSection() {
+    const [openIndex, setOpenIndex] = useState(0);
+
     return (
-        <Link href={`/jewelry/${prod.id}`} className="group flex flex-col text-left" onMouseEnter={onEnter} onMouseLeave={onLeave}>
-            <div className="aspect-square w-full overflow-hidden bg-white border border-neutral-100 p-2 mb-4">
-                <img ref={imgRef} src={prod.img} alt={prod.name} className="h-full w-full object-contain will-change-transform" />
+        <section id="faq" className="bg-white py-20 px-6 sm:px-10 lg:px-16 border-t border-neutral-100">
+            <div className="mx-auto max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-12 sm:gap-16">
+                {/* Left Column: 5/12 width */}
+                <div className="md:col-span-5 space-y-6 text-left">
+                    <span className="text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.25em] text-neutral-500 uppercase">
+                        Need Help?
+                    </span>
+                    <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-tight font-light text-neutral-900 tracking-wide">
+                        Frequently Asked Questions
+                    </h2>
+                    <p className="text-xs sm:text-sm font-light text-neutral-500 leading-relaxed max-w-sm">
+                        Everything you need to know about our jewellery, customisation, certifications, and after-sales care.
+                    </p>
+                    <div className="pt-2">
+                        <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-2.5 border border-neutral-900 rounded-full text-xs font-semibold uppercase tracking-wider text-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors duration-300">
+                            View all questions <span className="text-sm">→</span>
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Right Column: 7/12 width */}
+                <div className="md:col-span-7 space-y-4">
+                    {FAQ_ITEMS.map((item, idx) => {
+                        const isOpen = openIndex === idx;
+                        return (
+                            <div key={idx} className="border-b border-neutral-200/60 pb-4 transition-all duration-300">
+                                <button
+                                    onClick={() => setOpenIndex(isOpen ? -1 : idx)}
+                                    className="w-full flex items-center justify-between py-3 text-left focus:outline-none cursor-pointer"
+                                >
+                                    <span className="font-serif text-sm sm:text-base font-medium text-neutral-900 tracking-wide pr-4">
+                                        {item.question}
+                                    </span>
+                                    <span className="text-lg sm:text-xl font-light text-neutral-400 select-none">
+                                        {isOpen ? "−" : "+"}
+                                    </span>
+                                </button>
+                                <div className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"}`}>
+                                    <p className="text-xs sm:text-sm font-light text-neutral-500 leading-relaxed pl-1 pb-2 max-w-2xl">
+                                        {item.answer}
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
-            <h4 className="font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-widest text-neutral-800 uppercase mb-1">{prod.name}</h4>
-            <p className="font-sans text-[11px] lg:text-xs xl:text-sm text-neutral-500 font-medium">{formatPrice(prod.price)}</p>
-        </Link>
+        </section>
+    );
+}
+
+function CustomBespokeBanner() {
+    const bannerRef = useRef(null);
+    useEffect(() => {
+        loadGSAP().then(({ gsap, ScrollTrigger }) => {
+            if (!bannerRef.current) return;
+            gsap.fromTo(bannerRef.current.querySelector(".js-banner-content"),
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1, y: 0, duration: 1, ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: bannerRef.current,
+                        start: "top 80%",
+                        once: true
+                    }
+                }
+            );
+        });
+    }, []);
+
+    return (
+        <section ref={bannerRef} className="relative h-[480px] w-full overflow-hidden flex items-center justify-center">
+            {/* Background Image with Parallax Drift / Cover */}
+            <div className="absolute inset-0 z-0">
+                <img
+                    src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=1920"
+                    alt="Bespoke Craftsmanship Studio"
+                    className="w-full h-full object-cover scale-105"
+                />
+                {/* Dark overlay with premium opacity */}
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
+            </div>
+
+            {/* Banner Content Container */}
+            <div className="relative z-10 text-center px-6 max-w-4xl mx-auto space-y-6 js-banner-content opacity-0">
+                <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.35em] text-white/80 uppercase">
+                    Create Something That's Yours
+                </span>
+                <h2 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light text-white tracking-wide leading-tight">
+                    Customize every detail – from<br className="hidden sm:inline" /> diamond selection to the final design.
+                </h2>
+                <div className="pt-4">
+                    <Link href="/bespoke" className="inline-block px-8 py-3 bg-white text-black font-sans font-semibold text-[11px] sm:text-xs uppercase tracking-[0.2em] rounded-full hover:bg-neutral-100 transition-colors duration-300 shadow-sm cursor-pointer">
+                        Design Your Piece
+                    </Link>
+                </div>
+            </div>
+        </section>
     );
 }
 
@@ -524,7 +647,7 @@ export default function Home() {
                             <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 flex items-center h-full">
                                 <div className="max-w-2xl text-left space-y-6 js-hero-content">
                                     {/* Category Label */}
-                                    <span className="inline-block text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase js-hero-label">
+                                    <span className="inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase js-hero-label">
                                         {slide.label}
                                     </span>
 
@@ -541,11 +664,11 @@ export default function Home() {
                                     {/* Call To Action Button */}
                                     <div className="pt-4 js-hero-button">
                                         <Link href={slide.link}>
-                                            <button className="group relative overflow-hidden px-8 py-3.5 border border-white/30 text-white text-xs font-bold uppercase tracking-[0.2em] bg-transparent transition-colors duration-500 hover:border-[#C8A96A] focus:outline-none">
-                                                <span className="relative z-10 group-hover:text-white transition-colors duration-500">
+                                            <button className="group relative overflow-hidden px-8 py-3.5 border border-white/30 text-white text-xs font-bold uppercase tracking-[0.2em] bg-white/10 backdrop-blur-md transition-all duration-500 hover:border-white focus:outline-none shadow-lg">
+                                                <span className="relative z-10 group-hover:text-black transition-colors duration-500">
                                                     {slide.buttonText}
                                                 </span>
-                                                <span className="absolute inset-0 bg-[#C8A96A] origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
+                                                <span className="absolute inset-0 bg-white origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                                             </button>
                                         </Link>
                                     </div>
@@ -564,14 +687,14 @@ export default function Home() {
                                 aria-label={`Go to slide ${idx + 1}`}
                             >
                                 {/* Descriptive label appearing on hover */}
-                                <span className="text-[10px] font-sans font-medium tracking-[0.25em] text-[#FAF8F5]/60 group-hover:text-[#C8A96A] transition-colors duration-300 mr-4 opacity-0 group-hover:opacity-100 uppercase hidden sm:inline-block">
+                                <span className="text-[10px] font-sans font-medium tracking-[0.25em] text-white/60 group-hover:text-white transition-colors duration-300 mr-4 opacity-0 group-hover:opacity-100 uppercase hidden sm:inline-block">
                                     {SLIDES[idx].label}
                                 </span>
 
                                 {/* Progress bar container */}
                                 <div className="relative h-10 w-[2px] bg-white/20 transition-all duration-300 group-hover:bg-white/30">
                                     <div
-                                        className="absolute top-0 left-0 w-full bg-[#C8A96A] js-progress-fill"
+                                        className="absolute top-0 left-0 w-full bg-white js-progress-fill"
                                         style={{ height: idx < currentSlide ? "100%" : idx > currentSlide ? "0%" : "0%" }}
                                     />
                                 </div>
@@ -587,33 +710,26 @@ export default function Home() {
                             aria-label="Scroll down to category section"
                         >
                             {/* Floating Mouse Outline */}
-                            <div className="relative w-[22px] h-[36px] border border-white/30 rounded-full flex justify-center p-1 group-hover:border-[#C8A96A] transition-colors duration-500">
-                                <div className="w-[2px] h-[7px] bg-white rounded-full animate-bounce mt-1 group-hover:bg-[#C8A96A] transition-colors duration-500" />
+                            <div className="relative w-[22px] h-[36px] border border-white/30 rounded-full flex justify-center p-1 group-hover:border-white transition-colors duration-500">
+                                <div className="w-[2px] h-[7px] bg-white rounded-full animate-bounce mt-1 group-hover:bg-white transition-colors duration-500" />
                             </div>
-                            <span className="text-[9px] font-sans tracking-[0.3em] uppercase text-white/50 group-hover:text-[#C8A96A] transition-colors duration-500 mt-2 block">
+                            <span className="text-[9px] font-sans tracking-[0.3em] uppercase text-white/50 group-hover:text-white transition-colors duration-500 mt-2 block">
                                 Scroll
                             </span>
                         </button>
                     </div>
                 </section>
-
-                {/* Marquee Strip */}
-                <MarqueeStrip />
-
                 {/* ==================================================
                     SECTION 2: SHOP BY CATEGORY
                     ================================================== */}
-                <section id="section-categories" className="bg-white py-16">
-                    <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 text-white">
-                        <div ref={catHeadRef} className="text-center space-y-2 opacity-0">
-                            <h2 className="font-serif text-2xl lg:text-3xl tracking-[0.15em] text-neutral-900 uppercase">
-                                SHOP BY CATEGORY
-                            </h2>
-                            <p className="text-[10px] tracking-[0.25em] text-neutral-400 font-medium uppercase">
-                                Find your perfect piece from our curated selection.
-                            </p>
-                        </div>
-                        <CategoryCarousel />
+                <section id="section-categories" className="bg-white py-10">?
+                    <div className="text-center space-y-2">
+                        <h2 className="font-serif text-3xl sm:text-4xl  tracking-wide text-black">
+                            Shop by Category
+                        </h2>
+                    </div>
+                    <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 text-neutral-900">
+                        <CategoryCarousel headerRef={catHeadRef} />
                     </div>
                 </section>
 
@@ -621,46 +737,23 @@ export default function Home() {
                 <ExploreDiamonds />
 
                 {/* BEST SELLERS */}
-                <section className="bg-white py-4">
-                    <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
-                        <div ref={bestHeadRef} className="text-center space-y-2 opacity-0">
+                <section className="py-10 bg-white">
+                    <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 ">
+                        <div className="text-center space-y-2 py-4">
                             <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-wide text-black">
                                 Best selling product
                             </h2>
-                            <p className="font-serif italic text-neutral-400 text-sm font-light">
-                                Our most beloved pieces.
-                            </p>
                         </div>
                         <BestSellersGrid formatPrice={formatPrice} />
                     </div>
                 </section>
 
+
+
                 {/* Stats bar */}
                 <section className="bg-neutral-50 border-y border-neutral-100 py-16">
                     <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
                         <StatsTicker />
-                    </div>
-                </section>
-
-                {/* GIFTS OF THE SEASON */}
-                <section className="bg-white py-24 sm:py-32">
-                    <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                            <EditorialBlock
-                                eyebrow="Gift Edit · 2024"
-                                heading="Gifts of the season."
-                                body={[
-                                    "Diamond jewelry that endures — chosen for the moments that do. From solitaire pendants to fine rings, our gift edit is curated for the people you love most.",
-                                ]}
-                                cta="SHOP GIFTS"
-                                ctaHref="/jewelry?category=Pendant"
-                            />
-                            <ParallaxImage
-                                src="/products/rings.jpg"
-                                alt="Gifts of the Season"
-                                className="aspect-[4/5] border border-neutral-100"
-                            />
-                        </div>
                     </div>
                 </section>
                 {/* WHAT WERE WE MADE FOR? */}
@@ -685,6 +778,14 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+
+                {/* Custom Bespoke Call-To-Action Banner */}
+                <CustomBespokeBanner />
+
+
+
+                {/* FAQ Section */}
+                <FAQSection />
 
             </div>
         </Layout>

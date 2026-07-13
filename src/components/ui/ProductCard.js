@@ -28,7 +28,7 @@ export default function ProductCard({ item }) {
   const defaultVal = hasObjects ? colorList[0]?.value : colorList[0];
   const [selectedColor, setSelectedColor] = useState(defaultVal || null);
 
-  const getHex = (v) => colorMap[v?.toLowerCase()] || "#cccccc";
+  const getHex = (v) => colorMap[v?.toLowerCase()] || "#EDD680";
   const dispatch = useDispatch();
 
   const handleColorSelect = (e, color) => {
@@ -145,11 +145,10 @@ export default function ProductCard({ item }) {
                     key={index}
                     onClick={(e) => handleColorSelect(e, color)}
                     disabled={isDisabled}
-                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${
-                      isSelected
-                        ? "border-neutral-900 scale-110"
-                        : "border-neutral-300 hover:border-neutral-500"
-                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
+                      ? "border-neutral-900 scale-110"
+                      : "border-neutral-300 hover:border-neutral-500"
+                      } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     style={{ backgroundColor: hex }}
                     title={val}
                     aria-label={val}

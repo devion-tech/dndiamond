@@ -293,7 +293,7 @@ export default function AboutPage() {
         const currentRot = orbitTrackValRef.current.rotation;
         // Compute closest target angle to bring item idx to -90 degrees (12 o'clock top position)
         const targetRot = -90 - (idx * 360) / 8;
-        
+
         // Closest angle path math
         const diff = ((((targetRot - currentRot) % 360) + 540) % 360) - 180;
         const finalTargetRot = currentRot + diff;
@@ -366,8 +366,8 @@ export default function AboutPage() {
             y: -8,
             rotationX: 1.5,
             rotationY: -1.5,
-            borderColor: "#C8A96A",
-            boxShadow: "0 20px 40px rgba(200, 169, 106, 0.06)",
+            borderColor: "#111111",
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.04)",
             duration: 0.4,
             ease: "power2.out"
         });
@@ -380,7 +380,7 @@ export default function AboutPage() {
             y: 0,
             rotationX: 0,
             rotationY: 0,
-            borderColor: "#ECE8E2",
+            borderColor: "#E5E5E5",
             boxShadow: "0 0px 0px rgba(0,0,0,0)",
             duration: 0.4,
             ease: "power2.out"
@@ -502,14 +502,14 @@ export default function AboutPage() {
             // Diamond Cuts Orbit Animation (Slow continuous rotation)
             const orbitTrack = orbitTrackRef.current;
             const orbitItems = document.querySelectorAll(".js-orbit-item");
-            
+
             const updateOrbit = () => {
                 const radius = window.innerWidth < 640 ? 110 : window.innerWidth < 1024 ? 170 : 230;
                 orbitItems.forEach((item, idx) => {
                     const angle = (idx * 2 * Math.PI) / 8 + (orbitTrack.rotation * Math.PI) / 180;
                     const x = Math.cos(angle) * radius;
                     const y = Math.sin(angle) * radius;
-                    
+
                     gsap.set(item, {
                         x: x,
                         y: y,
@@ -517,10 +517,10 @@ export default function AboutPage() {
                     });
                 });
             };
-            
+
             // Initial render
             updateOrbit();
-            
+
             // Auto spin setup
             const autoSpin = gsap.to(orbitTrack, {
                 rotation: 360,
@@ -529,7 +529,7 @@ export default function AboutPage() {
                 ease: "none",
                 onUpdate: updateOrbit
             });
-            
+
             orbitSpinRef.current = autoSpin;
             orbitTrackValRef.current = orbitTrack;
             updateOrbitFnRef.current = updateOrbit;
@@ -580,7 +580,7 @@ export default function AboutPage() {
                                 containerAnimation: pinTrigger.animation,
                                 start: "left 85%",
                                 toggleActions: "play none none none"
-                              }
+                            }
                         }
                     );
                 });
@@ -736,13 +736,13 @@ export default function AboutPage() {
 
     return (
         <Layout>
-            <div className="w-full bg-[#FAF8F5] text-[#111111] font-sans selection:bg-[#C8A96A]/20 selection:text-[#111111] overflow-x-hidden">
-                
+            <div className="w-full bg-[#FAF9F6] text-[#111111] font-sans selection:bg-neutral-900/10 selection:text-[#111111] overflow-x-hidden">
+
                 {/* ==================================================
                     SECTION 1: EDITORIAL STATIC LUXURY HERO (70vh)
                     ================================================== */}
                 <section
-                    className="relative h-[70vh] w-full overflow-hidden flex items-center justify-start bg-[#0F0F0F] text-white"
+                    className="relative h-[70vh] w-full overflow-hidden flex items-center justify-start bg-black text-white"
                 >
                     <div className="absolute inset-0 z-0">
                         <img
@@ -755,13 +755,13 @@ export default function AboutPage() {
 
                     <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24">
                         <div className="max-w-2xl text-left space-y-6 js-about-hero-content">
-                            <span className="inline-block text-[11px] font-bold tracking-[0.35em] text-[#C8A96A] uppercase opacity-0">
+                            <span className="inline-block text-[11px] font-bold tracking-[0.35em] text-neutral-400 uppercase opacity-0">
                                 OUR STORY
                             </span>
                             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] opacity-0">
                                 Beyond Diamonds,<br />We Create Legacy.
                             </h1>
-                            <div className="w-16 h-[1px] bg-[#C8A96A] opacity-0" />
+                            <div className="w-16 h-[1px] bg-neutral-500 opacity-0" />
                             <p className="text-neutral-300 font-sans font-light text-sm sm:text-base leading-relaxed max-w-lg opacity-0">
                                 Every masterpiece begins with an extraordinary stone. At DN Diamond, we create jewellery that celebrates life's most meaningful moments through exceptional craftsmanship and timeless elegance.
                             </p>
@@ -775,155 +775,34 @@ export default function AboutPage() {
                             className="flex flex-col items-center group cursor-pointer focus:outline-none"
                             aria-label="Scroll down to heritage section"
                         >
-                            <div className="relative w-[20px] h-[32px] border border-white/20 rounded-full flex justify-center p-1 group-hover:border-[#C8A96A] transition-colors duration-500">
-                                <div className="w-[2px] h-[5px] bg-white rounded-full animate-bounce mt-1 group-hover:bg-[#C8A96A] transition-colors duration-500" />
+                            <div className="relative w-[20px] h-[32px] border border-white/20 rounded-full flex justify-center p-1 group-hover:border-white transition-colors duration-500">
+                                <div className="w-[2px] h-[5px] bg-white rounded-full animate-bounce mt-1 group-hover:bg-white transition-colors duration-500" />
                             </div>
                         </button>
                     </div>
                 </section>
 
-                {/* ==================================================
-                    SECTION 2: OUR LEGACY (Split Layout)
-                    ================================================== */}
-                <section
-                    id="section-legacy"
-                    className="relative py-24 sm:py-32 lg:py-40 px-6 sm:px-12 lg:px-24 max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 lg:gap-24 items-center"
-                >
-                    {/* Left Column: Parallax Image */}
-                    <div
-                        ref={legacyImageContainerRef}
-                        className="relative overflow-hidden h-[400px] sm:h-[550px] lg:h-[700px] w-full bg-[#ECE8E2]"
-                    >
-                        <img
-                            ref={legacyImageRef}
-                            src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200"
-                            alt="DN Diamond Exquisite Crafted Ring Detail"
-                            className="absolute top-0 left-0 w-full h-[125%] object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/5" />
-                    </div>
-
-                    {/* Right Column: Editorial Copy */}
-                    <div className="space-y-6 sm:space-y-8 js-legacy-content">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
-                            OUR HERITAGE
-                        </span>
-                        <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-[#111111] leading-tight">
-                            Our Legacy of Excellence
-                        </h2>
-                        <div className="w-16 h-[1px] bg-[#C8A96A]" />
-                        <p className="text-neutral-700 font-sans font-light text-sm sm:text-base leading-relaxed">
-                            Since our inception, DN Diamond has stood at the pinnacle of high jewellery, defining the art of diamond cutting and bespoke craftsmanship. Founded with a vision to create not just ornaments, but lasting legacies, our atelier has shaped the world’s most precious stones into works of timeless beauty.
-                        </p>
-                        <p className="text-neutral-600 font-sans font-light text-sm sm:text-base leading-relaxed">
-                            Our story is written in light, facet by facet, stone by stone. Every jewel we create is a testament to the pursuit of absolute perfection. Inspired by classical proportions and driven by modern innovation, our master artisans craft heirlooms that bridge the gap between temporary trends and eternal heritage.
-                        </p>
-                        <div className="pt-4 flex flex-wrap gap-4">
-                            <a
-                                href="/our-story"
-                                className="inline-flex items-center text-xs font-bold uppercase tracking-[0.25em] text-[#111111] hover:text-[#C8A96A] transition-colors duration-300 group"
-                            >
-                                Read Our Story
-                                <FaChevronRight className="ml-2 text-[10px] transform group-hover:translate-x-1 transition-transform duration-300" />
-                            </a>
-                            <a
-                                href="/bespoke"
-                                className="inline-flex items-center text-xs font-bold uppercase tracking-[0.25em] text-[#C8A96A] hover:text-[#111111] transition-colors duration-300 group"
-                            >
-                                Discover Bespoke Atelier
-                                <FaChevronRight className="ml-2 text-[10px] transform group-hover:translate-x-1 transition-transform duration-300" />
-                            </a>
-                        </div>
-                    </div>
-                </section>
-
-                {/* ==================================================
-                    SECTION 3: CRAFTSMANSHIP (Image Left, Text Right)
-                    ================================================== */}
-                <section className="bg-[#ECE8E2]/40 py-24 sm:py-32 lg:py-40">
-                    <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 lg:gap-24 items-center">
-                        
-                        {/* Left Column: Image (Jeweller Workbench) */}
-                        <div className="md:order-1 order-2 js-craft-content space-y-6 sm:space-y-8">
-                            <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
-                                THE ARTISANS
-                            </span>
-                            <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-[#111111] leading-tight">
-                                Crafted Without Compromise.
-                            </h2>
-                            <div className="w-16 h-[1px] bg-[#C8A96A]" />
-                            <p className="text-neutral-700 font-sans font-light text-sm sm:text-base leading-relaxed">
-                                At DN Diamond, craftsmanship is a sacred dialogue between the artisan and the gem. Our bench jewellers possess decades of specialized experience, utilizing ancient hand-forging techniques alongside cutting-edge micro-setting precision.
-                            </p>
-                            <p className="text-neutral-600 font-sans font-light text-sm sm:text-base leading-relaxed">
-                                Every setting is custom-built around the individual stone, ensuring that its unique fire and brilliance are highlighted from every angle. We select only conflict-free, GIA-certified diamonds of exceptional cut, color, and clarity, elevating them into extraordinary masterpieces.
-                            </p>
-
-                            {/* Counters Grid */}
-                            <div
-                                ref={craftsmanshipStatsRef}
-                                className="grid grid-cols-3 gap-4 pt-6 border-t border-black/10"
-                            >
-                                <div>
-                                    <span ref={yexpRef} className="block text-2xl sm:text-4xl font-serif font-light text-[#111111]">
-                                        0+
-                                    </span>
-                                    <span className="text-[10px] font-sans font-medium uppercase tracking-widest text-neutral-500 mt-1 block">
-                                        Years Experience
-                                    </span>
-                                </div>
-                                <div>
-                                    <span ref={jewelsRef} className="block text-2xl sm:text-4xl font-serif font-light text-[#111111]">
-                                        0+
-                                    </span>
-                                    <span className="text-[10px] font-sans font-medium uppercase tracking-widest text-neutral-500 mt-1 block">
-                                        Jewels Created
-                                    </span>
-                                </div>
-                                <div>
-                                    <span ref={certRef} className="block text-2xl sm:text-4xl font-serif font-light text-[#111111]">
-                                        0%
-                                    </span>
-                                    <span className="text-[10px] font-sans font-medium uppercase tracking-widest text-neutral-500 mt-1 block">
-                                        Certified Diamonds
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right Column: Artisan Photo */}
-                        <div className="md:order-2 order-1 js-craft-image-container relative overflow-hidden h-[400px] sm:h-[550px] lg:h-[700px] w-full bg-[#ECE8E2]">
-                            <img
-                                src="https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=1200"
-                                alt="DN Diamond Jeweller at Workbench Handcrafting Fine Ring"
-                                className="absolute top-0 left-0 w-full h-[125%] object-cover js-craft-image"
-                            />
-                            <div className="absolute inset-0 bg-black/5" />
-                        </div>
-
-                    </div>
-                </section>
 
                 {/* ==================================================
                     SECTION 3.5: THE GEOMETRY OF LIGHT (Signature Cuts Circular Orbit Carousel)
                     ================================================== */}
                 <section
                     ref={orbitSectionRef}
-                    className="py-24 sm:py-32 bg-[#FAF8F5] relative border-t border-[#ECE8E2] overflow-hidden"
+                    className="py-24 sm:py-32 bg-[#FAF9F6] relative border-t border-neutral-200 overflow-hidden"
                 >
                     <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-                        
+
                         {/* Left Column: Interactive Circular Orbit Widget */}
                         <div className="lg:col-span-7 flex justify-center items-center h-[420px] sm:h-[600px] relative">
                             {/* Circular Track Line */}
-                            <div className="js-orbit-container w-[220px] h-[220px] sm:w-[340px] sm:h-[340px] lg:w-[460px] lg:h-[460px] rounded-full border border-[#C8A96A]/20 border-dashed relative flex items-center justify-center">
-                                
+                            <div className="js-orbit-container w-[220px] h-[220px] sm:w-[340px] sm:h-[340px] lg:w-[460px] lg:h-[460px] rounded-full border border-neutral-300 border-dashed relative flex items-center justify-center">
+
                                 {/* Central Details Frame */}
-                                <div className="absolute w-[120px] h-[120px] sm:w-[190px] sm:h-[190px] rounded-full bg-[#FAF8F5] border border-[#C8A96A]/20 flex flex-col items-center justify-center p-4 shadow-inner z-10">
-                                    <div className="w-12 h-12 sm:w-20 sm:h-20 text-[#C8A96A]/85 transition-all duration-300 hover:scale-105">
-                                        {DIAMOND_SHAPES[activeShapeIdx].icon("#C8A96A")}
+                                <div className="absolute w-[120px] h-[120px] sm:w-[190px] sm:h-[190px] rounded-full bg-[#FAF9F6] border border-neutral-300 flex flex-col items-center justify-center p-4 shadow-inner z-10">
+                                    <div className="w-12 h-12 sm:w-20 sm:h-20 text-neutral-800 transition-all duration-300 hover:scale-105">
+                                        {DIAMOND_SHAPES[activeShapeIdx].icon("#111111")}
                                     </div>
-                                    <span className="text-[9px] font-sans font-bold tracking-[0.25em] text-[#C8A96A] uppercase mt-2 text-center max-w-[100px] sm:max-w-none">
+                                    <span className="text-[9px] font-sans font-bold tracking-[0.25em] text-neutral-800 uppercase mt-2 text-center max-w-[100px] sm:max-w-none">
                                         {DIAMOND_SHAPES[activeShapeIdx].name}
                                     </span>
                                 </div>
@@ -936,13 +815,13 @@ export default function AboutPage() {
                                             key={idx}
                                             onClick={() => handleShapeClick(idx)}
                                             className={`js-orbit-item absolute w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white border flex items-center justify-center cursor-pointer transition-all duration-300 focus:outline-none ${isActive
-                                                ? "border-[#C8A96A] shadow-md scale-110 ring-4 ring-[#C8A96A]/10 z-20"
-                                                : "border-[#ECE8E2] opacity-75 hover:opacity-100 hover:border-neutral-400 z-10"
+                                                ? "border-neutral-900 shadow-md scale-110 ring-4 ring-neutral-900/10 z-20"
+                                                : "border-neutral-200 opacity-75 hover:opacity-100 hover:border-neutral-400 z-10"
                                                 }`}
                                             aria-label={`Show details of ${shape.name}`}
                                         >
-                                            <div className={`w-6 h-6 sm:w-8 sm:h-8 transition-colors duration-300 ${isActive ? "text-[#C8A96A]" : "text-neutral-400 group-hover:text-[#C8A96A]"}`}>
-                                                {shape.icon(isActive ? "#C8A96A" : "#888888")}
+                                            <div className={`w-6 h-6 sm:w-8 sm:h-8 transition-colors duration-300 ${isActive ? "text-neutral-900" : "text-neutral-400 group-hover:text-neutral-900"}`}>
+                                                {shape.icon(isActive ? "#111111" : "#888888")}
                                             </div>
                                         </button>
                                     );
@@ -952,14 +831,14 @@ export default function AboutPage() {
 
                         {/* Right Column: Editorial Detailed Information Text */}
                         <div className="lg:col-span-5 text-left space-y-6 sm:space-y-8 js-shape-details">
-                            <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                            <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
                                 THE GEOMETRY OF LIGHT
                             </span>
                             <div className="space-y-4">
                                 <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-[#111111] leading-tight">
                                     {DIAMOND_SHAPES[activeShapeIdx].name}
                                 </h2>
-                                <div className="w-16 h-[1px] bg-[#C8A96A]" />
+                                <div className="w-16 h-[1px] bg-neutral-800" />
                             </div>
 
                             {/* Facet & Ratio Specs */}
@@ -977,17 +856,17 @@ export default function AboutPage() {
                             <p className="text-neutral-700 font-sans font-light text-sm sm:text-base leading-relaxed">
                                 {DIAMOND_SHAPES[activeShapeIdx].desc}
                             </p>
-                            
+
                             <p className="text-neutral-500 font-sans font-light text-xs sm:text-sm leading-relaxed">
                                 Our master lapidaries select cut dimensions that yield the ultimate light dispersion, capturing and refracting light in deep volumetric facets built for maximum dispersion.
                             </p>
 
                             <div className="pt-4">
-                                <button className="group relative overflow-hidden px-8 py-3.5 border border-[#111111] text-[#111111] text-xs font-bold uppercase tracking-[0.2em] bg-transparent transition-colors duration-500 hover:border-[#C8A96A] focus:outline-none">
+                                <button className="group relative overflow-hidden px-8 py-3.5 border border-[#111111] text-[#111111] text-xs font-bold uppercase tracking-[0.2em] bg-transparent transition-colors duration-500 hover:border-neutral-900 focus:outline-none">
                                     <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                                         Inquire About Cut
                                     </span>
-                                    <span className="absolute inset-0 bg-[#C8A96A] origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
+                                    <span className="absolute inset-0 bg-neutral-900 origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                                 </button>
                             </div>
                         </div>
@@ -1001,10 +880,10 @@ export default function AboutPage() {
                 {/* Desktop Pin Section */}
                 <section
                     ref={timelineContainerRef}
-                    className="relative bg-[#0F0F0F] text-[#FAF8F5] py-24 lg:py-32 overflow-hidden hidden md:block"
+                    className="relative bg-black text-[#FAF9F6] py-24 lg:py-32 overflow-hidden hidden md:block"
                 >
                     <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 mb-16">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block mb-3">
+                        <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block mb-3">
                             CREATION JOURNEY
                         </span>
                         <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-white leading-tight">
@@ -1019,14 +898,14 @@ export default function AboutPage() {
                         {TIMELINE_STEPS.map((step, idx) => (
                             <div
                                 key={idx}
-                                className="timeline-card flex-shrink-0 w-[360px] lg:w-[420px] bg-[#171717] border border-white/5 p-8 lg:p-10 relative flex flex-col justify-between h-[380px] group hover:border-[#C8A96A]/30 transition-colors duration-500"
+                                className="timeline-card flex-shrink-0 w-[360px] lg:w-[420px] bg-neutral-900 border border-white/5 p-8 lg:p-10 relative flex flex-col justify-between h-[380px] group hover:border-white/30 transition-colors duration-500"
                             >
                                 <div>
                                     <div className="flex justify-between items-start">
-                                        <span className="text-[10px] font-bold tracking-widest text-[#C8A96A] uppercase">
+                                        <span className="text-[10px] font-bold tracking-widest text-neutral-400 uppercase">
                                             {step.subtitle}
                                         </span>
-                                        <span className="text-4xl lg:text-5xl font-serif font-light text-white/10 group-hover:text-[#C8A96A]/20 transition-colors duration-500">
+                                        <span className="text-4xl lg:text-5xl font-serif font-light text-white/10 group-hover:text-white/20 transition-colors duration-500">
                                             {step.step}
                                         </span>
                                     </div>
@@ -1037,16 +916,16 @@ export default function AboutPage() {
                                         {step.desc}
                                     </p>
                                 </div>
-                                <div className="w-full h-[1px] bg-white/10 group-hover:bg-[#C8A96A]/30 transition-colors duration-500 mt-6" />
+                                <div className="w-full h-[1px] bg-white/10 group-hover:bg-white/30 transition-colors duration-500 mt-6" />
                             </div>
                         ))}
                     </div>
                 </section>
 
                 {/* Mobile Chronological Stack Section */}
-                <section className="bg-[#0F0F0F] text-[#FAF8F5] py-20 px-6 block md:hidden">
+                <section className="bg-black text-[#FAF9F6] py-20 px-6 block md:hidden">
                     <div className="mb-12 text-left">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block mb-2">
+                        <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block mb-2">
                             CREATION JOURNEY
                         </span>
                         <h2 className="text-3xl font-serif font-light tracking-wide text-white">
@@ -1060,8 +939,8 @@ export default function AboutPage() {
                                 key={idx}
                                 className="js-mobile-timeline-card relative space-y-2 text-left"
                             >
-                                <div className="absolute -left-[30px] top-1.5 w-2 h-2 bg-[#C8A96A] rounded-full" />
-                                <span className="text-[9px] font-bold tracking-widest text-[#C8A96A] uppercase block">
+                                <div className="absolute -left-[30px] top-1.5 w-2 h-2 bg-neutral-400 rounded-full" />
+                                <span className="text-[9px] font-bold tracking-widest text-neutral-400 uppercase block">
                                     {step.step} / {step.subtitle}
                                 </span>
                                 <h3 className="text-lg font-serif font-light text-white tracking-wide">
@@ -1075,126 +954,17 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                {/* ==================================================
-                    SECTION 5: OUR VALUES (Grid layout with 3D Tilt)
-                    ================================================== */}
-                <section
-                    ref={valuesRef}
-                    className="py-24 sm:py-32 lg:py-40 px-6 sm:px-12 lg:px-24 max-w-[1600px] mx-auto text-center"
-                >
-                    <div className="max-w-2xl mx-auto mb-16 sm:mb-24">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block mb-3">
-                            PHILOSOPHY
-                        </span>
-                        <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-[#111111] leading-tight">
-                            Our Core Values
-                        </h2>
-                        <p className="text-neutral-500 font-sans font-light text-sm sm:text-base leading-relaxed mt-4">
-                            We operate under an unyielding framework of responsibility, artistic design, and precision alignment, ensuring that the legacy we build mirrors the perfection of our stones.
-                        </p>
-                    </div>
 
-                    {/* Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto px-4 [perspective:1000px]">
-                        {/* Authenticity */}
-                        <div
-                            onMouseEnter={handleCardMouseEnter}
-                            onMouseLeave={handleCardMouseLeave}
-                            className="js-value-card bg-white border border-[#ECE8E2] p-8 lg:p-12 text-left flex flex-col justify-between h-[280px] sm:h-[300px] transition-all duration-300"
-                        >
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <span className="p-3 bg-[#FAF8F5] border border-[#ECE8E2] text-[#C8A96A] rounded-full">
-                                        <FaCertificate className="text-lg" />
-                                    </span>
-                                    <span className="text-[10px] font-sans font-bold tracking-widest text-neutral-300">01</span>
-                                </div>
-                                <h3 className="text-xl font-serif font-light tracking-wide text-[#111111]">
-                                    Authenticity
-                                </h3>
-                                <p className="text-neutral-500 font-sans font-light text-xs sm:text-sm leading-relaxed">
-                                    Every stone carries a unique laser-inscribed GIA registry, ensuring unmatched certification, origin transparency, and lifelong verification.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Precision */}
-                        <div
-                            onMouseEnter={handleCardMouseEnter}
-                            onMouseLeave={handleCardMouseLeave}
-                            className="js-value-card bg-white border border-[#ECE8E2] p-8 lg:p-12 text-left flex flex-col justify-between h-[280px] sm:h-[300px] transition-all duration-300"
-                        >
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <span className="p-3 bg-[#FAF8F5] border border-[#ECE8E2] text-[#C8A96A] rounded-full">
-                                        <FaGem className="text-lg" />
-                                    </span>
-                                    <span className="text-[10px] font-sans font-bold tracking-widest text-neutral-300">02</span>
-                                </div>
-                                <h3 className="text-xl font-serif font-light tracking-wide text-[#111111]">
-                                    Precision
-                                </h3>
-                                <p className="text-neutral-500 font-sans font-light text-xs sm:text-sm leading-relaxed">
-                                    Crafted to tolerances measured in microns. Our settings maximize light dispersion, highlighting the individual fire and brilliance of the diamond.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Integrity */}
-                        <div
-                            onMouseEnter={handleCardMouseEnter}
-                            onMouseLeave={handleCardMouseLeave}
-                            className="js-value-card bg-white border border-[#ECE8E2] p-8 lg:p-12 text-left flex flex-col justify-between h-[280px] sm:h-[300px] transition-all duration-300"
-                        >
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <span className="p-3 bg-[#FAF8F5] border border-[#ECE8E2] text-[#C8A96A] rounded-full">
-                                        <FaShieldAlt className="text-lg" />
-                                    </span>
-                                    <span className="text-[10px] font-sans font-bold tracking-widest text-neutral-300">03</span>
-                                </div>
-                                <h3 className="text-xl font-serif font-light tracking-wide text-[#111111]">
-                                    Integrity
-                                </h3>
-                                <p className="text-neutral-500 font-sans font-light text-xs sm:text-sm leading-relaxed">
-                                    We strictly adhere to the Kimberley Process and ethical sourcing standards, ensuring each gem is responsibly mined and socially positive.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Legacy */}
-                        <div
-                            onMouseEnter={handleCardMouseEnter}
-                            onMouseLeave={handleCardMouseLeave}
-                            className="js-value-card bg-white border border-[#ECE8E2] p-8 lg:p-12 text-left flex flex-col justify-between h-[280px] sm:h-[300px] transition-all duration-300"
-                        >
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <span className="p-3 bg-[#FAF8F5] border border-[#ECE8E2] text-[#C8A96A] rounded-full">
-                                        <FaCrown className="text-lg" />
-                                    </span>
-                                    <span className="text-[10px] font-sans font-bold tracking-widest text-neutral-300">04</span>
-                                </div>
-                                <h3 className="text-xl font-serif font-light tracking-wide text-[#111111]">
-                                    Legacy
-                                </h3>
-                                <p className="text-neutral-500 font-sans font-light text-xs sm:text-sm leading-relaxed">
-                                    We design jewelry to be lived in, loved, and passed down. Each piece is constructed with structural longevity to become a family heirloom.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 {/* ==================================================
                     SECTION 6: LUXURY GALLERY (Masonry Layout with Hover Zoom)
                     ================================================== */}
                 <section
                     ref={galleryRef}
-                    className="py-24 sm:py-32 lg:py-40 bg-[#ECE8E2]/25 overflow-hidden"
+                    className="py-24 sm:py-32 lg:py-40 bg-neutral-100/55 overflow-hidden"
                 >
                     <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 mb-16 sm:mb-24 text-center js-gallery-title">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block mb-3">
+                        <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block mb-3">
                             THE COLLECTIONS
                         </span>
                         <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-[#111111] leading-tight">
@@ -1205,7 +975,7 @@ export default function AboutPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-6">
 
                         {/* Gallery Item 1: Wide Solitaire Ring */}
-                        <div className="js-gallery-card md:col-span-2 relative overflow-hidden group h-[300px] sm:h-[400px] bg-[#ECE8E2]">
+                        <div className="js-gallery-card md:col-span-2 relative overflow-hidden group h-[300px] sm:h-[400px] bg-neutral-200">
                             <img
                                 src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800"
                                 alt="Stella Solitaire Ring Presentation Case"
@@ -1213,13 +983,13 @@ export default function AboutPage() {
                             />
                             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500" />
                             <div className="absolute bottom-6 left-6 z-10 text-left">
-                                <span className="text-[9px] font-bold tracking-[0.25em] text-[#C8A96A] uppercase">SOLITAIRE STUDY</span>
+                                <span className="text-[9px] font-bold tracking-[0.25em] text-neutral-400 uppercase">SOLITAIRE STUDY</span>
                                 <h3 className="text-lg sm:text-xl font-serif font-light text-white mt-1">The Stella Solitaire</h3>
                             </div>
                         </div>
 
                         {/* Gallery Item 2: Portrait Choker */}
-                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[300px] sm:h-[400px] bg-[#ECE8E2]">
+                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[300px] sm:h-[400px] bg-neutral-200">
                             <img
                                 src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800"
                                 alt="Aura Gold Diamond Choker Necklace Detail"
@@ -1227,13 +997,13 @@ export default function AboutPage() {
                             />
                             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500" />
                             <div className="absolute bottom-6 left-6 z-10 text-left">
-                                <span className="text-[9px] font-bold tracking-[0.25em] text-[#C8A96A] uppercase">ATELIER HIGHLIGHTS</span>
+                                <span className="text-[9px] font-bold tracking-[0.25em] text-neutral-400 uppercase">ATELIER HIGHLIGHTS</span>
                                 <h3 className="text-lg sm:text-xl font-serif font-light text-white mt-1">Aura Diamond Choker</h3>
                             </div>
                         </div>
 
                         {/* Gallery Item 3: Rose Ring */}
-                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[400px] sm:h-[500px] bg-[#ECE8E2]">
+                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[400px] sm:h-[500px] bg-neutral-200">
                             <img
                                 src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=800"
                                 alt="La Rose Gold Ring Crafting Study"
@@ -1241,13 +1011,13 @@ export default function AboutPage() {
                             />
                             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500" />
                             <div className="absolute bottom-6 left-6 z-10 text-left">
-                                <span className="text-[9px] font-bold tracking-[0.25em] text-[#C8A96A] uppercase">CRAFT STUDIES</span>
+                                <span className="text-[9px] font-bold tracking-[0.25em] text-neutral-400 uppercase">CRAFT STUDIES</span>
                                 <h3 className="text-lg sm:text-xl font-serif font-light text-white mt-1">La Rose Ring Study</h3>
                             </div>
                         </div>
 
                         {/* Gallery Item 4: Diamond drops model */}
-                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[400px] sm:h-[500px] bg-[#ECE8E2]">
+                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[400px] sm:h-[500px] bg-neutral-200">
                             <img
                                 src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800"
                                 alt="Model Wearing Elysian Diamond Drop Earrings"
@@ -1255,13 +1025,13 @@ export default function AboutPage() {
                             />
                             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500" />
                             <div className="absolute bottom-6 left-6 z-10 text-left">
-                                <span className="text-[9px] font-bold tracking-[0.25em] text-[#C8A96A] uppercase">EDITORIAL COLLECTION</span>
+                                <span className="text-[9px] font-bold tracking-[0.25em] text-neutral-400 uppercase">EDITORIAL COLLECTION</span>
                                 <h3 className="text-lg sm:text-xl font-serif font-light text-white mt-1">Elysian Diamond Drops</h3>
                             </div>
                         </div>
 
                         {/* Gallery Item 5: Bridal bands */}
-                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[400px] sm:h-[500px] bg-[#ECE8E2]">
+                        <div className="js-gallery-card md:col-span-1 relative overflow-hidden group h-[400px] sm:h-[500px] bg-neutral-200">
                             <img
                                 src="https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?q=80&w=800"
                                 alt="Signature Diamond Gold Bridal Band Stack"
@@ -1269,13 +1039,13 @@ export default function AboutPage() {
                             />
                             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500" />
                             <div className="absolute bottom-6 left-6 z-10 text-left">
-                                <span className="text-[9px] font-bold tracking-[0.25em] text-[#C8A96A] uppercase">THE WEDDING BAND</span>
+                                <span className="text-[9px] font-bold tracking-[0.25em] text-neutral-400 uppercase">THE WEDDING BAND</span>
                                 <h3 className="text-lg sm:text-xl font-serif font-light text-white mt-1">Signature Bridal Band</h3>
                             </div>
                         </div>
 
                         {/* Gallery Item 6: Marquise Brooch */}
-                        <div className="js-gallery-card md:col-span-3 relative overflow-hidden group h-[300px] sm:h-[450px] bg-[#ECE8E2]">
+                        <div className="js-gallery-card md:col-span-3 relative overflow-hidden group h-[300px] sm:h-[450px] bg-neutral-200">
                             <img
                                 src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200"
                                 alt="Imperial Marquise Diamond Brooch Close-up Portrait"
@@ -1283,7 +1053,7 @@ export default function AboutPage() {
                             />
                             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500" />
                             <div className="absolute bottom-6 left-6 z-10 text-left">
-                                <span className="text-[9px] font-bold tracking-[0.25em] text-[#C8A96A] uppercase">HERITAGE PIECE</span>
+                                <span className="text-[9px] font-bold tracking-[0.25em] text-neutral-400 uppercase">HERITAGE PIECE</span>
                                 <h3 className="text-lg sm:text-2xl font-serif font-light text-white mt-1">Imperial Marquise Brooch</h3>
                             </div>
                         </div>
@@ -1296,12 +1066,12 @@ export default function AboutPage() {
                     ================================================== */}
                 <section
                     ref={globalStatsRef}
-                    className="relative bg-[#0F0F0F] text-white py-24 sm:py-32 lg:py-40 overflow-hidden"
+                    className="relative bg-black text-white py-24 sm:py-32 lg:py-40 overflow-hidden"
                 >
                     {/* Custom SVG World Map background */}
                     <div className="absolute inset-0 w-full h-full z-0">
                         <svg
-                            className="absolute inset-0 w-full h-full opacity-[0.08] stroke-[#C8A96A] fill-none"
+                            className="absolute inset-0 w-full h-full opacity-[0.08] stroke-white fill-none"
                             viewBox="0 0 1000 500"
                             preserveAspectRatio="xMidYMid slice"
                         >
@@ -1314,7 +1084,7 @@ export default function AboutPage() {
                             <path d="M 450 250 Q 510 270, 540 370 T 470 450 Q 400 390, 420 290 Z" strokeWidth="1" strokeDasharray="6,6" />
                             <path d="M 770 380 Q 850 400, 820 450 T 750 430 Z" strokeWidth="1" strokeDasharray="6,6" />
 
-                            <g className="stroke-[#C8A96A]/60" strokeWidth="0.75">
+                            <g className="stroke-white/40" strokeWidth="0.75">
                                 <path d="M 230 200 Q 490 140, 750 260" strokeDasharray="4,4" />
                                 <path d="M 460 160 Q 605 190, 750 260" strokeDasharray="4,4" />
                                 <path d="M 480 175 Q 615 200, 750 260" strokeDasharray="4,4" />
@@ -1323,22 +1093,22 @@ export default function AboutPage() {
                             </g>
 
                             <g>
-                                <circle cx="750" cy="260" r="5" fill="#C8A96A" />
-                                <circle cx="750" cy="260" r="14" stroke="#C8A96A" strokeWidth="1.5" opacity="0.55" className="animate-ping" style={{ transformOrigin: "750px 260px" }} />
+                                <circle cx="750" cy="260" r="5" fill="#FFFFFF" />
+                                <circle cx="750" cy="260" r="14" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.55" className="animate-ping" style={{ transformOrigin: "750px 260px" }} />
                             </g>
 
-                            <circle cx="230" cy="200" r="3.5" fill="#C8A96A" opacity="0.8" />
-                            <circle cx="460" cy="160" r="3.5" fill="#C8A96A" opacity="0.8" />
-                            <circle cx="480" cy="175" r="3.5" fill="#C8A96A" opacity="0.8" />
-                            <circle cx="490" cy="190" r="3.5" fill="#C8A96A" opacity="0.8" />
-                            <circle cx="810" cy="225" r="3.5" fill="#C8A96A" opacity="0.8" />
+                            <circle cx="230" cy="200" r="3.5" fill="#FFFFFF" opacity="0.8" />
+                            <circle cx="460" cy="160" r="3.5" fill="#FFFFFF" opacity="0.8" />
+                            <circle cx="480" cy="175" r="3.5" fill="#FFFFFF" opacity="0.8" />
+                            <circle cx="490" cy="190" r="3.5" fill="#FFFFFF" opacity="0.8" />
+                            <circle cx="810" cy="225" r="3.5" fill="#FFFFFF" opacity="0.8" />
                         </svg>
                     </div>
 
                     <div className="relative z-10 max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24">
 
                         <div className="max-w-2xl text-left mb-16 sm:mb-24">
-                            <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block mb-3">
+                            <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block mb-3">
                                 GLOBAL FOOTPRINT
                             </span>
                             <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-white leading-tight">
@@ -1351,7 +1121,7 @@ export default function AboutPage() {
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 pt-12 border-t border-white/10">
                             <div className="text-left">
-                                <span ref={gCountriesRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#C8A96A]">
+                                <span ref={gCountriesRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-white">
                                     0+
                                 </span>
                                 <span className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-neutral-400 mt-2 block">
@@ -1360,7 +1130,7 @@ export default function AboutPage() {
                             </div>
 
                             <div className="text-left">
-                                <span ref={gClientsRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#C8A96A]">
+                                <span ref={gClientsRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-white">
                                     0+
                                 </span>
                                 <span className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-neutral-400 mt-2 block">
@@ -1369,7 +1139,7 @@ export default function AboutPage() {
                             </div>
 
                             <div className="text-left">
-                                <span ref={gCollectionsRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#C8A96A]">
+                                <span ref={gCollectionsRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-white">
                                     0+
                                 </span>
                                 <span className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-neutral-400 mt-2 block">
@@ -1378,7 +1148,7 @@ export default function AboutPage() {
                             </div>
 
                             <div className="text-left">
-                                <span ref={gExcellenceRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#C8A96A]">
+                                <span ref={gExcellenceRef} className="block text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-white">
                                     0+
                                 </span>
                                 <span className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-neutral-400 mt-2 block">
@@ -1393,11 +1163,11 @@ export default function AboutPage() {
                 {/* ==================================================
                     SECTION 8: FINAL CTA (Luxury Dark Section)
                     ================================================== */}
-                <section className="bg-[#0F0F0F] py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#C8A96A]/5 rounded-full blur-[120px] pointer-events-none" />
-                    
+                <section className="bg-black py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
+
                     <div className="relative z-10 max-w-3xl mx-auto px-6 js-cta-content space-y-6 sm:space-y-8">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                        <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block">
                             THE NEXT CHAPTER
                         </span>
                         <h2 className="text-4xl sm:text-6xl font-serif font-light tracking-wide text-white leading-tight">
@@ -1406,14 +1176,14 @@ export default function AboutPage() {
                         <p className="text-neutral-400 font-sans font-light text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
                             Discover jewellery that reflects timeless elegance and extraordinary craftsmanship. Connect with our concierge to reserve a private atelier consultation.
                         </p>
-                        
+
                         <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="/jewelry">
-                                <button className="group relative overflow-hidden px-10 py-4 bg-[#C8A96A] border border-[#C8A96A] text-[#111111] text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer">
+                                <button className="group relative overflow-hidden px-10 py-4 bg-white border border-white text-black text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer">
                                     <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                                         Explore Collection
                                     </span>
-                                    <span className="absolute inset-0 bg-[#111111] origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
+                                    <span className="absolute inset-0 bg-neutral-900 origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                                 </button>
                             </a>
                             <a href="/contact">

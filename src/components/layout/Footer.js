@@ -90,36 +90,36 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/contact"
                     className="hover:text-neutral-900 transition-colors"
                   >
                     Track your Order
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/contact"
                     className="hover:text-neutral-900 transition-colors"
                   >
                     Shipping & Returns
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/#faq"
                     className="hover:text-neutral-900 transition-colors"
                   >
                     Frequently Asked Questions
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/contact"
                     className="hover:text-neutral-900 transition-colors"
                   >
                     Schedule an appointment
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -196,6 +196,14 @@ export default function Footer() {
                     className="hover:text-neutral-900 transition-colors"
                   >
                     Loose Diamonds
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/bespoke"
+                    className="hover:text-neutral-900 transition-colors"
+                  >
+                    Bespoke Jewelry
                   </Link>
                 </li>
               </ul>

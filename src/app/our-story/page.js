@@ -155,10 +155,10 @@ export default function OurStoryPage() {
 
     return (
         <Layout>
-            <div className="w-full bg-[#FAF8F5] text-[#111111] font-sans selection:bg-[#C8A96A]/20 selection:text-[#111111] overflow-x-hidden font-light">
+            <div className="w-full bg-[#FAF9F6] text-[#111111] font-sans selection:bg-neutral-900/10 selection:text-[#111111] overflow-x-hidden font-light">
                 
                 {/* HERO SECTION */}
-                <section className="relative h-[80vh] w-full overflow-hidden flex items-center justify-start bg-[#0F0F0F] text-white">
+                <section className="relative h-[80vh] w-full overflow-hidden flex items-center justify-start bg-black text-white">
                     <div className="absolute inset-0 z-0">
                         <img
                             src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1920"
@@ -170,20 +170,20 @@ export default function OurStoryPage() {
 
                     <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24">
                         <div ref={heroContentRef} className="max-w-3xl text-left space-y-6">
-                            <span className="inline-block text-[11px] font-bold tracking-[0.35em] text-[#C8A96A] uppercase opacity-0">
+                            <span className="inline-block text-[11px] font-bold tracking-[0.35em] text-neutral-400 uppercase opacity-0">
                                 OUR HERITAGE
                             </span>
                             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] opacity-0">
                                 A Legacy Forged<br />in Brilliance.
                             </h1>
-                            <div className="w-16 h-[1px] bg-[#C8A96A] opacity-0" />
+                            <div className="w-16 h-[1px] bg-neutral-500 opacity-0" />
                             <p className="text-neutral-300 font-sans font-light text-sm sm:text-base leading-relaxed max-w-xl opacity-0">
                                 Drawing inspiration from classical proportions and the natural physics of light. Explore the timeline of how a small studio of Antwerp goldsmiths grew to craft GIA masterpieces for the world's most discerning collectors.
                             </p>
                             <div className="pt-2 opacity-0">
                                 <button
                                     onClick={handleScrollToHistory}
-                                    className="group relative overflow-hidden px-8 py-3.5 bg-[#C8A96A] border border-[#C8A96A] text-[#111111] text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-500 cursor-pointer focus:outline-none"
+                                    className="group relative overflow-hidden px-8 py-3.5 bg-white border border-white text-black text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-500 cursor-pointer focus:outline-none"
                                 >
                                     <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                                         View Our Journey
@@ -201,8 +201,8 @@ export default function OurStoryPage() {
                             className="flex flex-col items-center group cursor-pointer focus:outline-none"
                             aria-label="Scroll down to history"
                         >
-                            <div className="relative w-[20px] h-[32px] border border-white/20 rounded-full flex justify-center p-1 group-hover:border-[#C8A96A] transition-colors duration-500">
-                                <div className="w-[2px] h-[5px] bg-white rounded-full animate-bounce mt-1 group-hover:bg-[#C8A96A] transition-colors duration-500" />
+                            <div className="relative w-[20px] h-[32px] border border-white/20 rounded-full flex justify-center p-1 group-hover:border-white transition-colors duration-500">
+                                <div className="w-[2px] h-[5px] bg-white rounded-full animate-bounce mt-1 group-hover:bg-white transition-colors duration-500" />
                             </div>
                         </button>
                     </div>
@@ -216,13 +216,13 @@ export default function OurStoryPage() {
                 >
                     {/* Left Panel: Narrative Text */}
                     <div className="space-y-6 sm:space-y-8">
-                        <span data-anim className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                        <span data-anim className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
                             THE GENESIS
                         </span>
                         <h2 data-anim className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-[#111111] leading-tight">
                             The Quest For The Perfect Cut
                         </h2>
-                        <div data-anim className="w-16 h-[1px] bg-[#C8A96A]" />
+                        <div data-anim className="w-16 h-[1px] bg-neutral-800" />
                         <p data-anim className="text-neutral-700 font-sans font-light text-sm sm:text-base leading-relaxed">
                             DN Diamond was born from a singular obsession: to liberate the maximum fire hidden within the diamond crystalline structure. Standard commercial cuts prioritize carat weight over light returns; we set out to do the exact opposite. 
                         </p>
@@ -236,7 +236,7 @@ export default function OurStoryPage() {
 
                     {/* Right Panel: Immersive Collage */}
                     <div data-anim className="grid grid-cols-2 gap-4 h-[400px] sm:h-[550px] lg:h-[700px] w-full">
-                        <div className="overflow-hidden rounded-xs bg-[#ECE8E2] h-full relative group">
+                        <div className="overflow-hidden rounded-xs bg-neutral-100 h-full relative group">
                             <img
                                 src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600"
                                 alt="Atelier Diamond Setting Details"
@@ -244,14 +244,14 @@ export default function OurStoryPage() {
                             />
                         </div>
                         <div className="grid grid-rows-2 gap-4 h-full">
-                            <div className="overflow-hidden rounded-xs bg-[#ECE8E2] relative group">
+                            <div className="overflow-hidden rounded-xs bg-neutral-100 relative group">
                                 <img
                                     src="https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=600"
                                     alt="Bench Jeweller Polishing Setting"
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                             </div>
-                            <div className="overflow-hidden rounded-xs bg-[#ECE8E2] relative group">
+                            <div className="overflow-hidden rounded-xs bg-neutral-100 relative group">
                                 <img
                                     src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=600"
                                     alt="Finished Diamond Custom Ring"
@@ -265,19 +265,19 @@ export default function OurStoryPage() {
                 {/* THE BRAND PHILOSOPHY QUOTE PANEL (Dark Parallax Panel) */}
                 <section
                     ref={philosophySectionRef}
-                    className="relative bg-[#0F0F0F] text-white py-24 sm:py-32 lg:py-40 text-center px-6"
+                    className="relative bg-black text-white py-24 sm:py-32 lg:py-40 text-center px-6"
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C8A96A]/5 rounded-full blur-[130px] pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[130px] pointer-events-none" />
                     
                     <div className="relative z-10 max-w-4xl mx-auto space-y-8">
-                        <FaQuoteLeft className="text-3xl sm:text-5xl text-[#C8A96A] opacity-60 mx-auto animate-pulse-slow" />
+                        <FaQuoteLeft className="text-3xl sm:text-5xl text-neutral-400 opacity-60 mx-auto animate-pulse-slow" />
                         
                         <blockquote className="js-quote text-2xl sm:text-4xl lg:text-5xl font-serif font-light tracking-wide leading-relaxed text-neutral-100 max-w-3xl mx-auto italic">
                             "A diamond has no light of its own. It is the jeweler’s sacred duty to shape the facets so they capture passing rays and turn them into fire. We do not craft jewelry; we organize light."
                         </blockquote>
                         
-                        <div className="js-author w-12 h-[1px] bg-[#C8A96A] mx-auto mt-8" />
-                        <span className="block text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase">
+                        <div className="js-author w-12 h-[1px] bg-white/40 mx-auto mt-8" />
+                        <span className="block text-[11px] font-bold tracking-[0.3em] text-neutral-300 uppercase">
                             DN Diamond Master Lapidary
                         </span>
                     </div>
@@ -289,7 +289,7 @@ export default function OurStoryPage() {
                         
                         {/* Title Header */}
                         <div className="text-center space-y-4 mb-20">
-                            <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                            <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
                                 CHRONICLE
                             </span>
                             <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-neutral-900 leading-tight">
@@ -314,7 +314,7 @@ export default function OurStoryPage() {
                                         className={`js-timeline-item relative mb-16 md:mb-24 w-full md:w-1/2 flex flex-col items-start ${isEven ? "md:self-start md:items-end md:pr-16" : "md:self-end md:items-start md:pl-16"}`}
                                     >
                                         {/* Dot on Central Axis */}
-                                        <div className="absolute -left-[5px] md:left-auto md:right-auto top-2 h-2.5 w-2.5 rounded-full bg-[#C8A96A] border-4 border-white shadow-sm ring-2 ring-[#C8A96A]/30 z-10"
+                                        <div className="absolute -left-[5px] md:left-auto md:right-auto top-2 h-2.5 w-2.5 rounded-full bg-neutral-900 border-4 border-white shadow-sm ring-2 ring-neutral-900/10 z-10"
                                             style={{
                                                 left: isEven ? "auto" : "-5px",
                                                 right: isEven ? "-5px" : "auto"
@@ -325,7 +325,7 @@ export default function OurStoryPage() {
                                         <div className="glass-card-light rounded-xs p-6 border border-neutral-100/80 bg-white max-w-lg w-full text-left relative transition-all duration-300 hover:shadow-lg">
                                             {/* Date Banner */}
                                             <div className="flex items-center justify-between mb-4">
-                                                <span className="text-2xl sm:text-3xl font-serif font-light text-[#C8A96A]">
+                                                <span className="text-2xl sm:text-3xl font-serif font-light text-neutral-900">
                                                     {stone.year}
                                                 </span>
                                                 <span className="text-[9px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400 bg-neutral-50 px-2.5 py-1 rounded-sm border border-neutral-100">
@@ -355,12 +355,12 @@ export default function OurStoryPage() {
                 {/* FINAL CALL TO ACTION */}
                 <section
                     ref={ctaRef}
-                    className="bg-[#0F0F0F] py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden"
+                    className="bg-black py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden"
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#C8A96A]/5 rounded-full blur-[120px] pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
                     
                     <div className="relative z-10 max-w-3xl mx-auto px-6 js-cta-content space-y-6 sm:space-y-8">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                        <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block">
                             THE NEXT CHAPTER
                         </span>
                         <h2 className="text-4xl sm:text-6xl font-serif font-light tracking-wide text-white leading-tight">
@@ -372,11 +372,11 @@ export default function OurStoryPage() {
                         
                         <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="/bespoke">
-                                <button className="group relative overflow-hidden px-10 py-4 bg-[#C8A96A] border border-[#C8A96A] text-[#111111] text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 cursor-pointer focus:outline-none">
+                                <button className="group relative overflow-hidden px-10 py-4 bg-white border border-white text-black text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 cursor-pointer focus:outline-none">
                                     <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                                         Configure Bespoke
                                     </span>
-                                    <span className="absolute inset-0 bg-[#111111] origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
+                                    <span className="absolute inset-0 bg-neutral-900 origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                                 </button>
                             </a>
                             <a href="/contact">

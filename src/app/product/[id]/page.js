@@ -18,6 +18,7 @@ import { fetchProductDetail, clearSelectedProduct } from "@/redux/productSlice";
 import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
+import ProductCard from "@/components/ui/ProductCard";
 
 const colorMap = Object.fromEntries(
   colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
@@ -50,7 +51,14 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
   return idMap[id] || "Ring";
 };
 
-const getHex = (v) => colorMap[v?.toLowerCase()] || "#EDD680";
+const getHex = (v) => {
+  const name = v?.toLowerCase() || "";
+  if (name.includes("yellow")) return "#E5CE83";
+  if (name.includes("white")) return "#E9E9E9";
+  if (name.includes("rose")) return "#ECC5C0";
+  if (name.includes("platinum")) return "#E5E4E2";
+  return colorMap[name] || "#EDD680";
+};
 
 export default function ProductDetail({ params }) {
   const router = useRouter();
@@ -80,6 +88,8 @@ export default function ProductDetail({ params }) {
   const [successAdded, setSuccessAdded] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [similarProducts, setSimilarProducts] = useState([]);
+  const [loadingSimilar, setLoadingSimilar] = useState(false);
 
   // Fetch product details on mount/param change
   useEffect(() => {
@@ -117,20 +127,45 @@ export default function ProductDetail({ params }) {
         isFromApi: true,
       };
 
-      // Extract options from rawProduct
-      const options = p.options || [];
+      // Define static options configuration
+      const staticOptionsList = [
+        {
+          name: "color",
+          values: [
+            { value: "Yellow Gold" },
+            { value: "White Gold" },
+            { value: "Rose Gold" },
+            { value: "Platinum" },
+          ],
+        },
+        {
+          name: "gold_type",
+          values: [
+            { value: "18K Solid Gold" },
+            { value: "14K Solid Gold" },
+            { value: "Platinum 950" },
+          ],
+        },
+        {
+          name: "size",
+          values: [
+            { value: "6" },
+            { value: "7" },
+            { value: "8" },
+            { value: "9" },
+            { value: "10" },
+          ],
+        },
+      ];
 
-      // Build default selected options (first non-disabled value for each)
-      const defaults = {};
-      options.forEach((opt) => {
-        const firstEnabled = opt.values?.find((v) => !v.is_disabled);
-        if (firstEnabled) {
-          defaults[opt.name] = firstEnabled.value;
-        }
-      });
+      const defaults = {
+        color: "Yellow Gold",
+        gold_type: "18K Solid Gold",
+        size: "7",
+      };
 
       setProduct(mapped);
-      setProductOptions(options);
+      setProductOptions(staticOptionsList);
       setSelectedOptions(defaults);
       setLoadingError(false);
     }
@@ -141,6 +176,70 @@ export default function ProductDetail({ params }) {
       setLoadingError(true);
     }
   }, [apiError]);
+
+  useEffect(() => {
+    const getSimilarProducts = async () => {
+      if (!rawProduct) return;
+      try {
+        setLoadingSimilar(true);
+        const baseUrl =
+          process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+
+        const body = {
+          page: 1,
+          limit: 5,
+        };
+
+        if (rawProduct.subcategory_id) {
+          const subId = typeof rawProduct.subcategory_id === "object"
+            ? rawProduct.subcategory_id._id
+            : rawProduct.subcategory_id;
+          body.subcategory_id = subId;
+        } else if (rawProduct.category_id) {
+          const catId = typeof rawProduct.category_id === "object"
+            ? rawProduct.category_id._id
+            : rawProduct.category_id;
+          body.category_id = catId;
+        }
+
+        const response = await fetch(`${baseUrl}/api/product/getProduct`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+
+        if (response.ok) {
+          const resData = await response.json();
+          const list = resData?.data?.products || [];
+          const filtered = list.filter((p) => p._id !== rawProduct._id);
+          const mapped = filtered.slice(0, 4).map((p) => {
+            const colorsOpt = p?.options?.filter((opt) => opt.name === "colors" || opt.name === "color") || [];
+            return {
+              id: p._id,
+              title: p.name,
+              slug: p.slug,
+              is_wishlist: p.is_wishlist || false,
+              category: resolveCategoryName(p.category_id, p.subcategory_id),
+              colors: colorsOpt && colorsOpt.length > 0 ? colorsOpt[0].values : [],
+              image: p.images && p.images[0]
+                ? p.images[0]
+                : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
+              display_price: p.display_price || p.price || 0,
+              isFromApi: true,
+            };
+          });
+          setSimilarProducts(mapped);
+        }
+      } catch (err) {
+        console.error("Error fetching similar products:", err);
+      } finally {
+        setLoadingSimilar(false);
+      }
+    };
+    getSimilarProducts();
+  }, [rawProduct]);
 
   // Compute current price from selected gold_type option
   useEffect(() => {
@@ -273,11 +372,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`w-8 h-8 rounded-full border-2 transition-all duration-200 cursor-pointer ${
-                    isSelected
-                      ? "border-slate-800 scale-110 ring-2 ring-slate-800/20"
-                      : "border-slate-200 hover:border-slate-400"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`w-8 h-8 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
+                    ? "border-slate-800 scale-110 "
+                    : "border-slate-200 hover:border-slate-400"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                   style={{ backgroundColor: hex }}
                   title={val.value}
                   aria-label={val.value}
@@ -296,11 +394,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
-                    isSelected
-                      ? "bg-slate-800 text-white border-slate-800"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isSelected
+                    ? "bg-[#0e0e0e] text-white border-slate-800"
+                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -318,11 +415,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${
-                    isSelected
-                      ? "bg-primary text-white border-primary"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${isSelected
+                    ? "bg-primary text-white border-primary"
+                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -340,11 +436,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
-                    isSelected
-                      ? "bg-slate-800 text-white border-slate-800"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isSelected
+                    ? "bg-[#0e0e0e] text-white border-slate-800"
+                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -397,11 +492,10 @@ export default function ProductDetail({ params }) {
                   <div
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${
-                      selectedImage === idx
-                        ? "border-slate-800 ring-2 ring-slate-800/20"
-                        : "border-slate-100 hover:border-primary/50"
-                    }`}
+                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${selectedImage === idx
+                      ? "border-slate-800 ring-2 ring-slate-800/20"
+                      : "border-slate-100 hover:border-primary/50"
+                      }`}
                   >
                     <img
                       src={img}
@@ -425,9 +519,22 @@ export default function ProductDetail({ params }) {
                   Hallmarked & Certified
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-serif font-medium text-slate-900 tracking-wide">
-                {product.title}
-              </h1>
+              <div className="flex justify-between items-start gap-4">
+                <h1 className="text-2xl sm:text-3xl font-serif font-medium text-slate-900 tracking-wide">
+                  {product.title}
+                </h1>
+                <button
+                  onClick={() => toggleWishlist(product)}
+                  className="p-2.5 rounded-full border border-slate-100 hover:border-slate-200 bg-white hover:bg-slate-50 active:scale-95 transition-all duration-200 shadow-xs flex items-center justify-center cursor-pointer group shrink-0"
+                  aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                >
+                  {wishlisted ? (
+                    <FaHeart className="text-rose-500 scale-110 transition-transform duration-200" size={20} />
+                  ) : (
+                    <FaRegHeart className="text-slate-400 group-hover:text-rose-500 transition-colors duration-200" size={20} />
+                  )}
+                </button>
+              </div>
 
               {/* Configured Price below Title */}
               <div className="flex items-baseline gap-3 mt-1">
@@ -466,17 +573,9 @@ export default function ProductDetail({ params }) {
             <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-slate-100">
               <button
                 onClick={handleAddToCart}
-                className="flex-[2] btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all"
+                className="w-full btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all"
               >
                 <FaShoppingCart /> Add Custom Spec to Bag
-              </button>
-
-              <button
-                onClick={() => toggleWishlist(product)}
-                className={`flex-1 py-4 border rounded-xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer transition-all ${wishlisted ? "bg-neutral-800 text-white border-neutral-800 hover:bg-neutral-900" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"}`}
-              >
-                <FaHeart className={wishlisted ? "text-white" : ""} />{" "}
-                {wishlisted ? "Saved" : "Save Favorite"}
               </button>
             </div>
 
@@ -521,31 +620,28 @@ export default function ProductDetail({ params }) {
               <div className="flex border-b border-slate-100 gap-6">
                 <button
                   onClick={() => setActiveTab("overview")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-                    activeTab === "overview"
-                      ? "border-slate-900 text-slate-900"
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "overview"
+                    ? "border-slate-900 text-slate-900"
+                    : "border-transparent text-slate-400 hover:text-slate-600"
+                    }`}
                 >
                   Overview
                 </button>
                 <button
                   onClick={() => setActiveTab("specifications")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-                    activeTab === "specifications"
-                      ? "border-slate-900 text-slate-900"
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "specifications"
+                    ? "border-slate-900 text-slate-900"
+                    : "border-transparent text-slate-400 hover:text-slate-600"
+                    }`}
                 >
                   Specifications
                 </button>
                 <button
                   onClick={() => setActiveTab("shipping")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-                    activeTab === "shipping"
-                      ? "border-slate-900 text-slate-900"
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "shipping"
+                    ? "border-slate-900 text-slate-900"
+                    : "border-transparent text-slate-400 hover:text-slate-600"
+                    }`}
                 >
                   Shipping & Warranty
                 </button>
@@ -645,6 +741,28 @@ export default function ProductDetail({ params }) {
             </div>
           </div>
         </div>
+
+        {/* Similar Products Section */}
+        {similarProducts.length > 0 && (
+          <div className="border-t border-slate-100 mt-20 pt-16">
+            <div className="text-center space-y-2 mb-12">
+              <span className="text-[9px] text-neutral-400 font-extrabold tracking-[0.3em] uppercase">
+                Curated Selection
+              </span>
+              <h2 className="text-2xl lg:text-3xl font-serif font-light text-neutral-900 uppercase tracking-widest">
+                You May Also{" "}
+                <span className="font-serif italic font-light lowercase">
+                  Like
+                </span>
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-12">
+              {similarProducts.map((item) => (
+                <ProductCard key={item.id} item={item} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );

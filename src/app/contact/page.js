@@ -216,7 +216,7 @@ export default function ContactPage() {
                 particleCount: 150,
                 spread: 80,
                 origin: { y: 0.6 },
-                colors: ["#C8A96A", "#111111", "#FFFFFF", "#ECE8E2"]
+                colors: ["#111111", "#888888", "#FFFFFF", "#E5E5E5"]
             });
         }, 1200);
     };
@@ -237,20 +237,20 @@ export default function ContactPage() {
 
     return (
         <Layout>
-            <div className="w-full bg-[#FAF8F5] text-[#111111] font-sans selection:bg-[#C8A96A]/20 selection:text-[#111111] overflow-x-hidden font-light">
+            <div className="w-full bg-[#FAF9F6] text-[#111111] font-sans selection:bg-neutral-900/10 selection:text-[#111111] overflow-x-hidden font-light">
                 
                 {/* HERO BLOCK */}
-                <section className="bg-[#0F0F0F] text-white py-20 lg:py-28 relative overflow-hidden">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#C8A96A]/5 rounded-full blur-[140px] pointer-events-none" />
+                <section className="bg-black text-white py-20 lg:py-28 relative overflow-hidden">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-white/5 rounded-full blur-[140px] pointer-events-none" />
                     
                     <div className="relative z-10 max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 text-center space-y-4 js-contact-hero">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                        <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block">
                             RESERVATIONS
                         </span>
                         <h1 className="text-4xl sm:text-6xl font-serif font-light tracking-wide text-white leading-tight">
                             Connect With Our Concierge
                         </h1>
-                        <div className="w-16 h-[1px] bg-[#C8A96A] mx-auto my-3" />
+                        <div className="w-16 h-[1px] bg-neutral-500 mx-auto my-3" />
                         <p className="text-neutral-400 font-sans font-light text-sm sm:text-base leading-relaxed max-w-lg mx-auto">
                             Reserve a private viewing suite session in Central, Hong Kong, or arrange a detailed digital consultation with our master bench artisans.
                         </p>
@@ -260,7 +260,7 @@ export default function ContactPage() {
                 {/* SHOWROOM DIRECTORY */}
                 <section className="py-24 sm:py-32 max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24">
                     <div className="text-center space-y-3 mb-16">
-                        <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                        <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
                             LOCATIONS
                         </span>
                         <h2 className="text-2xl sm:text-4xl font-serif font-light text-neutral-900">
@@ -272,11 +272,11 @@ export default function ContactPage() {
                         {SHOWROOMS.map((room) => (
                             <div
                                 key={room.city}
-                                className="glass-card-light rounded-xs p-6 sm:p-8 border border-neutral-100 bg-white shadow-sm flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-[#C8A96A]"
+                                className="glass-card-light rounded-xs p-6 sm:p-8 border border-neutral-100 bg-white shadow-sm flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-neutral-900"
                             >
                                 <div className="space-y-4 text-left">
                                     <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-                                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#C8A96A]">
+                                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-800">
                                             {room.city}
                                         </span>
                                         <span className="text-[8px] font-sans text-neutral-400 tracking-wider">
@@ -294,15 +294,15 @@ export default function ContactPage() {
 
                                     <div className="space-y-2 pt-2 text-neutral-600 text-xs font-sans">
                                         <div className="flex items-center gap-2">
-                                            <FaPhoneAlt className="text-[#C8A96A] text-[10px]" />
+                                            <FaPhoneAlt className="text-neutral-400 text-[10px]" />
                                             <span>{room.phone}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <FaEnvelope className="text-[#C8A96A] text-[10px]" />
+                                            <FaEnvelope className="text-neutral-400 text-[10px]" />
                                             <a href={`mailto:${room.email}`} className="hover:underline truncate">{room.email}</a>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <FaClock className="text-[#C8A96A] text-[10px]" />
+                                            <FaClock className="text-neutral-400 text-[10px]" />
                                             <span className="text-[11px] leading-tight text-neutral-500">{room.hours}</span>
                                         </div>
                                     </div>
@@ -311,7 +311,7 @@ export default function ContactPage() {
                                 <div className="pt-6">
                                     <button
                                         onClick={() => handleLocationSelect(room.city)}
-                                        className="w-full text-center py-2.5 bg-neutral-950 border border-neutral-955 text-white text-[10px] font-bold uppercase tracking-[0.15em] transition-all hover:bg-[#C8A96A] hover:border-[#C8A96A] cursor-pointer"
+                                        className="w-full text-center py-2.5 bg-neutral-950 border border-neutral-955 text-white text-[10px] font-bold uppercase tracking-[0.15em] transition-all hover:bg-neutral-800 hover:border-neutral-800 cursor-pointer"
                                     >
                                         Book Here
                                     </button>
@@ -330,16 +330,16 @@ export default function ContactPage() {
                         
                         {/* LEFT COLUMN: CONCIERGE BOOKING FORM */}
                         <div ref={formRef} className="lg:col-span-7 w-full">
-                            <div className="glass-card-light rounded-xs p-8 sm:p-10 border border-neutral-100/85 shadow-lg bg-[#FAF8F5]/50 text-left">
+                            <div className="glass-card-light rounded-xs p-8 sm:p-10 border border-neutral-100/85 shadow-lg bg-neutral-50/50 text-left">
                                 {submittedData ? (
                                     // Success state block
                                     <div className="text-center py-10 space-y-6 animate-fade-in">
-                                        <FaCheckCircle className="text-[#C8A96A] text-6xl mx-auto animate-bounce" />
+                                        <FaCheckCircle className="text-neutral-800 text-6xl mx-auto animate-bounce" />
                                         <div className="space-y-2">
                                             <h3 className="text-2xl font-serif font-light text-neutral-900">
                                                 Consultation Requested
                                             </h3>
-                                            <span className="inline-block text-xs font-mono font-bold bg-[#C8A96A]/10 text-[#C8A96A] border border-[#C8A96A]/20 px-3 py-1 rounded-sm uppercase tracking-widest mt-1">
+                                            <span className="inline-block text-xs font-mono font-bold bg-neutral-100 text-neutral-800 border border-neutral-200 px-3 py-1 rounded-sm uppercase tracking-widest mt-1">
                                                 ID: {submittedData.referenceId}
                                             </span>
                                         </div>
@@ -349,7 +349,7 @@ export default function ContactPage() {
                                         <div className="pt-4">
                                             <button
                                                 onClick={handleReset}
-                                                className="px-8 py-3 bg-neutral-950 border border-neutral-950 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-neutral-900 cursor-pointer"
+                                                className="px-8 py-3 bg-neutral-950 border border-neutral-955 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-neutral-900 cursor-pointer"
                                             >
                                                 Submit Another Request
                                             </button>
@@ -377,7 +377,7 @@ export default function ContactPage() {
                                                     name="inquiryType"
                                                     value={formInput.inquiryType}
                                                     onChange={handleInputChange}
-                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all"
+                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all"
                                                 >
                                                     <option>Bespoke Custom Commission</option>
                                                     <option>Ready-to-Wear Fine Jewelry</option>
@@ -395,7 +395,7 @@ export default function ContactPage() {
                                                     name="location"
                                                     value={formInput.location}
                                                     onChange={handleInputChange}
-                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all"
+                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all"
                                                 >
                                                     <option>Central, Hong Kong</option>
                                                     <option>New York, USA</option>
@@ -418,7 +418,7 @@ export default function ContactPage() {
                                                 placeholder="e.g. Sterling H. Dupont"
                                                 value={formInput.name}
                                                 onChange={handleInputChange}
-                                                className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all text-neutral-800 placeholder-neutral-300"
+                                                className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all text-neutral-800 placeholder-neutral-300"
                                             />
                                         </div>
 
@@ -434,7 +434,7 @@ export default function ContactPage() {
                                                     placeholder="sterling@example.com"
                                                     value={formInput.email}
                                                     onChange={handleInputChange}
-                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all text-neutral-800 placeholder-neutral-300"
+                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all text-neutral-800 placeholder-neutral-300"
                                                 />
                                             </div>
 
@@ -449,7 +449,7 @@ export default function ContactPage() {
                                                     placeholder="+852 9123 4567"
                                                     value={formInput.phone}
                                                     onChange={handleInputChange}
-                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all text-neutral-800 placeholder-neutral-300"
+                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all text-neutral-800 placeholder-neutral-300"
                                                 />
                                             </div>
                                         </div>
@@ -467,7 +467,7 @@ export default function ContactPage() {
                                                         required
                                                         value={formInput.date}
                                                         onChange={handleInputChange}
-                                                        className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all text-neutral-800"
+                                                        className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all text-neutral-800"
                                                     />
                                                 </div>
                                             </div>
@@ -480,7 +480,7 @@ export default function ContactPage() {
                                                     name="timeSlot"
                                                     value={formInput.timeSlot}
                                                     onChange={handleInputChange}
-                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all"
+                                                    className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all"
                                                 >
                                                     <option>10:00 AM</option>
                                                     <option>11:00 AM</option>
@@ -504,7 +504,7 @@ export default function ContactPage() {
                                                 placeholder="Describe carat weights, shapes, preferred settings, or special timeline requests..."
                                                 value={formInput.notes}
                                                 onChange={handleInputChange}
-                                                className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A] rounded-sm transition-all text-neutral-800 placeholder-neutral-300 resize-none"
+                                                className="w-full border border-neutral-200 bg-white px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-neutral-900 rounded-sm transition-all text-neutral-800 placeholder-neutral-300 resize-none"
                                             />
                                         </div>
 
@@ -513,7 +513,7 @@ export default function ContactPage() {
                                             <button
                                                 type="submit"
                                                 disabled={submitting}
-                                                className="w-full py-4 bg-[#111111] hover:bg-[#C8A96A] text-white text-[10px] font-bold uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50 cursor-pointer"
+                                                className="w-full py-4 bg-[#111111] hover:bg-neutral-900 text-white text-[10px] font-bold uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50 cursor-pointer"
                                             >
                                                 {submitting ? "Checking Availability..." : "Request Reservation Slot"}
                                             </button>
@@ -526,7 +526,7 @@ export default function ContactPage() {
                         {/* RIGHT COLUMN: LUXURIOUS SVG FLAGSHIP MAP MAP */}
                         <div ref={contactInfoRef} className="lg:col-span-5 w-full space-y-8 text-left">
                             <div className="space-y-4">
-                                <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                                <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
                                     THE HEADQUARTERS
                                 </span>
                                 <h3 className="font-serif text-3xl font-light text-neutral-900 leading-tight">
@@ -538,7 +538,7 @@ export default function ContactPage() {
                             </div>
 
                             {/* Luxury Map Drawing */}
-                            <div className="w-full aspect-[4/3] rounded-xs bg-[#ECE8E2] border border-neutral-200 relative overflow-hidden flex items-center justify-center p-6 group shadow-inner">
+                            <div className="w-full aspect-[4/3] rounded-xs bg-neutral-100 border border-neutral-200 relative overflow-hidden flex items-center justify-center p-6 group shadow-inner">
                                 {/* SVG Grid Lines and Landmarks map mockup */}
                                 <svg viewBox="0 0 400 300" className="absolute inset-0 w-full h-full text-neutral-300 stroke-current opacity-70" fill="none" strokeWidth="0.5">
                                     {/* Grid Lines */}
@@ -554,7 +554,7 @@ export default function ContactPage() {
                                     </g>
 
                                     {/* Central Landmark buildings outline */}
-                                    <rect x="150" y="115" width="80" height="60" rx="3" fill="#FAF8F5" stroke="#D1C8BA" strokeWidth="1" />
+                                    <rect x="150" y="115" width="80" height="60" rx="3" fill="#FFFFFF" stroke="#D1C8BA" strokeWidth="1" />
                                     <text x="190" y="148" textAnchor="middle" className="fill-neutral-500 font-sans font-semibold text-[8px] uppercase tracking-widest" stroke="none">Landmark</text>
                                     <text x="190" y="158" textAnchor="middle" className="fill-neutral-400 font-sans font-light text-[6px] uppercase tracking-wide" stroke="none">Alexandra</text>
                                 </svg>
@@ -562,9 +562,9 @@ export default function ContactPage() {
                                 {/* Target Glowing Pointer */}
                                 <div className="absolute left-[190px] top-[145px] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
                                     {/* Ping Glow */}
-                                    <span className="absolute h-10 w-10 rounded-full border border-[#C8A96A] opacity-65 animate-ping pointer-events-none" />
+                                    <span className="absolute h-10 w-10 rounded-full border border-neutral-900 opacity-65 animate-ping pointer-events-none" />
                                     {/* Pin Dot */}
-                                    <div className="h-3 w-3 rounded-full bg-[#C8A96A] border-2 border-white shadow-md z-10" />
+                                    <div className="h-3 w-3 rounded-full bg-neutral-900 border-2 border-white shadow-md z-10" />
                                 </div>
 
                                 {/* Custom Coordinate Badge */}
@@ -579,15 +579,15 @@ export default function ContactPage() {
                                 </h4>
                                 <ul className="space-y-3 text-neutral-500 text-xs font-sans">
                                     <li className="flex items-center gap-3">
-                                        <FaEnvelope className="text-[#C8A96A] text-sm" />
+                                        <FaEnvelope className="text-neutral-400 text-sm" />
                                         <span>Concierge Inbox: <a href="mailto:concierge@dndiamond.com" className="text-neutral-900 font-bold hover:underline">concierge@dndiamond.com</a></span>
                                     </li>
                                     <li className="flex items-center gap-3">
-                                        <FaPhoneAlt className="text-[#C8A96A] text-sm" />
+                                        <FaPhoneAlt className="text-neutral-400 text-sm" />
                                         <span>HK Direct Hotline: <span className="text-neutral-900 font-bold">+852 2845 8888</span></span>
                                     </li>
                                     <li className="flex items-center gap-3">
-                                        <FaLaptop className="text-[#C8A96A] text-sm" />
+                                        <FaLaptop className="text-neutral-400 text-sm" />
                                         <span>Virtual consultation schedules coordinated globally across all regional timezones.</span>
                                     </li>
                                 </ul>
@@ -598,17 +598,17 @@ export default function ContactPage() {
                 </section>
 
                 {/* FAQ ACCORDION */}
-                <section className="py-24 sm:py-32 bg-[#FAF8F5] js-faq-container">
+                <section className="py-24 sm:py-32 bg-[#FAF9F6] js-faq-container">
                     <div className="max-w-4xl mx-auto px-6">
                         
                         <div className="text-center space-y-3 mb-16">
-                            <span className="text-[11px] font-bold tracking-[0.3em] text-[#C8A96A] uppercase block">
+                            <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-550 uppercase block">
                                 ASSISTANCE
                             </span>
                             <h2 className="text-3xl font-serif font-light text-neutral-900">
                                 Frequently Asked Questions
                             </h2>
-                            <div className="w-12 h-[1px] bg-[#C8A96A] mx-auto mt-3" />
+                            <div className="w-12 h-[1px] bg-neutral-800 mx-auto mt-3" />
                         </div>
 
                         {/* Questions list */}
@@ -624,12 +624,12 @@ export default function ContactPage() {
                                             onClick={() => toggleFaq(idx)}
                                             className="w-full flex items-center justify-between p-5 text-left focus:outline-none cursor-pointer group"
                                         >
-                                            <span className="font-serif text-sm sm:text-base font-semibold text-neutral-800 group-hover:text-[#C8A96A] transition-colors leading-snug">
+                                            <span className="font-serif text-sm sm:text-base font-semibold text-neutral-800 group-hover:text-neutral-900 transition-colors leading-snug">
                                                 {faq.q}
                                             </span>
                                             <FaChevronDown
                                                 size={10}
-                                                className={`text-[#C8A96A] transition-transform duration-300 ml-4 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}
+                                                className={`text-neutral-400 transition-transform duration-300 ml-4 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}
                                             />
                                         </button>
                                         

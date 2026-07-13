@@ -8,13 +8,13 @@ import confetti from "canvas-confetti";
 // Showrooms Data
 const SHOWROOMS = [
     {
-        city: "Central, Hong Kong",
-        name: "DN Flagship Showroom",
-        address: "32/F, Landmark Alexandra, 18 Chater Road, Central, Hong Kong",
-        phone: "+852 2845 8888",
+        city: "T.S.T, Hong Kong",
+        name: "D. N. Diamonds (HK) Ltd.",
+        address: "Unit 303, 3/F, Chevalier House, 45–51 Chatham Road, T.S.T, Kln., Hong Kong",
+        phone: "+852 3693 4141",
         hours: "Mon - Sat: 10:00 AM - 7:00 PM (By Appointment Only)",
-        email: "hk.atelier@dndiamond.com",
-        coords: "22.2818° N, 114.1583° E"
+        email: "dndiamondhk@yahoo.com",
+        coords: "22.2988° N, 114.1722° E"
     },
     {
         city: "New York, USA",
@@ -530,10 +530,10 @@ export default function ContactPage() {
                                     THE HEADQUARTERS
                                 </span>
                                 <h3 className="font-serif text-3xl font-light text-neutral-900 leading-tight">
-                                    Hong Kong Flagship Atelier
+                                    Hong Kong Office & Showroom
                                 </h3>
                                 <p className="text-neutral-600 font-sans text-xs sm:text-sm leading-relaxed">
-                                    Located in Central, Landmark Alexandra, our primary showroom is a high-security consulting vault featuring certified laser-inscriptions examination suites, loose GIA diamond inspection microscopes, and layout modeling.
+                                    Located in Tsim Sha Tsui, Chevalier House, our Hong Kong office and consulting suite features certified laser-inscriptions examination facilities, loose GIA diamond inspection microscopes, and custom design modeling.
                                 </p>
                             </div>
 
@@ -555,8 +555,8 @@ export default function ContactPage() {
 
                                     {/* Central Landmark buildings outline */}
                                     <rect x="150" y="115" width="80" height="60" rx="3" fill="#FFFFFF" stroke="#D1C8BA" strokeWidth="1" />
-                                    <text x="190" y="148" textAnchor="middle" className="fill-neutral-500 font-sans font-semibold text-[8px] uppercase tracking-widest" stroke="none">Landmark</text>
-                                    <text x="190" y="158" textAnchor="middle" className="fill-neutral-400 font-sans font-light text-[6px] uppercase tracking-wide" stroke="none">Alexandra</text>
+                                    <text x="190" y="148" textAnchor="middle" className="fill-neutral-500 font-sans font-semibold text-[8px] uppercase tracking-widest" stroke="none">Chevalier</text>
+                                    <text x="190" y="158" textAnchor="middle" className="fill-neutral-400 font-sans font-light text-[6px] uppercase tracking-wide" stroke="none">House</text>
                                 </svg>
                                 
                                 {/* Target Glowing Pointer */}
@@ -569,7 +569,7 @@ export default function ContactPage() {
 
                                 {/* Custom Coordinate Badge */}
                                 <div className="absolute bottom-4 left-4 bg-neutral-900 text-white text-[8px] font-mono tracking-widest px-2.5 py-1 rounded-sm select-none border border-white/10">
-                                    HK-HQ FLAGSHIP: 22.2818° N, 114.1583° E
+                                    HK-HQ OFFICE: 22.2988° N, 114.1722° E
                                 </div>
                             </div>
 
@@ -584,7 +584,7 @@ export default function ContactPage() {
                                     </li>
                                     <li className="flex items-center gap-3">
                                         <FaPhoneAlt className="text-neutral-400 text-sm" />
-                                        <span>HK Direct Hotline: <span className="text-neutral-900 font-bold">+852 2845 8888</span></span>
+                                        <span>HK Direct Hotline: <span className="text-neutral-900 font-bold">+852 3693 4141</span></span>
                                     </li>
                                     <li className="flex items-center gap-3">
                                         <FaLaptop className="text-neutral-400 text-sm" />

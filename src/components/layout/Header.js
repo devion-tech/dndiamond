@@ -252,7 +252,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </button>
         </div>
       )}
-      <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between px-2 min-[375px]:px-4 sm:px-6 lg:px-8 relative">
+      <div className="mx-auto flex h-14 items-center justify-between px-2 min-[375px]:px-4 sm:px-6 lg:px-8 relative">
         {/* Left Side: Mobile Toggle & Desktop Nav */}
         <div className="flex items-center gap-2 min-[375px]:gap-4 md:gap-6 static h-full">
           {/* Mobile Menu Toggle */}

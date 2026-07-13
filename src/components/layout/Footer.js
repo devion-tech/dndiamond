@@ -60,7 +60,7 @@ export default function Footer() {
       case "HK":
       default:
         return [
-          "Central, Hong Kong (Primary Showroom & Pickup)",
+          "T.S.T, Hong Kong (Office & Showroom)",
           "Chicago, IL",
           "New York, NY",
           "San Francisco, CA",
@@ -219,6 +219,12 @@ export default function Footer() {
                   <li key={index}>{loc}</li>
                 ))}
               </ul>
+              {region === "HK" && (
+                <div className="text-[10px] font-light text-neutral-400 space-y-1 pt-4 mt-4 border-t border-neutral-200/50">
+                  <p>Tel: +852 3693 4141</p>
+                  <p>Email: dndiamondhk@yahoo.com</p>
+                </div>
+              )}
             </div>
           </div>
 

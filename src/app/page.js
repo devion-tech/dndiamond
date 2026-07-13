@@ -7,12 +7,13 @@ import { useStore } from "@/context/StoreContext";
 import CategoryCarousel from "@/components/ui/CategoryCarousel";
 import ExploreDiamonds from "@/components/ui/ExploreDiamonds";
 import ProductCard from "@/components/ui/ProductCard";
+import EditorialBlock from "@/components/ui/EditorialBlock";
 
 const BEST_SELLERS = [
     { id: "JW-101", name: "Classic Diamond Halo Ring", price: 4150, img: "/bestsellers/RF16377DD-03-W.webp" },
     { id: "JW-102", name: "Vianne Everyday Diamond Band", price: 850, img: "/bestsellers/RFB0281DD-01W.webp" },
     { id: "JW-103", name: "Stella Solitaire Studs", price: 2450, img: "/bestsellers/101977EA-W2.webp" },
-    { id: "JW-104", name: "Signature Tennis Bracelet", price: 10450, img: "/bestsellers/GFA1049DD-01W1.webp" },
+    { id: "JW-104", name: "Signature Tennis                                                         Bracelet", price: 10450, img: "/bestsellers/GFA1049DD-01W1.webp" },
     { id: "JW-108", name: "Tiara Diamond Ring", price: 150, img: "/bestsellers/RFB6659DD-01-W.webp" },
 ];
 
@@ -286,51 +287,7 @@ function ParallaxImage({ src, alt, className }) {
     );
 }
 
-function EditorialBlock({ eyebrow, heading, body, cta, ctaHref, dark }) {
-    const ref = useRef(null);
-    useEffect(() => {
-        if (!ref.current) return;
-        let ctx;
-        loadGSAP().then(({ gsap, ScrollTrigger }) => {
-            const els = ref.current.querySelectorAll("[data-anim]");
-            ctx = gsap.context(() => {
-                gsap.fromTo(els,
-                    { opacity: 0, y: 24 },
-                    {
-                        opacity: 1, y: 0,
-                        duration: 0.75, stagger: 0.12, ease: "power3.out",
-                        scrollTrigger: { trigger: ref.current, start: "top 84%", once: true },
-                    }
-                );
-            });
-        });
-        return () => ctx && ctx.revert();
-    }, []);
 
-    return (
-        <div ref={ref} className="space-y-6 text-left">
-            {eyebrow && (
-                <span data-anim className="block text-[9px] lg:text-[10px] xl:text-[11px] font-bold tracking-[0.35em] uppercase opacity-0"
-                    style={{ color: dark ? "#555" : "#aaa" }}>
-                    {eyebrow}
-                </span>
-            )}
-            <h3 data-anim className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide leading-tight opacity-0 ${dark ? "text-white" : "text-neutral-955"}`}>
-                {heading}
-            </h3>
-            <div data-anim className={`space-y-3 text-xs xl:text-sm font-light leading-relaxed max-w-md opacity-0 ${dark ? "text-neutral-400" : "text-neutral-500"}`}>
-                {Array.isArray(body) ? body.map((p, i) => <p key={i}>{p}</p>) : <p>{body}</p>}
-            </div>
-            {cta && (
-                <div data-anim className="pt-2 opacity-0">
-                    <Link href={ctaHref} className={dark ? "btn-apollonian-outline btn-apollonian-outline-dark" : "btn-apollonian-outline btn-apollonian-outline-light"}>
-                        {cta}
-                    </Link>
-                </div>
-            )}
-        </div>
-    );
-}
 
 function StatsTicker() {
     const ref = useRef(null);
@@ -751,21 +708,21 @@ export default function Home() {
 
 
                 {/* Stats bar */}
-                <section className="bg-neutral-50 border-y border-neutral-100 py-16">
+                <section className=" py-16">
                     <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
                         <StatsTicker />
                     </div>
                 </section>
                 {/* WHAT WERE WE MADE FOR? */}
-                <section className="bg-[#0D0D0D] text-white py-24 sm:py-32">
+                <section className="bg-[#fff] text-black py-24 sm:py-32">
                     <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                             <ParallaxImage
                                 src="/products/atelier_interior.png"
                                 alt="Dndiamond Atelier Studio"
-                                className="aspect-[4/5] border border-neutral-800"
+                                className="aspect-[4/5] "
                             />
-                            <EditorialBlock dark
+                            <EditorialBlock
                                 eyebrow="Our Story"
                                 heading="What were we made for?"
                                 body={[

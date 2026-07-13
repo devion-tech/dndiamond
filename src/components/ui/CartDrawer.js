@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   FaTimes,
   FaTrash,
@@ -19,6 +20,7 @@ import { useStore } from "@/context/StoreContext";
 import confetti from "canvas-confetti";
 
 export default function CartDrawer({ isOpen, onClose }) {
+  const router = useRouter();
   const {
     cart,
     totalItems,
@@ -863,8 +865,8 @@ export default function CartDrawer({ isOpen, onClose }) {
                             <option value="Standard Courier Delivery">
                               Standard Courier Delivery (Free)
                             </option>
-                            <option value="Showroom Pickup - Central">
-                              Showroom Pickup - Central, Hong Kong (Free)
+                            <option value="Showroom Pickup - T.S.T Office">
+                              Showroom Pickup - T.S.T Office, Hong Kong (Free)
                             </option>
                           </>
                         ) : (
@@ -879,10 +881,9 @@ export default function CartDrawer({ isOpen, onClose }) {
                         )}
                       </select>
                       {region === "HK" &&
-                        shippingMethod === "Showroom Pickup - Central" && (
+                        shippingMethod === "Showroom Pickup - T.S.T Office" && (
                           <div className="bg-primary/5 border border-primary/20 rounded-xl p-2.5 text-[9px] text-slate-600 font-medium leading-relaxed mt-1">
-                            📍 <strong>Showroom Location:</strong> 18/F, Central
-                            Tower, 28 Queen's Road Central, Hong Kong.
+                            📍 <strong>Showroom Location:</strong> Unit 303, 3/F, Chevalier House, 45–51 Chatham Road, T.S.T, Kln., Hong Kong.
                             <br />
                             Hours: Mon-Sat 10:00 AM - 7:00 PM. Verification ID
                             required on collection.
@@ -1581,37 +1582,15 @@ export default function CartDrawer({ isOpen, onClose }) {
                 </div>
 
                 {/* Main drawer button */}
-                {!isCheckoutMode ? (
-                  <button
-                    onClick={() => setIsCheckoutMode(true)}
-                    className="w-full btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs border-0"
-                  >
-                    <FaLock size={12} /> Secure Checkout Flow
-                  </button>
-                ) : (
-                  <div className="flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setIsCheckoutMode(false)}
-                      className="flex-1 py-4 border border-slate-200 hover:bg-slate-50 bg-white rounded-xl text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer"
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={handlePlaceOrder}
-                      disabled={isKycRequired && !isKycCompleted}
-                      className={`flex-[2] py-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-sm border-0 ${
-                        isKycRequired && !isKycCompleted
-                          ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                          : "btn-gold text-white"
-                      }`}
-                    >
-                      {isKycRequired && !isKycCompleted
-                        ? "KYC Verification Required"
-                        : "Confirm Inquiry"}
-                    </button>
-                  </div>
-                )}
+                <button
+                  onClick={() => {
+                    router.push("/checkout");
+                    onClose();
+                  }}
+                  className="w-full btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs border-0"
+                >
+                  <FaLock size={12} /> Proceed to Secure Checkout
+                </button>
               </div>
             </div>
           )}

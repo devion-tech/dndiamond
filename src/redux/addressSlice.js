@@ -55,12 +55,65 @@ export const addAddress = createAsyncThunk(
   },
 );
 
+export const updateAddress = createAsyncThunk(
+  "address/updateAddress",
+  async ({ id, addressData }, { rejectWithValue }) => {
+    try {
+      const headers = getAuthHeaders();
+      const res = await fetch(`${baseUrl}/api/address/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+        body: JSON.stringify(addressData),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return rejectWithValue(data.message || "Failed to update address");
+      }
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.message || "Failed to connect to server",
+      );
+    }
+  },
+);
+
+export const deleteAddress = createAsyncThunk(
+  "address/deleteAddress",
+  async (id, { rejectWithValue }) => {
+    try {
+      const headers = getAuthHeaders();
+      const res = await fetch(`${baseUrl}/api/address/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return rejectWithValue(data.message || "Failed to delete address");
+      }
+      return id;
+    } catch (error) {
+      return rejectWithValue(
+        error.message || "Failed to connect to server",
+      );
+    }
+  },
+);
+
 const addressSlice = createSlice({
   name: "address",
   initialState: {
     items: [],
     loading: false,
     saving: false,
+    updating: false,
+    deleting: false,
     error: null,
     selectedAddressId: null,
   },
@@ -100,6 +153,36 @@ const addressSlice = createSlice({
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.saving = false;
+        state.error = action.payload;
+      })
+      .addCase(updateAddress.pending, (state) => {
+        state.updating = true;
+        state.error = null;
+      })
+      .addCase(updateAddress.fulfilled, (state, action) => {
+        state.updating = false;
+        const idx = state.items.findIndex((a) => a._id === action.payload._id);
+        if (idx !== -1) {
+          state.items[idx] = action.payload;
+        }
+      })
+      .addCase(updateAddress.rejected, (state, action) => {
+        state.updating = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteAddress.pending, (state) => {
+        state.deleting = true;
+        state.error = null;
+      })
+      .addCase(deleteAddress.fulfilled, (state, action) => {
+        state.deleting = false;
+        state.items = state.items.filter((a) => a._id !== action.payload);
+        if (state.selectedAddressId === action.payload) {
+          state.selectedAddressId = state.items[0]?._id || null;
+        }
+      })
+      .addCase(deleteAddress.rejected, (state, action) => {
+        state.deleting = false;
         state.error = action.payload;
       });
   },

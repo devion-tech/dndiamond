@@ -177,69 +177,69 @@ export default function ProductDetail({ params }) {
     }
   }, [apiError]);
 
-  useEffect(() => {
-    const getSimilarProducts = async () => {
-      if (!rawProduct) return;
-      try {
-        setLoadingSimilar(true);
-        const baseUrl =
-          process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+  // useEffect(() => {
+  //   const getSimilarProducts = async () => {
+  //     if (!rawProduct) return;
+  //     try {
+  //       setLoadingSimilar(true);
+  //       const baseUrl =
+  //         process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
-        const body = {
-          page: 1,
-          limit: 5,
-        };
+  //       const body = {
+  //         page: 1,
+  //         limit: 5,
+  //       };
 
-        if (rawProduct.subcategory_id) {
-          const subId = typeof rawProduct.subcategory_id === "object"
-            ? rawProduct.subcategory_id._id
-            : rawProduct.subcategory_id;
-          body.subcategory_id = subId;
-        } else if (rawProduct.category_id) {
-          const catId = typeof rawProduct.category_id === "object"
-            ? rawProduct.category_id._id
-            : rawProduct.category_id;
-          body.category_id = catId;
-        }
+  //       if (rawProduct.subcategory_id) {
+  //         const subId = typeof rawProduct.subcategory_id === "object"
+  //           ? rawProduct.subcategory_id._id
+  //           : rawProduct.subcategory_id;
+  //         body.subcategory_id = subId;
+  //       } else if (rawProduct.category_id) {
+  //         const catId = typeof rawProduct.category_id === "object"
+  //           ? rawProduct.category_id._id
+  //           : rawProduct.category_id;
+  //         body.category_id = catId;
+  //       }
 
-        const response = await fetch(`${baseUrl}/api/product/getProduct`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        });
+  //       const response = await fetch(`${baseUrl}/api/product/getProduct`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(body),
+  //       });
 
-        if (response.ok) {
-          const resData = await response.json();
-          const list = resData?.data?.products || [];
-          const filtered = list.filter((p) => p._id !== rawProduct._id);
-          const mapped = filtered.slice(0, 4).map((p) => {
-            const colorsOpt = p?.options?.filter((opt) => opt.name === "colors" || opt.name === "color") || [];
-            return {
-              id: p._id,
-              title: p.name,
-              slug: p.slug,
-              is_wishlist: p.is_wishlist || false,
-              category: resolveCategoryName(p.category_id, p.subcategory_id),
-              colors: colorsOpt && colorsOpt.length > 0 ? colorsOpt[0].values : [],
-              image: p.images && p.images[0]
-                ? p.images[0]
-                : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
-              display_price: p.display_price || p.price || 0,
-              isFromApi: true,
-            };
-          });
-          setSimilarProducts(mapped);
-        }
-      } catch (err) {
-        console.error("Error fetching similar products:", err);
-      } finally {
-        setLoadingSimilar(false);
-      }
-    };
-    getSimilarProducts();
-  }, [rawProduct]);
+  //       if (response.ok) {
+  //         const resData = await response.json();
+  //         const list = resData?.data?.products || [];
+  //         const filtered = list.filter((p) => p._id !== rawProduct._id);
+  //         const mapped = filtered.slice(0, 4).map((p) => {
+  //           const colorsOpt = p?.options?.filter((opt) => opt.name === "colors" || opt.name === "color") || [];
+  //           return {
+  //             id: p._id,
+  //             title: p.name,
+  //             slug: p.slug,
+  //             is_wishlist: p.is_wishlist || false,
+  //             category: resolveCategoryName(p.category_id, p.subcategory_id),
+  //             colors: colorsOpt && colorsOpt.length > 0 ? colorsOpt[0].values : [],
+  //             image: p.images && p.images[0]
+  //               ? p.images[0]
+  //               : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
+  //             display_price: p.display_price || p.price || 0,
+  //             isFromApi: true,
+  //           };
+  //         });
+  //         setSimilarProducts(mapped);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching similar products:", err);
+  //     } finally {
+  //       setLoadingSimilar(false);
+  //     }
+  //   };
+  //   getSimilarProducts();
+  // }, [rawProduct]);
 
   // Compute current price from selected gold_type option
   useEffect(() => {
@@ -372,10 +372,11 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`w-8 h-8 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
-                    ? "border-slate-800 scale-110 "
-                    : "border-slate-200 hover:border-slate-400"
-                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`w-8 h-8 rounded-full border transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? "border-slate-800 scale-110 "
+                      : "border-slate-200 hover:border-slate-400"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                   style={{ backgroundColor: hex }}
                   title={val.value}
                   aria-label={val.value}
@@ -394,10 +395,11 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isSelected
-                    ? "bg-[#0e0e0e] text-white border-slate-800"
-                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                    isSelected
+                      ? "bg-[#0e0e0e] text-white border-slate-800"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -415,10 +417,11 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${isSelected
-                    ? "bg-primary text-white border-primary"
-                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${
+                    isSelected
+                      ? "bg-primary text-white border-primary"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -436,10 +439,11 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${isSelected
-                    ? "bg-[#0e0e0e] text-white border-slate-800"
-                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                    isSelected
+                      ? "bg-[#0e0e0e] text-white border-slate-800"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -492,10 +496,11 @@ export default function ProductDetail({ params }) {
                   <div
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${selectedImage === idx
-                      ? "border-slate-800 ring-2 ring-slate-800/20"
-                      : "border-slate-100 hover:border-primary/50"
-                      }`}
+                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${
+                      selectedImage === idx
+                        ? "border-slate-800 ring-2 ring-slate-800/20"
+                        : "border-slate-100 hover:border-primary/50"
+                    }`}
                   >
                     <img
                       src={img}
@@ -526,12 +531,20 @@ export default function ProductDetail({ params }) {
                 <button
                   onClick={() => toggleWishlist(product)}
                   className="p-2.5 rounded-full border border-slate-100 hover:border-slate-200 bg-white hover:bg-slate-50 active:scale-95 transition-all duration-200 shadow-xs flex items-center justify-center cursor-pointer group shrink-0"
-                  aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                  aria-label={
+                    wishlisted ? "Remove from wishlist" : "Add to wishlist"
+                  }
                 >
                   {wishlisted ? (
-                    <FaHeart className="text-rose-500 scale-110 transition-transform duration-200" size={20} />
+                    <FaHeart
+                      className="text-rose-500 scale-110 transition-transform duration-200"
+                      size={20}
+                    />
                   ) : (
-                    <FaRegHeart className="text-slate-400 group-hover:text-rose-500 transition-colors duration-200" size={20} />
+                    <FaRegHeart
+                      className="text-slate-400 group-hover:text-rose-500 transition-colors duration-200"
+                      size={20}
+                    />
                   )}
                 </button>
               </div>
@@ -620,28 +633,31 @@ export default function ProductDetail({ params }) {
               <div className="flex border-b border-slate-100 gap-6">
                 <button
                   onClick={() => setActiveTab("overview")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "overview"
-                    ? "border-slate-900 text-slate-900"
-                    : "border-transparent text-slate-400 hover:text-slate-600"
-                    }`}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
+                    activeTab === "overview"
+                      ? "border-slate-900 text-slate-900"
+                      : "border-transparent text-slate-400 hover:text-slate-600"
+                  }`}
                 >
                   Overview
                 </button>
                 <button
                   onClick={() => setActiveTab("specifications")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "specifications"
-                    ? "border-slate-900 text-slate-900"
-                    : "border-transparent text-slate-400 hover:text-slate-600"
-                    }`}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
+                    activeTab === "specifications"
+                      ? "border-slate-900 text-slate-900"
+                      : "border-transparent text-slate-400 hover:text-slate-600"
+                  }`}
                 >
                   Specifications
                 </button>
                 <button
                   onClick={() => setActiveTab("shipping")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === "shipping"
-                    ? "border-slate-900 text-slate-900"
-                    : "border-transparent text-slate-400 hover:text-slate-600"
-                    }`}
+                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
+                    activeTab === "shipping"
+                      ? "border-slate-900 text-slate-900"
+                      : "border-transparent text-slate-400 hover:text-slate-600"
+                  }`}
                 >
                   Shipping & Warranty
                 </button>

@@ -38,6 +38,8 @@ export default function CartDrawer({ isOpen, onClose }) {
     formatPrice,
     formatConvertedPrice,
     getTaxAmount,
+    token,
+    setAuthModalOpen,
   } = useStore();
 
   const [promoCode, setPromoCode] = useState("");
@@ -883,7 +885,9 @@ export default function CartDrawer({ isOpen, onClose }) {
                       {region === "HK" &&
                         shippingMethod === "Showroom Pickup - T.S.T Office" && (
                           <div className="bg-primary/5 border border-primary/20 rounded-xl p-2.5 text-[9px] text-slate-600 font-medium leading-relaxed mt-1">
-                            📍 <strong>Showroom Location:</strong> Unit 303, 3/F, Chevalier House, 45–51 Chatham Road, T.S.T, Kln., Hong Kong.
+                            📍 <strong>Showroom Location:</strong> Unit 303,
+                            3/F, Chevalier House, 45–51 Chatham Road, T.S.T,
+                            Kln., Hong Kong.
                             <br />
                             Hours: Mon-Sat 10:00 AM - 7:00 PM. Verification ID
                             required on collection.
@@ -1473,7 +1477,7 @@ export default function CartDrawer({ isOpen, onClose }) {
               {/* Drawer Footer Price details */}
               <div className="border-t border-slate-100 bg-slate-50/50 px-6 py-5 space-y-4">
                 {/* Promo Code verification */}
-                {!isCheckoutMode && (
+                {/* {!isCheckoutMode && (
                   <>
                     <form onSubmit={handleApplyPromo} className="flex gap-2">
                       <div className="relative flex-1">
@@ -1492,7 +1496,6 @@ export default function CartDrawer({ isOpen, onClose }) {
                       >
                         Apply
                       </button>
-                      {/* Error/Success Promo responses */}
                     </form>
                     {promoError && (
                       <p className="text-[10px] text-neutral-800 font-semibold text-left">
@@ -1505,10 +1508,10 @@ export default function CartDrawer({ isOpen, onClose }) {
                       </p>
                     )}
                   </>
-                )}
+                )} */}
 
                 {/* Applied Code Summary */}
-                {appliedCoupon && (
+                {/* {appliedCoupon && (
                   <div className="flex items-center justify-between bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-2">
                     <div className="flex items-center gap-1.5 text-xs text-neutral-800 font-semibold">
                       <FaCheckCircle size={12} className="text-neutral-800" />
@@ -1522,7 +1525,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                       Remove
                     </button>
                   </div>
-                )}
+                )} */}
 
                 {/* Pricing totals */}
                 <div className="space-y-2 border-t border-slate-100 pt-3">
@@ -1584,6 +1587,11 @@ export default function CartDrawer({ isOpen, onClose }) {
                 {/* Main drawer button */}
                 <button
                   onClick={() => {
+                    if (!token) {
+                      onClose();
+                      setAuthModalOpen(true);
+                      return;
+                    }
                     router.push("/checkout");
                     onClose();
                   }}

@@ -33,13 +33,13 @@ const getDisplayCategoryName = (apiName) => {
 };
 
 export default function Footer() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { items: apiCategories } = useSelector((state) => state.categories);
   const { region } = useStore();
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchCategories());
+  // }, [dispatch]);
 
   const getLocations = () => {
     switch (region) {
@@ -198,7 +198,6 @@ export default function Footer() {
                     Loose Diamonds
                   </Link>
                 </li>
-
               </ul>
             </div>
 

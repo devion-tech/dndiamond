@@ -8,7 +8,6 @@ import {
   FaHeart,
   FaRegHeart,
   FaShoppingCart,
-  FaArrowLeft,
   FaShieldAlt,
   FaTruck,
   FaUndo,
@@ -53,10 +52,17 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
 };
 
 const resolveCategorySlug = (categoryField, subcategoryField) => {
-  if (categoryField && typeof categoryField === "object" && categoryField.slug) {
+  if (
+    categoryField &&
+    typeof categoryField === "object" &&
+    categoryField.slug
+  ) {
     return categoryField.slug;
   }
-  const name = resolveCategoryName(categoryField, subcategoryField).toLowerCase();
+  const name = resolveCategoryName(
+    categoryField,
+    subcategoryField,
+  ).toLowerCase();
   if (name.includes("ring")) return "ring";
   if (name.includes("necklace")) return "necklace";
   if (name.includes("earring")) return "earring";
@@ -64,7 +70,6 @@ const resolveCategorySlug = (categoryField, subcategoryField) => {
   if (name.includes("pendant")) return "pendant";
   return "ring";
 };
-
 
 const getHex = (v) => {
   const name = v?.toLowerCase() || "";
@@ -130,7 +135,7 @@ export default function ProductDetail({ params }) {
   useEffect(() => {
     if (rawProduct) {
       const p = rawProduct;
-      console.log('p :>> ', p);
+      console.log("p :>> ", p);
 
       const mapped = {
         id: p._id,
@@ -184,10 +189,13 @@ export default function ProductDetail({ params }) {
         },
       ];
 
-      const optionsList = p.options && p.options.length > 0 ? p.options : staticOptionsList;
+      const optionsList =
+        p.options && p.options.length > 0 ? p.options : staticOptionsList;
       const defaults = {};
       optionsList.forEach((opt) => {
-        const firstVal = opt.values?.find((v) => !v.is_disabled)?.value || opt.values?.[0]?.value;
+        const firstVal =
+          opt.values?.find((v) => !v.is_disabled)?.value ||
+          opt.values?.[0]?.value;
         defaults[opt.name] = firstVal || "";
       });
 
@@ -497,7 +505,10 @@ export default function ProductDetail({ params }) {
             Home
           </Link>
           <span className="text-[#7A9FAE]/60">/</span>
-          <Link href="/category" className="hover:text-[#567482] transition-colors">
+          <Link
+            href="/category"
+            className="hover:text-[#567482] transition-colors"
+          >
             Shop
           </Link>
           <span className="text-[#7A9FAE]/60">/</span>
@@ -508,9 +519,7 @@ export default function ProductDetail({ params }) {
             {product.category || "Ring"}
           </Link>
           <span className="text-[#7A9FAE]/60">/</span>
-          <span className="text-slate-600 font-normal">
-            {product.title}
-          </span>
+          <span className="text-slate-600 font-normal">{product.title}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -605,7 +614,6 @@ export default function ProductDetail({ params }) {
                   </span>
                 )}
               </div>
-
             </div>
 
             {/* Dynamic Options from product.options */}
@@ -703,16 +711,28 @@ export default function ProductDetail({ params }) {
                   </p>
                   <div className="grid grid-cols-3 gap-4 border border-slate-100 bg-slate-50/50 p-4 rounded-xl text-xs font-light text-slate-500">
                     <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Stock ID</span>
-                      <span className="text-slate-800 font-bold">{product.id}</span>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">
+                        Stock ID
+                      </span>
+                      <span className="text-slate-800 font-bold">
+                        {product.id}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Collection Style</span>
-                      <span className="text-slate-800 font-bold">{product.style || "Atelier Custom"}</span>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">
+                        Collection Style
+                      </span>
+                      <span className="text-slate-800 font-bold">
+                        {product.style || "Atelier Custom"}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Metal Weight</span>
-                      <span className="text-slate-800 font-bold">{product.goldWeight || 2.5}g (approx.)</span>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">
+                        Metal Weight
+                      </span>
+                      <span className="text-slate-800 font-bold">
+                        {product.goldWeight || 2.5}g (approx.)
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-500 leading-relaxed font-light">
@@ -726,7 +746,9 @@ export default function ProductDetail({ params }) {
               {activeTab === "specifications" && (
                 <div className="space-y-6 transition-opacity duration-300">
                   <div className="space-y-3">
-                    <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">Metal Details</h4>
+                    <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">
+                      Metal Details
+                    </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5 text-xs">
                       <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
                         <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
@@ -757,7 +779,9 @@ export default function ProductDetail({ params }) {
                           Selected Color
                         </span>
                         <span className="text-slate-800 font-bold">
-                          {selectedOptions.color || selectedOptions.colors || "Yellow Gold"}
+                          {selectedOptions.color ||
+                            selectedOptions.colors ||
+                            "Yellow Gold"}
                         </span>
                       </div>
                       <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
@@ -765,42 +789,68 @@ export default function ProductDetail({ params }) {
                           Category & Style
                         </span>
                         <span className="text-slate-800 font-bold">
-                          {product.category} • {product.style || "Atelier Style"}
+                          {product.category} •{" "}
+                          {product.style || "Atelier Style"}
                         </span>
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">Diamond & Gemstone Specifications</h4>
+                    <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">
+                      Diamond & Gemstone Specifications
+                    </h4>
                     {rawProduct?.diamonds && rawProduct.diamonds.length > 0 ? (
                       rawProduct.diamonds.map((diamond, idx) => (
-                        <div key={idx} className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-3 relative overflow-hidden group">
+                        <div
+                          key={idx}
+                          className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-3 relative overflow-hidden group"
+                        >
                           <div className="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-colors pointer-events-none" />
                           <div className="flex justify-between items-center">
                             <span className="text-[9px] bg-neutral-900 text-white font-extrabold px-2.5 py-0.5 rounded-sm tracking-wider uppercase">
                               Stone #{idx + 1} ({diamond.type || "Natural"})
                             </span>
                             <span className="text-xs font-bold text-slate-800">
-                              {diamond.quantity || 1} x {diamond.weight || 0.5} Carat
+                              {diamond.quantity || 1} x {diamond.weight || 0.5}{" "}
+                              Carat
                             </span>
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs pt-1">
                             <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">Shape</span>
-                              <span className="text-slate-800 font-bold">{diamond.shape || "Round"}</span>
+                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
+                                Shape
+                              </span>
+                              <span className="text-slate-800 font-bold">
+                                {diamond.shape || "Round"}
+                              </span>
                             </div>
                             <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">Color</span>
-                              <span className="text-slate-800 font-bold">{diamond.color || "D"} {diamond.fancyColor ? `(Fancy ${diamond.fancyColor})` : ""}</span>
+                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
+                                Color
+                              </span>
+                              <span className="text-slate-800 font-bold">
+                                {diamond.color || "D"}{" "}
+                                {diamond.fancyColor
+                                  ? `(Fancy ${diamond.fancyColor})`
+                                  : ""}
+                              </span>
                             </div>
                             <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">Clarity</span>
-                              <span className="text-slate-800 font-bold">{diamond.clarity || "VS1"}</span>
+                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
+                                Clarity
+                              </span>
+                              <span className="text-slate-800 font-bold">
+                                {diamond.clarity || "VS1"}
+                              </span>
                             </div>
                             <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">Cut Grade</span>
-                              <span className="text-slate-800 font-bold">{diamond.cut || "Excellent"}</span>
+                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
+                                Cut Grade
+                              </span>
+                              <span className="text-slate-800 font-bold">
+                                {diamond.cut || "Excellent"}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -864,7 +914,6 @@ export default function ProductDetail({ params }) {
           </div>
         </div>
 
-
         {/* Similar Products Section */}
         <div className="border-t border-slate-100 mt-20 pt-16">
           <div className="text-center space-y-2 mb-12">
@@ -879,56 +928,63 @@ export default function ProductDetail({ params }) {
             </h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-12">
-            {(similarProducts.length > 0 ? similarProducts : [
-              {
-                id: "similar-1",
-                title: "Classic Diamond Solitaire Ring",
-                category: "Ring",
-                slug: "solitaire-ring",
-                is_wishlist: false,
-                colors: [],
-                price: 1250,
-                display_price: 1500,
-                discount: 16,
-                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&auto=format&fit=crop",
-              },
-              {
-                id: "similar-2",
-                title: "Brilliant Diamond Halo Pendant",
-                category: "Pendant",
-                slug: "halo-pendant",
-                is_wishlist: false,
-                colors: [],
-                price: 890,
-                display_price: 990,
-                discount: 10,
-                image: "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&auto=format&fit=crop",
-              },
-              {
-                id: "similar-3",
-                title: "Eternity Diamond Tennis Bracelet",
-                category: "Bracelet & Bangle",
-                slug: "tennis-bracelet",
-                is_wishlist: false,
-                colors: [],
-                price: 3400,
-                display_price: 3400,
-                discount: 0,
-                image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&auto=format&fit=crop",
-              },
-              {
-                id: "similar-4",
-                title: "Vintage Diamond Drop Earrings",
-                category: "Earring",
-                slug: "drop-earrings",
-                is_wishlist: false,
-                colors: [],
-                price: 1450,
-                display_price: 1750,
-                discount: 17,
-                image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=600&auto=format&fit=crop",
-              },
-            ]).map((item) => (
+            {(similarProducts.length > 0
+              ? similarProducts
+              : [
+                  {
+                    id: "similar-1",
+                    title: "Classic Diamond Solitaire Ring",
+                    category: "Ring",
+                    slug: "solitaire-ring",
+                    is_wishlist: false,
+                    colors: [],
+                    price: 1250,
+                    display_price: 1500,
+                    discount: 16,
+                    image:
+                      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&auto=format&fit=crop",
+                  },
+                  {
+                    id: "similar-2",
+                    title: "Brilliant Diamond Halo Pendant",
+                    category: "Pendant",
+                    slug: "halo-pendant",
+                    is_wishlist: false,
+                    colors: [],
+                    price: 890,
+                    display_price: 990,
+                    discount: 10,
+                    image:
+                      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&auto=format&fit=crop",
+                  },
+                  {
+                    id: "similar-3",
+                    title: "Eternity Diamond Tennis Bracelet",
+                    category: "Bracelet & Bangle",
+                    slug: "tennis-bracelet",
+                    is_wishlist: false,
+                    colors: [],
+                    price: 3400,
+                    display_price: 3400,
+                    discount: 0,
+                    image:
+                      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&auto=format&fit=crop",
+                  },
+                  {
+                    id: "similar-4",
+                    title: "Vintage Diamond Drop Earrings",
+                    category: "Earring",
+                    slug: "drop-earrings",
+                    is_wishlist: false,
+                    colors: [],
+                    price: 1450,
+                    display_price: 1750,
+                    discount: 17,
+                    image:
+                      "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=600&auto=format&fit=crop",
+                  },
+                ]
+            ).map((item) => (
               <ProductCard key={item.id} item={item} />
             ))}
           </div>

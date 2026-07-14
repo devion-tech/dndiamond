@@ -15,12 +15,12 @@ export default function CategoryCarousel() {
   const dispatch = useDispatch();
 
   const { items: apiCategories, loading } = useSelector(
-    (state) => state.categories
+    (state) => state.categories,
   );
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchCategories());
+  // }, [dispatch]);
 
   if (loading || !apiCategories?.length) return null;
 
@@ -49,11 +49,8 @@ export default function CategoryCarousel() {
         }}
       >
         {apiCategories.map((cat) => (
-          <SwiperSlide  key={cat._id}>
-            <Link
-              href={`/category/${cat.slug}`}
-              className="group block"
-            >
+          <SwiperSlide key={cat._id}>
+            <Link href={`/category/${cat.slug}`} className="group block">
               <div className="overflow-hidden bg-neutral-100 aspect-square">
                 <img
                   src={cat.image}

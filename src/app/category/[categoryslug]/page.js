@@ -148,7 +148,7 @@ function CatalogContent() {
   const data = rawProducts || [];
   const apiProducts = useMemo(() => {
     return data.map((p) => {
-      const colors = p?.options?.filter((opt) => opt.name === "colors") || [];
+      const colors = p?.options?.filter((opt) => opt.name === "colors" || opt.name === "color" || opt.name === "gold_type") || [];
       const diamondCost = p.pricing?.diamond_cost || p.price || 600;
       const gemstoneCost = p.pricing?.gemstone_cost || 0;
       const additionalCost = p.pricing?.additional_cost || 150;
@@ -173,7 +173,7 @@ function CatalogContent() {
         diamondPrice: diamondCost + gemstoneCost,
         makingCharges: additionalCost,
         style: p.subcategory_id?.name || "",
-        origin: p.origin || "natural",
+        origin: p.origin || (p.diamonds && p.diamonds[0]?.type?.toLowerCase().includes("lab") ? "labgrown" : "natural"),
         isFromApi: true,
         display_price: p.display_price || 0,
       };
@@ -254,6 +254,8 @@ function CatalogContent() {
 
     return sortOrder === "ASC" ? priceA - priceB : priceB - priceA;
   });
+
+  console.log('sortedJewelry :>> ', sortedJewelry);
 
   const resetFilters = () => {
     setSearch("");

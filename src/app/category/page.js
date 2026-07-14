@@ -127,7 +127,7 @@ function CatalogContent() {
         diamondPrice: diamondCost + gemstoneCost,
         makingCharges: additionalCost,
         style: p.subcategory_id?.name || "",
-        origin: p.origin || "natural",
+        origin: p.origin || (p.diamonds && p.diamonds[0]?.type?.toLowerCase().includes("lab") ? "labgrown" : "natural"),
         isFromApi: true,
       };
     });

@@ -99,6 +99,42 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
   const [isJewelryHovered, setIsJewelryHovered] = useState(false);
   const hoverTimeoutRef = useRef(null);
+  const [isAboutHovered, setIsAboutHovered] = useState(false);
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+  const aboutHoverTimeoutRef = useRef(null);
+
+  const [recentOrder, setRecentOrder] = useState(null);
+
+  const fetchRecentOrder = () => {
+    try {
+      const stored = localStorage.getItem("praya_orders");
+      if (stored) {
+        const list = JSON.parse(stored);
+        if (list && list.length > 0) {
+          setRecentOrder(list[0]);
+          return;
+        }
+      }
+      setRecentOrder(null);
+    } catch (e) {
+      console.error(e);
+      setRecentOrder(null);
+    }
+  };
+
+
+
+  const handleAboutMouseEnter = () => {
+    if (aboutHoverTimeoutRef.current) clearTimeout(aboutHoverTimeoutRef.current);
+    setIsAboutHovered(true);
+  };
+
+  const handleAboutMouseLeave = () => {
+    if (aboutHoverTimeoutRef.current) clearTimeout(aboutHoverTimeoutRef.current);
+    aboutHoverTimeoutRef.current = setTimeout(() => {
+      setIsAboutHovered(false);
+    }, 200);
+  };
   const [jewelryTab, setJewelryTab] = useState("labgrown"); // "labgrown" or "natural"
 
   const handleTabClick = (tab) => {
@@ -192,6 +228,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   useEffect(() => {
     return () => {
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      if (aboutHoverTimeoutRef.current) clearTimeout(aboutHoverTimeoutRef.current);
     };
   }, []);
 
@@ -342,13 +379,55 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
 
 
-            {/* About Us */}
-            <Link
-              href="/about"
-              className="text-[11px] sm:text-xs xl:text-xs font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
+            {/* About Submenu Dropdown */}
+            <div
+              className="relative h-full flex items-center"
+              onMouseEnter={handleAboutMouseEnter}
+              onMouseLeave={handleAboutMouseLeave}
             >
-              About Us
-            </Link>
+              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-all duration-300 cursor-pointer">
+                <span>About</span>
+                <FaChevronDown
+                  size={7}
+                  className={`text-neutral-400 transition-transform duration-300 ${isAboutHovered ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              <div
+                className={`absolute left-1/2 -translate-x-1/2 top-full w-44 bg-white border border-neutral-100 p-3.5 shadow-lg animate-fade-in z-50 text-left rounded-sm ${isAboutHovered ? "block" : "hidden"}`}
+              >
+                <ul className="space-y-2.5 text-[10px] sm:text-[11px] font-semibold tracking-wider text-neutral-700 uppercase">
+                  <li>
+                    <Link
+                      href="/about"
+                      onClick={() => setIsAboutHovered(false)}
+                      className="hover:text-neutral-955 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
+                    >
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/our-story"
+                      onClick={() => setIsAboutHovered(false)}
+                      className="hover:text-neutral-955 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
+                    >
+                      Our Story
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="/about#certification"
+                      onClick={() => setIsAboutHovered(false)}
+                      className="hover:text-neutral-955 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
+                    >
+                      Certification
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
             {/* Contact */}
             <Link
@@ -423,7 +502,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </button>
 
           {/* 3. Profile */}
-          <div className="relative group hidden md:block">
+          <div className="relative group hidden md:block" onMouseEnter={fetchRecentOrder}>
             <button
               onClick={() => {
                 if (!user) {
@@ -439,7 +518,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 className={user ? "text-neutral-950" : "text-neutral-400"}
               />
             </button>
-            <div className="absolute right-0 top-full hidden group-hover:block w-48 bg-white border border-neutral-100 rounded-sm p-3 shadow-md animate-fade-in z-50">
+            <div className="absolute right-0 top-full hidden group-hover:block w-52 bg-white border border-neutral-100 rounded-sm p-3 shadow-md animate-fade-in z-50">
               {user ? (
                 <>
                   <div className="px-2 py-1.5 border-b border-neutral-100 mb-2 text-left">
@@ -450,17 +529,39 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       {user.name || user.email}
                     </p>
                   </div>
-                  {/* <a
-                    href="http://localhost:3001"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-center"
+                  <Link
+                    href="/profile"
+                    className="block rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-left border-b border-neutral-50"
                   >
-                    Open Admin Portal
-                  </a> */}
+                    My Profile
+                  </Link>
+                  <Link
+                    href="/orders"
+                    className="block rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-left border-b border-neutral-50"
+                  >
+                    My Orders
+                  </Link>
+                  {recentOrder && (
+                    <div className="mt-2 p-2.5 bg-slate-50 border border-slate-100 rounded-md text-left text-[9px] space-y-1 font-sans">
+                      <div className="flex justify-between font-bold text-slate-800 uppercase tracking-wider">
+                        <span>Recent Order</span>
+                        <Link href="/orders" className="text-neutral-500 hover:text-neutral-800 underline">View</Link>
+                      </div>
+                      <div className="flex justify-between text-slate-500 font-medium">
+                        <span>ID: {recentOrder.id}</span>
+                        <span className="bg-neutral-200 text-neutral-800 px-1 py-0.2 rounded-xs uppercase text-[8px] font-bold">
+                          {recentOrder.status}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-slate-700 font-bold pt-0.5 border-t border-slate-100">
+                        <span>{recentOrder.date}</span>
+                        <span>{formatPrice(recentOrder.totalAmount)}</span>
+                      </div>
+                    </div>
+                  )}
                   <button
                     onClick={logoutUser}
-                    className="w-full text-center mt-1.5 rounded-sm px-2 py-1.5 text-[10px] font-bold text-red-500 hover:bg-red-50 transition-all uppercase tracking-wider cursor-pointer"
+                    className="w-full text-center mt-2.5 rounded-sm px-2 py-1.5 text-[10px] font-bold text-red-500 hover:bg-red-50 transition-all uppercase tracking-wider cursor-pointer"
                   >
                     Logout
                   </button>
@@ -623,20 +724,54 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               >
                 Loose Diamonds
               </Link>
-              <Link
-                onClick={() => setMobileMenuOpen(false)}
-                href="/our-story"
-                className="text-[11px] font-bold text-neutral-800 uppercase tracking-widest"
-              >
-                Our Story
-              </Link>
-              <Link
-                onClick={() => setMobileMenuOpen(false)}
-                href="/about"
-                className="text-[11px] font-bold text-neutral-800 uppercase tracking-widest"
-              >
-                About Us
-              </Link>
+              {/* Mobile About Accordion */}
+              <div>
+                <button
+                  onClick={() => setMobileAboutOpen(!mobileAboutOpen)}
+                  className="w-full flex items-center justify-between text-[11px] font-bold text-neutral-800 uppercase tracking-widest py-1 cursor-pointer focus:outline-none"
+                >
+                  <span>About</span>
+                  <FaChevronDown
+                    size={8}
+                    className={`text-neutral-400 transition-transform duration-300 ${mobileAboutOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {mobileAboutOpen && (
+                  <div className="pl-3 mt-2 space-y-2.5 border-l border-neutral-100 animate-fade-in flex flex-col">
+                    <Link
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setMobileAboutOpen(false);
+                      }}
+                      href="/about"
+                      className="text-[10px] font-semibold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
+                    >
+                      About Us
+                    </Link>
+                    <Link
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setMobileAboutOpen(false);
+                      }}
+                      href="/our-story"
+                      className="text-[10px] font-semibold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
+                    >
+                      Our Story
+                    </Link>
+
+                    <Link
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setMobileAboutOpen(false);
+                      }}
+                      href="/about#certification"
+                      className="text-[10px] font-semibold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
+                    >
+                      Certification
+                    </Link>
+                  </div>
+                )}
+              </div>
               <Link
                 onClick={() => setMobileMenuOpen(false)}
                 href="/contact"

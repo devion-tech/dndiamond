@@ -198,14 +198,7 @@ export default function Footer() {
                     Loose Diamonds
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/bespoke"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Bespoke Jewelry
-                  </Link>
-                </li>
+
               </ul>
             </div>
 

@@ -47,7 +47,6 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
 function CatalogContent() {
   const searchParams = useSearchParams();
   const { calculatePrice, formatPrice } = useStore();
-
   // Filters state
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -150,7 +149,7 @@ function CatalogContent() {
   const data = rawProducts || [];
   const apiProducts = useMemo(() => {
     return data.map((p) => {
-      const colors = p?.options?.filter((opt) => opt.name === "colors") || [];
+      const colors = p?.options?.filter((opt) => opt.name === "colors" || opt.name === "color" || opt.name === "gold_type") || [];
       const diamondCost = p.pricing?.diamond_cost || p.price || 600;
       const gemstoneCost = p.pricing?.gemstone_cost || 0;
       const additionalCost = p.pricing?.additional_cost || 150;
@@ -175,7 +174,7 @@ function CatalogContent() {
         diamondPrice: diamondCost + gemstoneCost,
         makingCharges: additionalCost,
         style: p.subcategory_id?.name || "",
-        origin: p.origin || "natural",
+        origin: p.origin || (p.diamonds && p.diamonds[0]?.type?.toLowerCase().includes("lab") ? "labgrown" : "natural"),
         isFromApi: true,
         display_price: p.display_price || 0,
       };
@@ -275,11 +274,8 @@ function CatalogContent() {
         <span className="text-[9px] text-neutral-400 font-extrabold tracking-[0.3em] uppercase">
           High Jewelry Atelier
         </span>
-        <h1 className="text-3xl lg:text-4xl font-serif font-light text-neutral-900 uppercase tracking-widest">
-          The Jewelry{" "}
-          <span className="font-serif italic font-light lowercase">
-            Collection
-          </span>
+        <h1 className="text-2xl  font-light text-neutral-900 uppercase tracking-widest">
+          The Jewelry Collection
         </h1>
       </div>
 

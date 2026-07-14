@@ -16,9 +16,7 @@ const colorMap = Object.fromEntries(
 );
 
 export default function ProductCard({ item }) {
-  const { token } = useStore();
-
-  const { formatPrice } = useStore();
+  const { token, formatPrice, addToCart } = useStore();
   const [isToggling, setIsToggling] = useState(false);
   const [wishlisted, setWishlisted] = useState(item?.is_wishlist);
   const [hasError, setHasError] = useState(false);
@@ -28,7 +26,14 @@ export default function ProductCard({ item }) {
   const defaultVal = hasObjects ? colorList[0]?.value : colorList[0];
   const [selectedColor, setSelectedColor] = useState(defaultVal || null);
 
-  const getHex = (v) => colorMap[v?.toLowerCase()] || "#EDD680";
+  const getHex = (v) => {
+    const name = v?.toLowerCase() || "";
+    if (name.includes("yellow")) return "#E5CE83";
+    if (name.includes("white")) return "#E9E9E9";
+    if (name.includes("rose")) return "#ECC5C0";
+    if (name.includes("platinum")) return "#E5E4E2";
+    return colorMap[name] || "#EDD680";
+  };
   const dispatch = useDispatch();
 
   const handleColorSelect = (e, color) => {
@@ -37,6 +42,21 @@ export default function ProductCard({ item }) {
     if (hasObjects && color.is_disabled) return;
     const val = hasObjects ? color.value : color;
     setSelectedColor(val);
+  };
+
+  const handleAddToBagClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const selectedOptions = {};
+      if (selectedColor) {
+        selectedOptions.color = selectedColor;
+      }
+      await addToCart(item, selectedOptions, item.display_price || item.price || 0);
+      toast.success("Added to bag!");
+    } catch (error) {
+      toast.error(error.message || "Failed to add to bag.");
+    }
   };
 
   const currentImage = (() => {
@@ -94,10 +114,10 @@ export default function ProductCard({ item }) {
   return (
     <>
       <Link
-        href={`/product/${item?.slug}`}
+        href={`/product/${item?.id || item?._id || item?.slug}`}
         className="group relative flex flex-col justify-between bg-white overflow-hidden transition-all duration-500 h-full p-4 hover:shadow-xs"
       >
-        <div className="relative aspect-square w-full bg-[#FAFAFA] flex items-center justify-center overflow-hidden rounded-xs p-8">
+        <div className="relative aspect-square w-full  flex items-center justify-center overflow-hidden rounded-xs p-8">
           <button
             onClick={handleWishlistClick}
             disabled={isToggling}
@@ -119,6 +139,13 @@ export default function ProductCard({ item }) {
             alt={item.title}
             className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-700 will-change-transform"
           />
+
+          <button
+            onClick={handleAddToBagClick}
+            className="absolute bottom-0 left-0 right-0 py-3 bg-neutral-900/90 hover:bg-neutral-950 text-white font-sans font-bold text-[9px] uppercase tracking-widest text-center translate-y-full group-hover:translate-y-0 transition-transform duration-350 ease-out backdrop-blur-xs flex items-center justify-center gap-1.5 cursor-pointer z-20 border-0"
+          >
+            Add to Bag
+          </button>
         </div>
 
         <div className="pt-5 text-center flex flex-col items-center space-y-1.5 flex-1 justify-end">
@@ -131,6 +158,12 @@ export default function ProductCard({ item }) {
               {formatPrice(item?.display_price)}
             </span>
           </div>
+
+          {selectedColor && (
+            <span className="text-[10px] text-neutral-400 tracking-wider font-light uppercase mt-0.5 block">
+              {selectedColor}
+            </span>
+          )}
 
           {colorList.length > 0 && (
             <div className="flex items-center justify-center space-x-2 mt-1">

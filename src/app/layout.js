@@ -1,20 +1,26 @@
-import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
+import { Mulish, Manrope, Quicksand } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/context/StoreContext";
 import ReduxProvider from "@/redux/ReduxProvider";
 import { Toaster } from "react-hot-toast";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const mulish = Mulish({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
 });
 
-const cormorant = Cormorant_Garamond({
+const manrope = Manrope({
   variable: "--font-serif",
   subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+});
+
+const quicksand = Quicksand({
+  variable: "--font-display",
+  subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
 });
 
 export const metadata = {
@@ -27,7 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${cormorant.variable} h-full scroll-smooth antialiased`}
+      className={`${mulish.variable} ${manrope.variable} ${quicksand.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-slate-background text-primary font-sans flex flex-col">
         <ReduxProvider>

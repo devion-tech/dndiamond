@@ -135,27 +135,6 @@ function CatalogContent() {
   }, [loadMore]);
 
   const data = rawProducts || [];
-  const apiProducts = useMemo(() => {
-    return data.map((p) => {
-      const colors = p?.options?.filter((opt) => opt.name === "colors") || [];
-      return {
-        id: p._id,
-        title: p.name,
-        slug: p.slug,
-        is_wishlist: p.is_wishlist || false,
-        category: resolveCategoryName(p.category_id, p.subcategory_id),
-        colors: colors && colors.length > 0 ? colors[0].values : [],
-        image:
-          p.images && p.images[0]
-            ? p.images[0]
-            : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
-        display_price: p.display_price || 0,
-        isFromApi: true,
-      };
-    });
-  }, [data]);
-
-  const productsSource = apiProducts || [];
 
   const resetFilters = () => {
     setSearch("");
@@ -196,7 +175,7 @@ function CatalogContent() {
           </button>
           <span className="h-4 w-px bg-neutral-200 hidden sm:inline-block"></span>
           <span className="text-neutral-400 font-medium tracking-widest hidden sm:inline-block">
-            {productsSource?.length} Products Found
+            {data?.length} Products Found
           </span>
         </div>
 
@@ -235,7 +214,7 @@ function CatalogContent() {
         accordions={accordions}
         toggleAccordion={toggleAccordion}
         resetFilters={resetFilters}
-        productCount={productsSource?.length}
+        productCount={data?.length}
         formatPrice={formatPrice}
         hideCategory={true}
       />
@@ -249,11 +228,11 @@ function CatalogContent() {
               Loading Atelier Pieces...
             </span>
           </div>
-        ) : productsSource?.length > 0 ? (
+        ) : data?.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-12 animate-fade-in">
-              {productsSource?.map((item) => (
-                <ProductCard key={item.id} item={item} />
+              {data?.map((item) => (
+                <ProductCard key={item._id} item={item} />
               ))}
             </div>
             {/* Sentinel for infinite scroll */}
@@ -263,15 +242,13 @@ function CatalogContent() {
                 <div className="h-6 w-6 border-2 border-neutral-900 border-t-transparent rounded-full animate-spin" />
               </div>
             )}
-            {!loadingMore &&
-              currentPage >= totalPages &&
-              productsSource.length > 0 && (
-                <div className="text-center py-8">
-                  <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-[0.2em]">
-                    You've seen all products
-                  </span>
-                </div>
-              )}
+            {!loadingMore && currentPage >= totalPages && data?.length > 0 && (
+              <div className="text-center py-8">
+                <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-[0.2em]">
+                  You've seen all products
+                </span>
+              </div>
+            )}
           </>
         ) : (
           <div className="flex flex-col justify-center items-center text-center py-32 px-4 bg-white border border-neutral-100 rounded-sm space-y-5 max-w-lg mx-auto">

@@ -11,39 +11,6 @@ import EditorialBlock from "@/components/ui/EditorialBlock";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMainPage } from "@/redux/landingSlice";
 
-const BEST_SELLERS = [
-  {
-    id: "JW-101",
-    name: "Classic Diamond Halo Ring",
-    price: 4150,
-    img: "/bestsellers/RF16377DD-03-W.webp",
-  },
-  {
-    id: "JW-102",
-    name: "Vianne Everyday Diamond Band",
-    price: 850,
-    img: "/bestsellers/RFB0281DD-01W.webp",
-  },
-  {
-    id: "JW-103",
-    name: "Stella Solitaire Studs",
-    price: 2450,
-    img: "/bestsellers/101977EA-W2.webp",
-  },
-  {
-    id: "JW-104",
-    name: "Signature Tennis                                                         Bracelet",
-    price: 10450,
-    img: "/bestsellers/GFA1049DD-01W1.webp",
-  },
-  {
-    id: "JW-108",
-    name: "Tiara Diamond Ring",
-    price: 150,
-    img: "/bestsellers/RFB6659DD-01-W.webp",
-  },
-];
-
 const MARQUEE_ITEMS = [
   "Fine Jewellery",
   "Certified Diamonds",
@@ -57,46 +24,6 @@ const MARQUEE_ITEMS = [
   "18K & Platinum",
   "GIA Certified",
   "Conflict-Free Gems",
-];
-
-// Carousel Slide Data for Home Page Hero
-const SLIDES = [
-  {
-    label: "THE DIAMOND COLLECTION",
-    title: "Inspiring Light,\nDefining Elegance.",
-    description:
-      "Ethically sourced. Masterfully cut. Discover fine GIA certified diamond jewelry designed to hold stories that last a lifetime.",
-    buttonText: "Shop Collection",
-    img: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=1920",
-    link: "/jewelry",
-  },
-  {
-    label: "BESPOKE CREATIONS",
-    title: "Crafted Specifically\nFor Your Story.",
-    description:
-      "Work directly with our master bench jewellers to design a unique custom piece engineered to endure for generations.",
-    buttonText: "Reserve Consultation",
-    img: "https://earthlyjewels.co/cdn/shop/files/desktop_bannerc1-3.jpg?v=1782132412&width=1800",
-    link: "/bespoke",
-  },
-  {
-    label: "CERTIFIED BRILLIANCE",
-    title: "GIA Conflict-Free\nMasterpieces.",
-    description:
-      "Every diamond carries an official GIA laser-inscribed registration, guaranteeing unmatched clarity, color, and provenance.",
-    buttonText: "Explore Diamonds",
-    img: "https://www.chatham.com/cdn/shop/files/Color-Engagement-Rings-Feature-Image-1_ac52e2f6-86e5-4610-aa9d-3954446f0ef0.jpg?v=1758731031",
-    link: "/diamonds",
-  },
-  {
-    label: "THE ATELIER",
-    title: "A Legacy Of\nPure Precision.",
-    description:
-      "Drawing inspiration from classical proportions and symmetry. Explore our collection of hand-forged gold and platinum masterpieces.",
-    buttonText: "About DN Diamond",
-    img: "https://ecommo--ion.bluenile.com/static-dyo-bn/Necklaces.e5191.jpg",
-    link: "/about",
-  },
 ];
 
 async function loadGSAP() {
@@ -177,24 +104,6 @@ function MarqueeStrip({ dark }) {
 
 function BestSellersGrid() {
   const { bestProducts } = useSelector((state) => state.landing);
-  const apiProducts = useMemo(() => {
-    return bestProducts.map((p) => {
-      const colors = p?.options?.filter((opt) => opt.name === "colors") || [];
-      return {
-        id: p._id,
-        title: p.name,
-        slug: p.slug,
-        is_wishlist: p.is_wishlist || false,
-        colors: colors && colors.length > 0 ? colors[0].values : [],
-        image:
-          p.images && p.images[0]
-            ? p.images[0]
-            : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
-        display_price: p.display_price || 0,
-        isFromApi: true,
-      };
-    });
-  }, [bestProducts]);
   const gridRef = useRef(null);
   useReveal(gridRef, { stagger: 0.1, y: 28, duration: 0.7, start: "top 82%" });
   return (
@@ -202,7 +111,7 @@ function BestSellersGrid() {
       ref={gridRef}
       className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-12"
     >
-      {apiProducts?.map((prod) => {
+      {bestProducts?.map((prod) => {
         return (
           <div key={prod?.id} className=" h-full">
             <ProductCard item={prod} />
@@ -433,7 +342,7 @@ function StatsTicker() {
 export default function Home() {
   const { formatPrice } = useStore();
   const dispatch = useDispatch();
-  const { items, bestProducts } = useSelector((state) => state.landing);
+  const { items } = useSelector((state) => state.landing);
   // Slider State
   const [currentSlide, setCurrentSlide] = useState(0);
 

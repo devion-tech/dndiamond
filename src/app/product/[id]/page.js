@@ -204,70 +204,6 @@ export default function ProductDetail({ params }) {
     }
   }, [apiError]);
 
-  // useEffect(() => {
-  //   const getSimilarProducts = async () => {
-  //     if (!rawProduct) return;
-  //     try {
-  //       setLoadingSimilar(true);
-  //       const baseUrl =
-  //         process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-
-  //       const body = {
-  //         page: 1,
-  //         limit: 5,
-  //       };
-
-  //       if (rawProduct.subcategory_id) {
-  //         const subId = typeof rawProduct.subcategory_id === "object"
-  //           ? rawProduct.subcategory_id._id
-  //           : rawProduct.subcategory_id;
-  //         body.subcategory_id = subId;
-  //       } else if (rawProduct.category_id) {
-  //         const catId = typeof rawProduct.category_id === "object"
-  //           ? rawProduct.category_id._id
-  //           : rawProduct.category_id;
-  //         body.category_id = catId;
-  //       }
-
-  //       const response = await fetch(`${baseUrl}/api/product/getProduct`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(body),
-  //       });
-
-  //       if (response.ok) {
-  //         const resData = await response.json();
-  //         const list = resData?.data?.products || [];
-  //         const filtered = list.filter((p) => p._id !== rawProduct._id);
-  //         const mapped = filtered.slice(0, 4).map((p) => {
-  //           const colorsOpt = p?.options?.filter((opt) => opt.name === "colors" || opt.name === "color") || [];
-  //           return {
-  //             id: p._id,
-  //             title: p.name,
-  //             slug: p.slug,
-  //             is_wishlist: p.is_wishlist || false,
-  //             category: resolveCategoryName(p.category_id, p.subcategory_id),
-  //             colors: colorsOpt && colorsOpt.length > 0 ? colorsOpt[0].values : [],
-  //             image: p.images && p.images[0]
-  //               ? p.images[0]
-  //               : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
-  //             display_price: p.display_price || p.price || 0,
-  //             isFromApi: true,
-  //           };
-  //         });
-  //         setSimilarProducts(mapped);
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching similar products:", err);
-  //     } finally {
-  //       setLoadingSimilar(false);
-  //     }
-  //   };
-  //   getSimilarProducts();
-  // }, [rawProduct]);
-
   // Compute current price from selected gold_type option
   useEffect(() => {
     if (product && selectedOptions.gold_type) {
@@ -920,64 +856,11 @@ export default function ProductDetail({ params }) {
             </h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-12">
-            {(similarProducts.length > 0
-              ? similarProducts
-              : [
-                  {
-                    id: "similar-1",
-                    title: "Classic Diamond Solitaire Ring",
-                    category: "Ring",
-                    slug: "solitaire-ring",
-                    is_wishlist: false,
-                    colors: [],
-                    price: 1250,
-                    display_price: 1500,
-                    discount: 16,
-                    image:
-                      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&auto=format&fit=crop",
-                  },
-                  {
-                    id: "similar-2",
-                    title: "Brilliant Diamond Halo Pendant",
-                    category: "Pendant",
-                    slug: "halo-pendant",
-                    is_wishlist: false,
-                    colors: [],
-                    price: 890,
-                    display_price: 990,
-                    discount: 10,
-                    image:
-                      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&auto=format&fit=crop",
-                  },
-                  {
-                    id: "similar-3",
-                    title: "Eternity Diamond Tennis Bracelet",
-                    category: "Bracelet & Bangle",
-                    slug: "tennis-bracelet",
-                    is_wishlist: false,
-                    colors: [],
-                    price: 3400,
-                    display_price: 3400,
-                    discount: 0,
-                    image:
-                      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&auto=format&fit=crop",
-                  },
-                  {
-                    id: "similar-4",
-                    title: "Vintage Diamond Drop Earrings",
-                    category: "Earring",
-                    slug: "drop-earrings",
-                    is_wishlist: false,
-                    colors: [],
-                    price: 1450,
-                    display_price: 1750,
-                    discount: 17,
-                    image:
-                      "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=600&auto=format&fit=crop",
-                  },
-                ]
+            {(rawProduct?.related_products?.length > 0
+              ? rawProduct?.related_products
+              : []
             ).map((item) => (
-              <ProductCard key={item.id} item={item} />
+              <ProductCard key={item?._id} item={item} />
             ))}
           </div>
         </div>

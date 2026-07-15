@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 import { toggleWishlist } from "@/redux/wishlistSlice";
 import { getAuthHeaders } from "@/common/token";
 import { useDispatch } from "react-redux";
-import AuthModal from "./AuthModal";
 
 const colorMap = Object.fromEntries(
   colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
@@ -17,11 +16,27 @@ const colorMap = Object.fromEntries(
 
 export default function ProductCard({ item }) {
   const { token, formatPrice, addToCart } = useStore();
+  const product = useMemo(() => {
+    const colors = item?.options?.filter((opt) => opt.name === "colors") || [];
+    return {
+      id: item?._id,
+      title: item?.name,
+      slug: item?.slug,
+      is_wishlist: item?.is_wishlist || false,
+      colors: colors && colors.length > 0 ? colors[0].values : [],
+      image:
+        item?.images && item?.images[0]
+          ? item?.images[0]
+          : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
+      display_price: item?.display_price || 0,
+      isFromApi: true,
+    };
+  }, [item]);
   const [isToggling, setIsToggling] = useState(false);
-  const [wishlisted, setWishlisted] = useState(item?.is_wishlist);
+  const [wishlisted, setWishlisted] = useState(product?.is_wishlist);
   const [hasError, setHasError] = useState(false);
 
-  const colorList = item?.colors || [];
+  const colorList = product?.colors || [];
   const hasObjects = colorList.length > 0 && typeof colorList[0] === "object";
   const defaultVal = hasObjects ? colorList[0]?.value : colorList[0];
   const [selectedColor, setSelectedColor] = useState(defaultVal || null);
@@ -52,7 +67,11 @@ export default function ProductCard({ item }) {
       if (selectedColor) {
         selectedOptions.color = selectedColor;
       }
-      await addToCart(item, selectedOptions, item.display_price || item.price || 0);
+      await addToCart(
+        product,
+        selectedOptions,
+        product?.display_price || product?.price || 0,
+      );
       toast.success("Added to bag!");
     } catch (error) {
       toast.error(error.message || "Failed to add to bag.");
@@ -64,7 +83,7 @@ export default function ProductCard({ item }) {
       const match = colorList.find((c) => c.value === selectedColor);
       if (match?.image) return match.image;
     }
-    return item.image;
+    return product?.image;
   })();
 
   const handleWishlistClick = async (e) => {
@@ -85,12 +104,11 @@ export default function ProductCard({ item }) {
 
     setWishlisted(newWishlistedState);
     setIsToggling(true);
-    setHasError(false);
 
     try {
       const response = await dispatch(
         toggleWishlist({
-          product_id: item?.id,
+          product_id: product?.id,
         }),
       );
       if (!response?.payload?.success) {
@@ -103,7 +121,6 @@ export default function ProductCard({ item }) {
       }
     } catch (error) {
       setWishlisted(wishlisted);
-      setHasError(true);
 
       toast.error(error.message || "Failed to update wishlist.");
     } finally {
@@ -114,7 +131,7 @@ export default function ProductCard({ item }) {
   return (
     <>
       <Link
-        href={`/product/${item?.id || item?._id || item?.slug}`}
+        href={`/product/${product?.id || product?._id || product?.slug}`}
         className="group relative flex flex-col justify-between bg-white overflow-hidden transition-all duration-500 h-full p-4 hover:shadow-xs"
       >
         <div className="relative aspect-square w-full  flex items-center justify-center overflow-hidden rounded-xs p-8">
@@ -136,7 +153,7 @@ export default function ProductCard({ item }) {
               currentImage ||
               "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop"
             }
-            alt={item.title}
+            alt={product?.title}
             className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-700 will-change-transform"
           />
 
@@ -150,12 +167,12 @@ export default function ProductCard({ item }) {
 
         <div className="pt-5 text-center flex flex-col items-center space-y-1.5 flex-1 justify-end">
           <h3 className="font-serif text-xs md:text-sm font-medium text-neutral-800 tracking-wider uppercase group-hover:text-neutral-950 transition-colors line-clamp-1">
-            {item.title}
+            {product?.title}
           </h3>
 
           <div>
             <span className=" text-[11px] md:text-sm font-semibold text-neutral-900 tracking-wider">
-              {formatPrice(item?.display_price)}
+              {formatPrice(product?.display_price)}
             </span>
           </div>
 
@@ -178,10 +195,11 @@ export default function ProductCard({ item }) {
                     key={index}
                     onClick={(e) => handleColorSelect(e, color)}
                     disabled={isDisabled}
-                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
-                      ? "border-neutral-900 scale-110"
-                      : "border-neutral-300 hover:border-neutral-500"
-                      } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${
+                      isSelected
+                        ? "border-neutral-900 scale-110"
+                        : "border-neutral-300 hover:border-neutral-500"
+                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     style={{ backgroundColor: hex }}
                     title={val}
                     aria-label={val}

@@ -157,12 +157,12 @@ export default function ProductCard({ item }) {
             className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-700 will-change-transform"
           />
 
-          <button
+          {/* <button
             onClick={handleAddToBagClick}
             className="absolute bottom-0 left-0 right-0 py-3 bg-neutral-900/90 hover:bg-neutral-950 text-white font-sans font-bold text-[9px] uppercase tracking-widest text-center translate-y-full group-hover:translate-y-0 transition-transform duration-350 ease-out backdrop-blur-xs flex items-center justify-center gap-1.5 cursor-pointer z-20 border-0"
           >
             Add to Bag
-          </button>
+          </button> */}
         </div>
 
         <div className="pt-5 text-center flex flex-col items-center space-y-1.5 flex-1 justify-end">

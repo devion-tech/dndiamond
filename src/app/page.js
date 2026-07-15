@@ -113,7 +113,7 @@ function BestSellersGrid() {
     >
       {bestProducts?.map((prod) => {
         return (
-          <div key={prod?.id} className=" h-full">
+          <div key={prod?._id} className=" h-full">
             <ProductCard item={prod} />
           </div>
         );
@@ -151,7 +151,7 @@ function FAQSection() {
   return (
     <section
       id="faq"
-      className="bg-white py-20 px-6 sm:px-10 lg:px-16 border-t border-neutral-100"
+      className=" py-20 px-6 sm:px-10 lg:px-16 border-t border-neutral-100"
     >
       <div className="mx-auto max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-12 sm:gap-16">
         {/* Left Column: 5/12 width */}
@@ -691,7 +691,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="w-full flex flex-col bg-white overflow-x-hidden select-none">
+      <div className="w-full flex flex-col  overflow-x-hidden select-none">
         {/* ==================================================
                     SECTION 1: FULLSCREEN HERO CAROUSEL (100vh)
                     ================================================== */}
@@ -805,7 +805,7 @@ export default function Home() {
         {/* ==================================================
                     SECTION 2: SHOP BY CATEGORY
                     ================================================== */}
-        <section id="section-categories" className="bg-white py-10">
+        <section id="section-categories" className="py-10">
           ?
           <div className="text-center space-y-2">
             <h2 className="font-serif text-3xl sm:text-4xl  tracking-wide text-black">
@@ -821,7 +821,7 @@ export default function Home() {
         <ExploreDiamonds />
 
         {/* BEST SELLERS */}
-        <section className="py-10 bg-white">
+        <section className="py-10 ">
           <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 ">
             <div className="text-center space-y-2 py-4">
               <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-wide text-black">
@@ -839,7 +839,7 @@ export default function Home() {
           </div>
         </section>
         {/* WHAT WERE WE MADE FOR? */}
-        <section className="bg-[#fff] text-black py-24 sm:py-32">
+        <section className=" text-black py-24 sm:py-32">
           <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <ParallaxImage

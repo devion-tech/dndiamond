@@ -95,15 +95,8 @@ export default function ProductDetail({ params }) {
   const resolvedParams = use(params);
   const productId = resolvedParams.id;
 
-  const {
-    guestId,
-    calculatePrice,
-    addToCart,
-    toggleWishlist,
-    isWishlisted,
-    formatPrice,
-  } = useStore();
-  console.log("guestId :>> ", guestId);
+  const { guestId, addToCart, toggleWishlist, isWishlisted, formatPrice } =
+    useStore();
 
   const dispatch = useDispatch();
   const { selectedProduct: rawProduct, error: apiError } = useSelector(
@@ -135,7 +128,6 @@ export default function ProductDetail({ params }) {
   useEffect(() => {
     if (rawProduct) {
       const p = rawProduct;
-      console.log("p :>> ", p);
 
       const mapped = {
         id: p._id,

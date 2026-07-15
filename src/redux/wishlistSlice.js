@@ -79,7 +79,6 @@ export const toggleWishlistApi = async ({ product }) => {
   const baseUrl =
     process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
   const headers = getAuthHeaders();
-  console.log("headers :>> ", headers);
   const res = await fetch(`${baseUrl}/api/wishlist/`, {
     method: "POST",
     headers: {
@@ -118,7 +117,6 @@ const wishlistSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchWishlist.fulfilled, (state, action) => {
-        console.log("action.payload?.products :>> ", action.payload?.products);
         state.loading = false;
         state.total = action.payload?.total || 0;
         state.items = action.payload?.products?.map((p) => {

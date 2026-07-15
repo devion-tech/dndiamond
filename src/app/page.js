@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
@@ -176,6 +176,25 @@ function MarqueeStrip({ dark }) {
 }
 
 function BestSellersGrid() {
+  const { bestProducts } = useSelector((state) => state.landing);
+  const apiProducts = useMemo(() => {
+    return bestProducts.map((p) => {
+      const colors = p?.options?.filter((opt) => opt.name === "colors") || [];
+      return {
+        id: p._id,
+        title: p.name,
+        slug: p.slug,
+        is_wishlist: p.is_wishlist || false,
+        colors: colors && colors.length > 0 ? colors[0].values : [],
+        image:
+          p.images && p.images[0]
+            ? p.images[0]
+            : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
+        display_price: p.display_price || 0,
+        isFromApi: true,
+      };
+    });
+  }, [bestProducts]);
   const gridRef = useRef(null);
   useReveal(gridRef, { stagger: 0.1, y: 28, duration: 0.7, start: "top 82%" });
   return (
@@ -183,19 +202,10 @@ function BestSellersGrid() {
       ref={gridRef}
       className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-12"
     >
-      {BEST_SELLERS.map((prod) => {
-        const mappedProd = {
-          id: prod.id,
-          title: prod.name,
-          display_price: prod.price,
-          image: prod.img,
-          slug: prod.id,
-          colors: [],
-          is_wishlist: false,
-        };
+      {apiProducts?.map((prod) => {
         return (
-          <div key={prod.id} className="opacity-0 h-full">
-            <ProductCard item={mappedProd} />
+          <div key={prod?.id} className=" h-full">
+            <ProductCard item={prod} />
           </div>
         );
       })}
@@ -424,7 +434,6 @@ export default function Home() {
   const { formatPrice } = useStore();
   const dispatch = useDispatch();
   const { items, bestProducts } = useSelector((state) => state.landing);
-  console.log("items, bestProducts  :>> ", items, bestProducts);
   // Slider State
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -479,7 +488,7 @@ export default function Home() {
     stopAutoplay();
     autoplayTimerRef.current = setInterval(() => {
       if (isAnimatingRef.current) return;
-      const nextIdx = (slideRef.current + 1) % SLIDES.length;
+      const nextIdx = (slideRef.current + 1) % items.length;
       transitionSlides(slideRef.current, nextIdx, "next");
     }, 2000);
   };
@@ -747,7 +756,7 @@ export default function Home() {
               }
 
               if (window.scrollY === 0) {
-                if (isScrollDown && slideRef.current < SLIDES.length - 1) {
+                if (isScrollDown && slideRef.current < items?.length - 1) {
                   self.event.preventDefault();
                   const nextIdx = slideRef.current + 1;
                   transitionSlides(slideRef.current, nextIdx, "next");
@@ -782,7 +791,7 @@ export default function Home() {
           className="relative h-screen w-full bg-[#0F0F0F] overflow-hidden select-none"
         >
           {/* Background Images Layer */}
-          {SLIDES.map((slide, idx) => (
+          {items?.map((slide, idx) => (
             <div
               key={idx}
               ref={(el) => (slideContainersRef.current[idx] = el)}
@@ -791,8 +800,8 @@ export default function Home() {
               {/* Background Photo */}
               <div className="absolute inset-0 overflow-hidden">
                 <img
-                  src={slide.img}
-                  alt={slide.label}
+                  src={slide?.image?.image}
+                  alt={slide?.title}
                   className="w-full h-full object-cover select-none js-hero-img"
                   style={{ transform: "scale(1.15)" }}
                 />
@@ -821,10 +830,10 @@ export default function Home() {
 
                   {/* Call To Action Button */}
                   <div className="pt-4 js-hero-button">
-                    <Link href={slide.link}>
+                    <Link href={"/"} passHref>
                       <button className="group relative overflow-hidden px-8 py-3.5 border border-white/30 text-white text-xs font-bold uppercase tracking-[0.2em] bg-white/10 backdrop-blur-md transition-all duration-500 hover:border-white focus:outline-none shadow-lg">
                         <span className="relative z-10 group-hover:text-black transition-colors duration-500">
-                          {slide.buttonText}
+                          Shop Collection
                         </span>
                         <span className="absolute inset-0 bg-white origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                       </button>
@@ -837,7 +846,7 @@ export default function Home() {
 
           {/* Vertical Progress Indicators (Right Side) */}
           <div className="absolute right-6 sm:right-12 top-1/2 -translate-y-1/2 z-30 flex flex-col space-y-3">
-            {SLIDES.map((_, idx) => (
+            {items?.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => handleProgressClick(idx)}
@@ -846,7 +855,7 @@ export default function Home() {
               >
                 {/* Descriptive label appearing on hover */}
                 <span className="text-[10px] font-sans font-medium tracking-[0.25em] text-white/60 group-hover:text-white transition-colors duration-300 mr-4 opacity-0 group-hover:opacity-100 uppercase hidden sm:inline-block">
-                  {SLIDES[idx].label}
+                  {items?.[idx]?.label}
                 </span>
 
                 {/* Progress bar container */}

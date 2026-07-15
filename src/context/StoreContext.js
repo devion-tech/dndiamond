@@ -168,7 +168,6 @@ export function StoreProvider({ children }) {
   };
 
   const updateQuantity = async (cartId, quantity) => {
-    console.log("quantity, cartId :>> ", quantity);
     if (quantity <= 0) {
       await removeFromCart(cartId);
       return;

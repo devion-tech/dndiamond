@@ -45,7 +45,6 @@ const landingSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchMainPage.fulfilled, (state, action) => {
-        console.log("action?.payload :>> ", action?.payload);
         state.loading = false;
         state.items = action.payload?.image;
         state.bestProducts = action.payload?.best_selling_products;

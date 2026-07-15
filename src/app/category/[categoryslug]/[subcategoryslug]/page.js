@@ -45,8 +45,8 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
 };
 
 function CatalogContent() {
-  const searchParams = useSearchParams();
   const { calculatePrice, formatPrice } = useStore();
+
   // Filters state
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -133,26 +133,10 @@ function CatalogContent() {
     return () => observer.disconnect();
   }, [loadMore]);
 
-  // Sync filters with URL search params on mount
-  useEffect(() => {
-    const searchParam = searchParams.get("search");
-    const originParam = searchParams.get("origin");
-    const metalParam = searchParams.get("metal");
-    const caratParam = searchParams.get("carat");
-
-    if (searchParam) setSearch(searchParam);
-    if (originParam) setSelectedOrigin(originParam);
-    if (metalParam) setSelectedMetal(metalParam);
-    if (caratParam) setSelectedCaratRange(caratParam);
-  }, [searchParams]);
-
   const data = rawProducts || [];
   const apiProducts = useMemo(() => {
     return data.map((p) => {
-      const colors = p?.options?.filter((opt) => opt.name === "colors" || opt.name === "color" || opt.name === "gold_type") || [];
-      const diamondCost = p.pricing?.diamond_cost || p.price || 600;
-      const gemstoneCost = p.pricing?.gemstone_cost || 0;
-      const additionalCost = p.pricing?.additional_cost || 150;
+      const colors = p?.options?.filter((opt) => opt.name === "colors") || [];
       return {
         id: p._id,
         title: p.name,
@@ -164,19 +148,8 @@ function CatalogContent() {
           p.images && p.images[0]
             ? p.images[0]
             : "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&fit=crop",
-        description:
-          p.description ||
-          "Ethically sourced certified diamond luxury masterpiece.",
-        discount: p.discount || 0,
-        metalType: p.metalType || ["14K Gold", "18K Gold", "Platinum"],
-        diamondWeight: p.diamondWeight || [0.5, 0.75, 1.0],
-        goldWeight: p.weight || 2.5,
-        diamondPrice: diamondCost + gemstoneCost,
-        makingCharges: additionalCost,
-        style: p.subcategory_id?.name || "",
-        origin: p.origin || (p.diamonds && p.diamonds[0]?.type?.toLowerCase().includes("lab") ? "labgrown" : "natural"),
-        isFromApi: true,
         display_price: p.display_price || 0,
+        isFromApi: true,
       };
     });
   }, [data]);
@@ -185,76 +158,76 @@ function CatalogContent() {
   const productsSource = apiProducts || [];
 
   // Apply filters and sorting dynamically
-  const filteredJewelry = productsSource.filter((item) => {
-    // Search filter
-    if (
-      search &&
-      !item.title.toLowerCase().includes(search.toLowerCase()) &&
-      !item.category.toLowerCase().includes(search.toLowerCase())
-    ) {
-      return false;
-    }
+  //   const filteredJewelry = productsSource.filter((item) => {
+  //     // Search filter
+  //     if (
+  //       search &&
+  //       !item.title.toLowerCase().includes(search.toLowerCase()) &&
+  //       !item.category.toLowerCase().includes(search.toLowerCase())
+  //     ) {
+  //       return false;
+  //     }
 
-    // Category filter
-    if (selectedCategory && item.category !== selectedCategory) {
-      return false;
-    }
+  //     // Category filter
+  //     if (selectedCategory && item.category !== selectedCategory) {
+  //       return false;
+  //     }
 
-    // Origin filter
-    if (selectedOrigin && item.origin !== selectedOrigin) {
-      return false;
-    }
+  //     // Origin filter
+  //     if (selectedOrigin && item.origin !== selectedOrigin) {
+  //       return false;
+  //     }
 
-    // Style/subcategory filter
-    if (
-      selectedStyle &&
-      (!item.style ||
-        !item.style.toLowerCase().includes(selectedStyle.toLowerCase()))
-    ) {
-      return false;
-    }
+  //     // Style/subcategory filter
+  //     if (
+  //       selectedStyle &&
+  //       (!item.style ||
+  //         !item.style.toLowerCase().includes(selectedStyle.toLowerCase()))
+  //     ) {
+  //       return false;
+  //     }
 
-    // Metal type filter
-    if (selectedMetal && !item.metalType.includes(selectedMetal)) {
-      return false;
-    }
+  //     // Metal type filter
+  //     if (selectedMetal && !item.metalType.includes(selectedMetal)) {
+  //       return false;
+  //     }
 
-    // Carat size filter check
-    if (selectedCaratRange) {
-      const hasMatchingCarat =
-        item.diamondWeight &&
-        item.diamondWeight.some((w) => {
-          if (selectedCaratRange === "low") return w <= 0.5;
-          if (selectedCaratRange === "mid") return w > 0.5 && w <= 1.0;
-          if (selectedCaratRange === "high") return w > 1.0;
-          return true;
-        });
-      if (!hasMatchingCarat) return false;
-    }
+  //     // Carat size filter check
+  //     if (selectedCaratRange) {
+  //       const hasMatchingCarat =
+  //         item.diamondWeight &&
+  //         item.diamondWeight.some((w) => {
+  //           if (selectedCaratRange === "low") return w <= 0.5;
+  //           if (selectedCaratRange === "mid") return w > 0.5 && w <= 1.0;
+  //           if (selectedCaratRange === "high") return w > 1.0;
+  //           return true;
+  //         });
+  //       if (!hasMatchingCarat) return false;
+  //     }
 
-    // Price range filter
-    const defaultMetal = item.metalType ? item.metalType[0] : "14K Gold";
-    const defaultCarat = item.diamondWeight ? item.diamondWeight[0] : 0.5;
-    const itemPrice = calculatePrice(item, defaultMetal, defaultCarat);
-    if (itemPrice > maxPrice) {
-      return false;
-    }
+  //     // Price range filter
+  //     const defaultMetal = item.metalType ? item.metalType[0] : "14K Gold";
+  //     const defaultCarat = item.diamondWeight ? item.diamondWeight[0] : 0.5;
+  //     const itemPrice = calculatePrice(item, defaultMetal, defaultCarat);
+  //     if (itemPrice > maxPrice) {
+  //       return false;
+  //     }
 
-    return true;
-  });
+  //     return true;
+  //   });
 
-  // Apply Sorting
-  const sortedJewelry = [...filteredJewelry].sort((a, b) => {
-    const defaultMetalA = a.metalType ? a.metalType[0] : "14K Gold";
-    const defaultCaratA = a.diamondWeight ? a.diamondWeight[0] : 0.5;
-    const priceA = calculatePrice(a, defaultMetalA, defaultCaratA);
+  //   // Apply Sorting
+  //   const sortedJewelry = [...filteredJewelry].sort((a, b) => {
+  //     const defaultMetalA = a.metalType ? a.metalType[0] : "14K Gold";
+  //     const defaultCaratA = a.diamondWeight ? a.diamondWeight[0] : 0.5;
+  //     const priceA = calculatePrice(a, defaultMetalA, defaultCaratA);
 
-    const defaultMetalB = b.metalType ? b.metalType[0] : "14K Gold";
-    const defaultCaratB = b.diamondWeight ? b.diamondWeight[0] : 0.5;
-    const priceB = calculatePrice(b, defaultMetalB, defaultCaratB);
+  //     const defaultMetalB = b.metalType ? b.metalType[0] : "14K Gold";
+  //     const defaultCaratB = b.diamondWeight ? b.diamondWeight[0] : 0.5;
+  //     const priceB = calculatePrice(b, defaultMetalB, defaultCaratB);
 
-    return sortOrder === "ASC" ? priceA - priceB : priceB - priceA;
-  });
+  //     return sortOrder === "ASC" ? priceA - priceB : priceB - priceA;
+  //   });
 
   const resetFilters = () => {
     setSearch("");
@@ -274,8 +247,11 @@ function CatalogContent() {
         <span className="text-[9px] text-neutral-400 font-extrabold tracking-[0.3em] uppercase">
           High Jewelry Atelier
         </span>
-        <h1 className="text-2xl  font-light text-neutral-900 uppercase tracking-widest">
-          The Jewelry Collection
+        <h1 className="text-3xl lg:text-4xl font-serif font-light text-neutral-900 uppercase tracking-widest">
+          The Jewelry{" "}
+          <span className="font-serif italic font-light lowercase">
+            Collection
+          </span>
         </h1>
       </div>
 
@@ -292,7 +268,7 @@ function CatalogContent() {
           </button>
           <span className="h-4 w-px bg-neutral-200 hidden sm:inline-block"></span>
           <span className="text-neutral-400 font-medium tracking-widest hidden sm:inline-block">
-            {sortedJewelry?.length} Products Found
+            {/* {sortedJewelry.length} Products Found */}
           </span>
         </div>
 
@@ -331,7 +307,7 @@ function CatalogContent() {
         accordions={accordions}
         toggleAccordion={toggleAccordion}
         resetFilters={resetFilters}
-        productCount={sortedJewelry?.length}
+        productCount={productsSource?.length}
         formatPrice={formatPrice}
         hideCategory={true}
       />
@@ -345,10 +321,10 @@ function CatalogContent() {
               Loading Atelier Pieces...
             </span>
           </div>
-        ) : sortedJewelry?.length > 0 ? (
+        ) : productsSource?.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-12 animate-fade-in">
-              {sortedJewelry.map((item) => (
+              {productsSource.map((item) => (
                 <ProductCard key={item.id} item={item} />
               ))}
             </div>
@@ -359,13 +335,15 @@ function CatalogContent() {
                 <div className="h-6 w-6 border-2 border-neutral-900 border-t-transparent rounded-full animate-spin" />
               </div>
             )}
-            {!loadingMore && currentPage >= totalPages && sortedJewelry.length > 0 && (
-              <div className="text-center py-8">
-                <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-[0.2em]">
-                  You've seen all products
-                </span>
-              </div>
-            )}
+            {!loadingMore &&
+              currentPage >= totalPages &&
+              productsSource.length > 0 && (
+                <div className="text-center py-8">
+                  <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-[0.2em]">
+                    You've seen all products
+                  </span>
+                </div>
+              )}
           </>
         ) : (
           <div className="flex flex-col justify-center items-center text-center py-32 px-4 bg-white border border-neutral-100 rounded-sm space-y-5 max-w-lg mx-auto">

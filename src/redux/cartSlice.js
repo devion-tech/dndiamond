@@ -69,8 +69,6 @@ export const addToCart = createAsyncThunk(
     if (!token || token === "null") {
       body.guest_id = guestId;
     }
-    console.log("add to cart --->>>>");
-    console.log("token :>> ", token);
 
     const res = await fetch(`${baseUrl}/api/cart/`, {
       method: "POST",

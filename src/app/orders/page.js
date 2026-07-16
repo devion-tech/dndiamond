@@ -147,7 +147,7 @@ const STATIC_MOCK_ORDERS = [
 export default function OrdersPage() {
   const router = useRouter();
   const { formatPrice } = useStore();
-  
+
   // State for tabs, search, and active tracking expansion
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -179,7 +179,7 @@ export default function OrdersPage() {
   return (
     <Layout>
       <div className="bg-[#FAF9F6] min-h-screen py-10 md:py-16 px-4 md:px-8 font-sans text-neutral-800 relative selection:bg-neutral-900 selection:text-white">
-        
+
         {/* Toast Notification Banner */}
         {toastMessage && (
           <div className="fixed bottom-6 right-6 z-50 bg-neutral-900 text-white px-6 py-4 rounded-2xl shadow-2xl border border-neutral-700 flex items-center gap-3 animate-fade-in text-xs font-medium max-w-md">
@@ -189,7 +189,7 @@ export default function OrdersPage() {
         )}
 
         <div className="max-w-6xl mx-auto space-y-10">
-          
+
           {/* Header & Title Section */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-neutral-200">
             <div className="space-y-2 text-left">
@@ -226,16 +226,14 @@ export default function OrdersPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 whitespace-nowrap cursor-pointer flex items-center gap-2 ${
-                    activeTab === tab.id
-                      ? "bg-neutral-900 text-white shadow-md"
-                      : "text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100"
-                  }`}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 whitespace-nowrap cursor-pointer flex items-center gap-2 ${activeTab === tab.id
+                    ? "bg-neutral-900 text-white shadow-md"
+                    : "text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100"
+                    }`}
                 >
                   <span>{tab.label}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-                    activeTab === tab.id ? "bg-white/20 text-white" : "bg-neutral-200 text-neutral-700"
-                  }`}>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${activeTab === tab.id ? "bg-white/20 text-white" : "bg-neutral-200 text-neutral-700"
+                    }`}>
                     {tab.count}
                   </span>
                 </button>
@@ -288,14 +286,12 @@ export default function OrdersPage() {
 
                       {/* Status Badge & Expand Toggle */}
                       <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-neutral-800">
-                        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm ${
-                          order.statusCategory === "delivered"
-                            ? "bg-lime-950/80 text-lime-400 border border-lime-700/60"
-                            : "bg-amber-950/80 text-amber-300 border border-amber-700/60"
-                        }`}>
-                          <span className={`h-2 w-2 rounded-full ${
-                            order.statusCategory === "delivered" ? "bg-lime-400 animate-pulse" : "bg-amber-400 animate-pulse"
-                          }`}></span>
+                        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm ${order.statusCategory === "delivered"
+                          ? "bg-lime-950/80 text-lime-400 border border-lime-700/60"
+                          : "bg-amber-950/80 text-amber-300 border border-amber-700/60"
+                          }`}>
+                          <span className={`h-2 w-2 rounded-full ${order.statusCategory === "delivered" ? "bg-lime-400 animate-pulse" : "bg-amber-400 animate-pulse"
+                            }`}></span>
                           {order.status}
                         </span>
 
@@ -333,13 +329,12 @@ export default function OrdersPage() {
                           {order.steps.map((step, idx) => (
                             <div
                               key={idx}
-                              className={`p-4 rounded-2xl border relative flex flex-col justify-between transition-all ${
-                                step.active
-                                  ? "bg-white border-neutral-900 shadow-md ring-2 ring-neutral-900/10"
-                                  : step.completed
+                              className={`p-4 rounded-2xl border relative flex flex-col justify-between transition-all ${step.active
+                                ? "bg-white border-neutral-900 shadow-md ring-2 ring-neutral-900/10"
+                                : step.completed
                                   ? "bg-neutral-100/70 border-neutral-200 text-neutral-700"
                                   : "bg-transparent border-neutral-200/60 opacity-50"
-                              }`}
+                                }`}
                             >
                               <div className="flex items-center justify-between gap-2">
                                 <span className="text-[10px] font-mono font-bold uppercase text-neutral-400">Step 0{idx + 1}</span>
@@ -364,7 +359,7 @@ export default function OrdersPage() {
 
                     {/* Order Items & Destination Details Grid */}
                     <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                      
+
                       {/* Left Column: Items Requested */}
                       <div className="lg:col-span-8 space-y-5 text-left">
                         <div className="flex justify-between items-center border-b border-neutral-150 pb-3">
@@ -408,7 +403,7 @@ export default function OrdersPage() {
                                       {formatPrice(item.total)}
                                     </span>
                                   </div>
-                                  
+
                                   {/* Specifications pills */}
                                   <div className="flex flex-wrap gap-2 mt-2">
                                     <span className="px-2.5 py-1 bg-white border border-neutral-200 rounded-lg text-[10px] font-medium text-neutral-700">
@@ -448,7 +443,7 @@ export default function OrdersPage() {
 
                       {/* Right Column: Destination & Concierge Actions */}
                       <div className="lg:col-span-4 lg:border-l border-neutral-200 lg:pl-8 space-y-6 text-left">
-                        
+
                         {/* Shipping Destination */}
                         <div className="space-y-3 bg-neutral-50 p-5 rounded-2xl border border-neutral-200/60">
                           <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest flex items-center gap-1.5">

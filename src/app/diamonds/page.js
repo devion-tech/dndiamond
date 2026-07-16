@@ -1,338 +1,587 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { FaGem, FaSearch, FaSlidersH, FaFileContract, FaCheckCircle, FaShoppingCart, FaArrowRight } from "react-icons/fa";
-import Layout from "@/components/layout/Layout";
-import { useStore } from "@/context/StoreContext";
+import { useState } from 'react';
+import { BsWhatsapp } from 'react-icons/bs';
+import { MdMail } from 'react-icons/md';
+import Layout from '@/components/layout/Layout';
 
-function DiamondsContent() {
-    const searchParams = useSearchParams();
-    const { diamonds, addToCart, formatPrice } = useStore();
+/** ---------- helpers ---------- */
+const formatMoney = (n) =>
+  new Intl.NumberFormat('en-HK', {
+    style: 'currency',
+    currency: 'HKD',
+    maximumFractionDigits: 0,
+  }).format(n);
 
-    // Search and filters
-    const [search, setSearch] = useState("");
-    const [shapeFilter, setShapeFilter] = useState("");
-    const [clarityFilter, setClarityFilter] = useState("");
-    const [colorFilter, setColorFilter] = useState("");
-    const [sortOrder, setSortOrder] = useState("DESC");
-    const [successItem, setSuccessItem] = useState(null);
+/** ---------- data ---------- */
+const SHAPES = [
+  {
+    id: 'Round',
+    svg: <img src='/shape/Round.png' className='h-8 w-8 object-contain' alt='Round Diamond Shape' />,
+  },
+  {
+    id: 'Princess',
+    svg: <img src='/shape/Princess.png' className='h-8 w-8 object-contain' alt='Princess Diamond Shape' />,
+  },
+  {
+    id: 'Cushion',
+    svg: <img src='/shape/Cushion.png' className='h-8 w-8 object-contain' alt='Cushion Diamond Shape' />,
+  },
+  {
+    id: 'Emerald',
+    svg: <img src='/shape/Emerald.png' className='h-8 w-8 object-contain' alt='Emerald Diamond Shape' />,
+  },
+  {
+    id: 'Oval',
+    svg: <img src='/shape/Oval.png' className='h-8 w-8 object-contain' alt='Oval Diamond Shape' />,
+  },
+  {
+    id: 'Pear',
+    svg: <img src='/shape/Pear.png' className='h-8 w-8 object-contain' alt='Pear Diamond Shape' />,
+  },
+  {
+    id: 'Asscher',
+    svg: <img src='/shape/Asscher.png' className='h-8 w-8 object-contain' alt='Asscher Diamond Shape' />,
+  },
+  {
+    id: 'Radiant',
+    svg: <img src='/shape/Radiant.png' className='h-8 w-8 object-contain' alt='Radiant Diamond Shape' />,
+  },
+  {
+    id: 'Heart',
+    svg: <img src='/shape/Heart.png' className='h-8 w-8 object-contain' alt='Heart Diamond Shape' />,
+  },
+  {
+    id: 'Marquise',
+    svg: <img src='/shape/Marquise.png' className='h-8 w-8 object-contain' alt='Marquise Diamond Shape' />,
+  },
+  {
+    id: 'Trillion',
+    svg: <img src='/shape/Trillion.png' className='h-8 w-8 object-contain' alt='Trillion Diamond Shape' />,
+  },
+  {
+    id: 'Other',
+    svg: (
+      <span className='text-[10px] tracking-widest uppercase font-semibold text-neutral-400'>
+        Other
+      </span>
+    ),
+  },
+];
 
-    // Sync search from URL
-    useEffect(() => {
-        const searchParam = searchParams.get("search");
-        const shapeParam = searchParams.get("shape");
-        if (searchParam) setSearch(searchParam);
-        if (shapeParam) setShapeFilter(shapeParam);
-    }, [searchParams]);
+const BUDGET_PRESETS = [
+  { label: 'Under HK$10k', min: 0, max: 10000 },
+  { label: 'HK$10k – HK$30k', min: 10000, max: 30000 },
+  { label: 'HK$30k – HK$60k', min: 30000, max: 60000 },
+  { label: 'HK$60k – HK$100k', min: 60000, max: 100000 },
+  { label: 'HK$100k – HK$200k', min: 100000, max: 200000 },
+  { label: 'HK$200k+', min: 200000, max: 2000000 },
+];
 
-    // Apply filtering
-    const filteredDiamonds = diamonds.filter((item) => {
-        if (search && 
-            !item.title.toLowerCase().includes(search.toLowerCase()) && 
-            !item.certificate.toLowerCase().includes(search.toLowerCase()) &&
-            !item.id.toLowerCase().includes(search.toLowerCase())
-        ) {
-            return false;
-        }
+const CARAT_PRESETS = [
+  { label: 'Under 0.50 ct', min: 0.1, max: 0.5 },
+  { label: '0.50 – 1.00 ct', min: 0.5, max: 1.0 },
+  { label: '1.00 – 1.50 ct', min: 1.0, max: 1.5 },
+  { label: '1.50 – 2.00 ct', min: 1.5, max: 2.0 },
+  { label: '2.00 – 3.00 ct', min: 2.0, max: 3.0 },
+  { label: '3.00 ct+', min: 3.0, max: 15.0 },
+];
 
-        if (shapeFilter && item.shape !== shapeFilter) return false;
-        if (clarityFilter && item.clarity !== clarityFilter) return false;
-        if (colorFilter && item.color !== colorFilter) return false;
+const CLARITY = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'SI3', 'I1', 'I2', 'I3'];
+const COLORS = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+const CUTS = ['Ideal', 'Excellent', 'Very Good', 'Good', 'Fair', 'Poor'];
+const POLISH = ['Ideal', 'Excellent', 'Very Good', 'Good', 'Fair', 'Poor'];
+const SYMM = ['Ideal', 'Excellent', 'Very Good', 'Good', 'Fair', 'Poor'];
+const FLUOR = ['None', 'Faint', 'Medium', 'Strong', 'Very Strong'];
+const LABS = ['GIA', 'IGI'];
 
-        return true;
+export default function DiamondProductPage() {
+  const [activeCategory, setActiveCategory] = useState('natural'); // 'natural'
+  const [filters, setFilters] = useState({
+    shape: 'Round',
+    clarity: [],
+    color: [],
+    cut: 'Excellent',
+    polish: 'Excellent',
+    symmetry: 'Excellent',
+    fluorescence: 'None',
+    lab: [],
+    price: [10000, 30000],
+    carat: [0.5, 1.0],
+  });
+
+  const [notes, setNotes] = useState('');
+
+  const OWNER_NUMBER = '9376557788';
+  const OWNER_EMAIL = 'prashil@dnitin.com';
+
+  const setSingle = (key, val) => setFilters((prev) => ({ ...prev, [key]: val }));
+
+  const toggleMulti = (key, val) =>
+    setFilters((prev) => {
+      const set = new Set(prev[key]);
+      set.has(val) ? set.delete(val) : set.add(val);
+      return { ...prev, [key]: Array.from(set) };
     });
 
-    // Apply sorting
-    const sortedDiamonds = [...filteredDiamonds].sort((a, b) => {
-        return sortOrder === "ASC" ? a.price - b.price : b.price - a.price;
+  const handleBudgetPreset = (preset) => {
+    setFilters((prev) => ({ ...prev, price: [preset.min, preset.max] }));
+  };
+
+  const handleMinPriceChange = (val) => {
+    const num = val === '' ? '' : Number(val);
+    setFilters((prev) => ({ ...prev, price: [num, prev.price[1]] }));
+  };
+
+  const handleMaxPriceChange = (val) => {
+    const num = val === '' ? '' : Number(val);
+    setFilters((prev) => ({ ...prev, price: [prev.price[0], num] }));
+  };
+
+  const handleCaratPreset = (preset) => {
+    setFilters((prev) => ({ ...prev, carat: [preset.min, preset.max] }));
+  };
+
+  const handleMinCaratChange = (val) => {
+    const num = val === '' ? '' : Number(val);
+    setFilters((prev) => ({ ...prev, carat: [num, prev.carat[1]] }));
+  };
+
+  const handleMaxCaratChange = (val) => {
+    const num = val === '' ? '' : Number(val);
+    setFilters((prev) => ({ ...prev, carat: [prev.carat[0], num] }));
+  };
+
+  const shareOnWhatsApp = () => {
+    const msg = [
+      'Diamond Requirement Spec',
+      '',
+      `• Type: ${activeCategory === 'natural' ? 'Natural Diamond' : 'Lab-Grown Diamond'}`,
+      `• Shape: ${filters.shape || 'Any'}`,
+      `• Clarity: ${filters.clarity.length ? filters.clarity.join(', ') : 'Any'}`,
+      `• Color: ${filters.color.length ? filters.color.join(', ') : 'Any'}`,
+      `• Cut: ${filters.cut || 'Any'}`,
+      `• Polish: ${filters.polish || 'Any'}`,
+      `• Symmetry: ${filters.symmetry || 'Any'}`,
+      `• Fluorescence: ${filters.fluorescence || 'Any'}`,
+      `• Lab: ${filters.lab.length ? filters.lab.join(', ') : 'Any'}`,
+      `• Carat Range: ${filters.carat[0] || '0'} - ${filters.carat[1] || 'Any'} ct`,
+      `• Budget: ${filters.price[0] ? formatMoney(filters.price[0]) : 'HK$0'} - ${filters.price[1] ? formatMoney(filters.price[1]) : 'Any'}`,
+      ...(notes ? ['', '• Additional Notes:', notes] : []),
+    ]
+      .filter(Boolean)
+      .join('\n');
+
+    window.open(`https://wa.me/${OWNER_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
+  const shareViaEmail = () => {
+    const subject = `${activeCategory === 'natural' ? 'Natural Diamond' : 'Lab-Grown'} Specification Inquiry`;
+    const body = [
+      'Diamond Requirement Spec',
+      '',
+      `• Type: ${activeCategory === 'natural' ? 'Natural Diamond' : 'Lab-Grown Diamond'}`,
+      `• Shape: ${filters.shape || 'Any'}`,
+      `• Clarity: ${filters.clarity.length ? filters.clarity.join(', ') : 'Any'}`,
+      `• Color: ${filters.color.length ? filters.color.join(', ') : 'Any'}`,
+      `• Cut: ${filters.cut || 'Any'}`,
+      `• Polish: ${filters.polish || 'Any'}`,
+      `• Symmetry: ${filters.symmetry || 'Any'}`,
+      `• Fluorescence: ${filters.fluorescence || 'Any'}`,
+      `• Lab: ${filters.lab.length ? filters.lab.join(', ') : 'Any'}`,
+      `• Carat Range: ${filters.carat[0] || '0'} - ${filters.carat[1] || 'Any'} ct`,
+      `• Budget: ${filters.price[0] ? formatMoney(filters.price[0]) : 'HK$0'} - ${filters.price[1] ? formatMoney(filters.price[1]) : 'Any'}`,
+      ...(notes ? ['', '• Additional Notes:', notes] : []),
+    ]
+      .filter(Boolean)
+      .join('%0D%0A');
+
+    window.open(`mailto:${OWNER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${body}`, '_blank');
+  };
+
+  const resetAll = () => {
+    setFilters({
+      shape: 'Round',
+      clarity: [],
+      color: [],
+      cut: 'Excellent',
+      polish: 'Excellent',
+      symmetry: 'Excellent',
+      fluorescence: 'None',
+      lab: [],
+      price: [10000, 30000],
+      carat: [0.5, 1.0],
     });
+    setNotes('');
+  };
 
-    const resetFilters = () => {
-        setSearch("");
-        setShapeFilter("");
-        setClarityFilter("");
-        setColorFilter("");
-    };
-
-    const handleAddToCart = (diamond) => {
-        const price = Math.round(diamond.price - (diamond.discount ? (diamond.price * (diamond.discount / 100)) : 0));
-        
-        // Add loose diamond to cart with selected characteristics
-        addToCart(
-            {
-                id: diamond.id,
-                title: diamond.title,
-                category: "Loose Diamond",
-                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400"
-            }, 
-            `${diamond.clarity} Clarity`, 
-            diamond.carat, 
-            price
-        );
-
-        setSuccessItem(diamond.id);
-        setTimeout(() => setSuccessItem(null), 3000);
-    };
-
-    return (
-        <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 font-sans">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-                <div className="text-left">
-                    <span className="text-[10px] text-primary font-bold tracking-[0.3em] uppercase">GIA & IGI Conflict-Free Gems</span>
-                    <h1 className="text-2xl font-serif font-medium text-slate-900 mt-1">
-                        Certified Loose <span className="font-serif italic text-accent font-light">Diamonds</span>
-                    </h1>
-                </div>
-
-                {/* Instant search & sorting dropdown */}
-                <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                    <div className="relative flex-1 sm:w-64">
-                        <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
-                        <input 
-                            type="text" 
-                            placeholder="Search Cert ID, title or shape..." 
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="pl-9 pr-4 py-2.5 w-full border border-slate-200 bg-white text-slate-800 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all placeholder:text-slate-400 font-medium"
-                        />
-                    </div>
-                    
-                    <select 
-                        value={sortOrder}
-                        onChange={(e) => setSortOrder(e.target.value)}
-                        className="rounded-xl border border-slate-200 bg-white text-slate-700 px-4 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all font-semibold"
-                    >
-                        <option value="DESC">Price: High to Low</option>
-                        <option value="ASC">Price: Low to High</option>
-                    </select>
-                </div>
-            </div>
-
-            {/* Filter Dashboard layout (Mobile-First Touch Pills) */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-xs p-5 mb-8 flex flex-col gap-6 text-left">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div className="flex items-center gap-2 text-slate-700 font-bold uppercase text-[10px] tracking-wider">
-                        <FaSlidersH className="text-accent" /> Touch Filters
-                    </div>
-                    <button 
-                        onClick={resetFilters}
-                        className="text-[10px] text-slate-400 hover:text-slate-700 font-bold uppercase tracking-wider transition-colors cursor-pointer border-0 bg-transparent"
-                    >
-                        Clear All
-                    </button>
-                </div>
-
-                {/* Horizontal Scrolling Pills */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    
-                    {/* 1. Shape Pills */}
-                    <div className="flex flex-col space-y-1.5">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pl-1">Diamond Shape</span>
-                        <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar max-w-full scroll-smooth">
-                            {[
-                                { val: "", label: "All Shapes" },
-                                { val: "Round", label: "💎 Round" },
-                                { val: "Cushion", label: "⬜ Cushion" },
-                                { val: "Princess", label: "◽ Princess" }
-                            ].map(shape => (
-                                <button
-                                    key={shape.val}
-                                    type="button"
-                                    onClick={() => setShapeFilter(shape.val)}
-                                    className={`px-3 py-1.5 text-[10px] font-bold rounded-full transition-all shrink-0 cursor-pointer border ${
-                                        shapeFilter === shape.val 
-                                        ? "bg-slate-800 border-slate-800 text-white shadow-xs" 
-                                        : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
-                                    }`}
-                                >
-                                    {shape.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 2. Clarity Pills */}
-                    <div className="flex flex-col space-y-1.5">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pl-1">Clarity Grade</span>
-                        <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar max-w-full">
-                            {[
-                                { val: "", label: "All Clarities" },
-                                { val: "IF", label: "IF (Flawless)" },
-                                { val: "VVS1", label: "VVS1" },
-                                { val: "VS2", label: "VS2" }
-                            ].map(clarity => (
-                                <button
-                                    key={clarity.val}
-                                    type="button"
-                                    onClick={() => setClarityFilter(clarity.val)}
-                                    className={`px-3 py-1.5 text-[10px] font-bold rounded-full transition-all shrink-0 cursor-pointer border ${
-                                        clarityFilter === clarity.val 
-                                        ? "bg-slate-800 border-slate-800 text-white shadow-xs" 
-                                        : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
-                                    }`}
-                                >
-                                    {clarity.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 3. Color Pills */}
-                    <div className="flex flex-col space-y-1.5">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pl-1">Color Grade</span>
-                        <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar max-w-full">
-                            {[
-                                { val: "", label: "All Colors" },
-                                { val: "D", label: "D (Colorless)" },
-                                { val: "E", label: "E" },
-                                { val: "F", label: "F" }
-                            ].map(color => (
-                                <button
-                                    key={color.val}
-                                    type="button"
-                                    onClick={() => setColorFilter(color.val)}
-                                    className={`px-3 py-1.5 text-[10px] font-bold rounded-full transition-all shrink-0 cursor-pointer border ${
-                                        colorFilter === color.val 
-                                        ? "bg-slate-800 border-slate-800 text-white shadow-xs" 
-                                        : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
-                                    }`}
-                                >
-                                    {color.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Success add dialog */}
-            {successItem && (
-                <div className="bg-neutral-50 border border-neutral-200 text-neutral-800 rounded-xl p-3.5 text-xs font-semibold flex items-center gap-2 mb-6 animate-fade-in text-left">
-                    <FaCheckCircle className="text-neutral-800" /> Diamond added to cart. Bundle it with a custom bespoke ring!
-                </div>
-            )}
-
-            {/* Interactive Grid or List */}
-            {sortedDiamonds.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {sortedDiamonds.map((item) => {
-                        const finalPrice = Math.round(item.price - (item.discount ? (item.price * (item.discount / 100)) : 0));
-                        return (
-                            <div key={item.id} className="glass-card rounded-2xl border border-slate-100 bg-white p-5 text-left flex flex-col justify-between hover:shadow-lg transition-all duration-300">
-                                
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-start border-b border-slate-50 pb-3">
-                                        <div>
-                                            <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
-                                                <FaGem className="text-primary text-xs" /> {item.title}
-                                            </h3>
-                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-1">
-                                                Cert: {item.certificate} • {item.lab} Approved
-                                            </span>
-                                        </div>
-                                        {item.discount > 0 && (
-                                            <span className="px-2 py-0.5 bg-accent/10 border border-accent/20 text-accent font-extrabold text-[9px] rounded-md tracking-wider uppercase">
-                                                {item.discount}% Off
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {/* Characteristics Specs Grid */}
-                                    <div className="grid grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                                        <div className="text-center space-y-0.5">
-                                            <span className="text-[9px] text-slate-400 font-bold uppercase block">Shape</span>
-                                            <span className="text-xs font-bold text-slate-800">{item.shape}</span>
-                                        </div>
-                                        <div className="text-center space-y-0.5 border-x border-slate-200/50">
-                                            <span className="text-[9px] text-slate-400 font-bold uppercase block">Carats</span>
-                                            <span className="text-xs font-extrabold text-primary">{item.carat} ct</span>
-                                        </div>
-                                        <div className="text-center space-y-0.5">
-                                            <span className="text-[9px] text-slate-400 font-bold uppercase block">Clarity</span>
-                                            <span className="text-xs font-bold text-slate-800">{item.clarity}</span>
-                                        </div>
-                                        <div className="text-center space-y-0.5 border-t border-slate-200/50 pt-2">
-                                            <span className="text-[9px] text-slate-400 font-bold uppercase block">Color</span>
-                                            <span className="text-xs font-bold text-slate-800">{item.color}</span>
-                                        </div>
-                                        <div className="text-center space-y-0.5 border-t border-x border-slate-200/50 pt-2">
-                                            <span className="text-[9px] text-slate-400 font-bold uppercase block">Cut</span>
-                                            <span className="text-xs font-bold text-slate-800">{item.cut}</span>
-                                        </div>
-                                        <div className="text-center space-y-0.5 border-t border-slate-200/50 pt-2">
-                                            <span className="text-[9px] text-slate-400 font-bold uppercase block">Polish</span>
-                                            <span className="text-xs font-bold text-slate-800">{item.polish}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Description Notes */}
-                                    <p className="text-[11px] text-slate-400 font-light leading-relaxed">
-                                        {item.notes} Fluorescence: {item.fluorescence}. Polish and symmetry ratios are certified Excellent.
-                                    </p>
-                                </div>
-
-                                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
-                                    <div>
-                                        <span className="text-[9px] text-slate-400 font-semibold block uppercase">Diamond Cost</span>
-                                        <div className="flex items-baseline gap-1.5">
-                                            <span className="text-sm font-extrabold text-slate-900">{formatPrice(finalPrice)}</span>
-                                            {item.discount > 0 && (
-                                                <span className="text-[10px] text-slate-400 line-through">{formatPrice(item.price)}</span>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex gap-2">
-                                        <button 
-                                            onClick={() => handleAddToCart(item)}
-                                            className="btn-gold px-3.5 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs"
-                                        >
-                                            <FaShoppingCart size={9} /> Buy Loose
-                                        </button>
-                                        <a 
-                                            href={`/bespoke?diamond=${item.id}`}
-                                            className="px-3 py-2 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer"
-                                        >
-                                            Build Ring <FaArrowRight size={8} />
-                                        </a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        );
-                    })}
-                </div>
-            ) : (
-                <div className="flex flex-col justify-center items-center text-center py-20 px-4 bg-white border border-slate-100 rounded-2xl space-y-4 shadow-2xs">
-                    <FaGem className="text-slate-350 text-5xl animate-pulse" />
-                    <h3 className="text-sm font-bold text-slate-800 tracking-wider">No certified diamonds match</h3>
-                    <p className="text-xs text-slate-400 max-w-xs leading-relaxed font-light">
-                        We couldn't find any loose diamonds matching your specified criteria. Try removing some filters.
-                    </p>
-                    <button 
-                        onClick={resetFilters}
-                        className="btn-teal px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer"
-                    >
-                        Reset All Filters
-                    </button>
-                </div>
-            )}
+  return (
+    <Layout>
+      <div className='mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-12 relative'>
+        {/* Header */}
+        <div className="text-center space-y-2 ">
+          <span className="text-[9px] text-neutral-400 font-extrabold tracking-[0.3em] uppercase">
+            Bespoke Loose Diamonds
+          </span>
+          <h1 className="text-2xl font-light text-neutral-900 uppercase tracking-widest">
+            The Diamond{" "}
+            <span className="">
+              Collection
+            </span>
+          </h1>
         </div>
-    );
-}
+        {/* Main Specification Card */}
+        <div className='bg-white p-6 sm:p-12 space-y-12 shadow-xs rounded-none'>
 
-export default function DiamondsPage() {
-    return (
-        <Layout>
-            <Suspense fallback={
-                <div className="flex-1 flex items-center justify-center min-h-[400px] text-xs font-bold uppercase text-slate-400 tracking-widest">
-                    Loading Loose Diamonds catalog...
+          {/* Inputs Grid */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 pt-4'>
+            {/* Budget Range Section */}
+            <div className='space-y-6 text-left'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400 border-b border-neutral-100 pb-2.5'>
+                Budget Range (HKD)
+              </h3>
+
+              {/* Presets Grid */}
+              <div className='grid grid-cols-2 sm:grid-cols-3 gap-2'>
+                {BUDGET_PRESETS.map((p) => {
+                  const active = filters.price[0] === p.min && filters.price[1] === p.max;
+                  return (
+                    <button
+                      key={p.label}
+                      onClick={() => handleBudgetPreset(p)}
+                      className={`px-3 py-2.5 border text-[10px] font-sans font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer text-center
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white shadow-3xs'
+                          : 'border-neutral-200/60 text-neutral-600 bg-transparent hover:border-neutral-900 hover:text-neutral-900'
+                        }`}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Custom inputs */}
+              <div className='flex gap-4 items-center pt-2'>
+                <div className='flex-1 relative'>
+                  <span className='absolute left-4 top-1/2 -translate-y-1/2 text-[9px] uppercase font-bold tracking-widest text-neutral-400'>Min</span>
+                  <input
+                    type='number'
+                    value={filters.price[0] === '' ? '' : filters.price[0]}
+                    onChange={(e) => handleMinPriceChange(e.target.value)}
+                    className='w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none'
+                    placeholder='Min HKD'
+                  />
                 </div>
-            }>
-                <DiamondsContent />
-            </Suspense>
-        </Layout>
-    );
+                <div className='text-neutral-300 font-light select-none'>&ndash;</div>
+                <div className='flex-1 relative'>
+                  <span className='absolute left-4 top-1/2 -translate-y-1/2 text-[9px] uppercase font-bold tracking-widest text-neutral-400'>Max</span>
+                  <input
+                    type='number'
+                    value={filters.price[1] === '' ? '' : filters.price[1]}
+                    onChange={(e) => handleMaxPriceChange(e.target.value)}
+                    className='w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none'
+                    placeholder='Max HKD'
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Carat Range Section */}
+            <div className='space-y-6 text-left'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400 border-b border-neutral-100 pb-2.5'>
+                Carat Weight Range
+              </h3>
+
+              {/* Presets Grid */}
+              <div className='grid grid-cols-2 sm:grid-cols-3 gap-2'>
+                {CARAT_PRESETS.map((p) => {
+                  const active = filters.carat[0] === p.min && filters.carat[1] === p.max;
+                  return (
+                    <button
+                      key={p.label}
+                      onClick={() => handleCaratPreset(p)}
+                      className={`px-3 py-2.5 border text-[10px] font-sans font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer text-center
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white shadow-3xs'
+                          : 'border-neutral-200/60 text-neutral-600 bg-transparent hover:border-neutral-900 hover:text-neutral-900'
+                        }`}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Custom inputs */}
+              <div className='flex gap-4 items-center pt-2'>
+                <div className='flex-1 relative'>
+                  <span className='absolute left-4 top-1/2 -translate-y-1/2 text-[9px] uppercase font-bold tracking-widest text-neutral-400'>Min</span>
+                  <input
+                    type='number'
+                    step='0.01'
+                    value={filters.carat[0] === '' ? '' : filters.carat[0]}
+                    onChange={(e) => handleMinCaratChange(e.target.value)}
+                    className='w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none'
+                    placeholder='Min ct'
+                  />
+                </div>
+                <div className='text-neutral-300 font-light select-none'>&ndash;</div>
+                <div className='flex-1 relative'>
+                  <span className='absolute left-4 top-1/2 -translate-y-1/2 text-[9px] uppercase font-bold tracking-widest text-neutral-400'>Max</span>
+                  <input
+                    type='number'
+                    step='0.01'
+                    value={filters.carat[1] === '' ? '' : filters.carat[1]}
+                    onChange={(e) => handleMaxCaratChange(e.target.value)}
+                    className='w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none'
+                    placeholder='Max ct'
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Shapes selection */}
+          <div className='space-y-4 pt-4 text-left'>
+            <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400 border-b border-neutral-100 pb-2.5'>
+              Select Shape
+            </h3>
+            <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 gap-3.5'>
+              {SHAPES.map((s) => {
+                const active = filters.shape === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setSingle('shape', s.id)}
+                    className={`group flex flex-col items-center justify-center py-5 px-3 border transition-all duration-350 cursor-pointer
+                        ${active
+                        ? 'border-neutral-900 bg-neutral-950/5 text-neutral-900'
+                        : 'border-neutral-200/60 hover:border-neutral-500 text-neutral-450 bg-transparent'
+                      }`}
+                    title={s.id}
+                  >
+                    <div className='h-9 w-9 flex items-center justify-center transition-transform duration-500 group-hover:scale-105 select-none'>
+                      {s.svg}
+                    </div>
+                    <span className='mt-2.5 text-[9px] font-sans tracking-[0.18em] uppercase font-semibold'>
+                      {s.id}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Properties select grid */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 pt-4 text-left'>
+            {/* Clarity */}
+            <div className='space-y-3.5'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+                Clarity Grade
+              </h3>
+              <div className='flex flex-wrap gap-2'>
+                {CLARITY.map((c) => {
+                  const active = filters.clarity.includes(c);
+                  return (
+                    <button
+                      key={c}
+                      onClick={() => toggleMulti('clarity', c)}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white'
+                          : 'border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900'
+                        }`}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Color */}
+            <div className='space-y-3.5'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+                Color Grade
+              </h3>
+              <div className='flex flex-wrap gap-2'>
+                {COLORS.map((c) => {
+                  const active = filters.color.includes(c);
+                  return (
+                    <button
+                      key={c}
+                      onClick={() => toggleMulti('color', c)}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white'
+                          : 'border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900'
+                        }`}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Lab */}
+            <div className='space-y-3.5'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+                Certification Lab
+              </h3>
+              <div className='flex flex-wrap gap-2'>
+                {LABS.map((l) => {
+                  const active = filters.lab.includes(l);
+                  return (
+                    <button
+                      key={l}
+                      onClick={() => toggleMulti('lab', l)}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white'
+                          : 'border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900'
+                        }`}
+                    >
+                      {l}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Cut */}
+            <div className='space-y-3.5'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+                Cut Grade
+              </h3>
+              <div className='flex flex-wrap gap-2'>
+                {CUTS.map((v) => {
+                  const active = filters.cut === v;
+                  return (
+                    <button
+                      key={v}
+                      onClick={() => setSingle('cut', v)}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white'
+                          : 'border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900'
+                        }`}
+                    >
+                      {v}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Polish */}
+            <div className='space-y-3.5'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+                Polish
+              </h3>
+              <div className='flex flex-wrap gap-2'>
+                {POLISH.map((v) => {
+                  const active = filters.polish === v;
+                  return (
+                    <button
+                      key={v}
+                      onClick={() => setSingle('polish', v)}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white'
+                          : 'border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900'
+                        }`}
+                    >
+                      {v}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Symmetry */}
+            <div className='space-y-3.5'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+                Symmetry
+              </h3>
+              <div className='flex flex-wrap gap-2'>
+                {SYMM.map((v) => {
+                  const active = filters.symmetry === v;
+                  return (
+                    <button
+                      key={v}
+                      onClick={() => setSingle('symmetry', v)}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white'
+                          : 'border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900'
+                        }`}
+                    >
+                      {v}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Fluorescence */}
+            <div className='space-y-3.5 md:col-span-2'>
+              <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+                Fluorescence Intensity
+              </h3>
+              <div className='flex flex-wrap gap-2'>
+                {FLUOR.map((v) => {
+                  const active = filters.fluorescence === v;
+                  return (
+                    <button
+                      key={v}
+                      onClick={() => setSingle('fluorescence', v)}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
+                          ${active
+                          ? 'border-neutral-900 bg-neutral-900 text-white'
+                          : 'border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900'
+                        }`}
+                    >
+                      {v}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Notes */}
+          <div className='space-y-3.5 pt-4 text-left'>
+            <h3 className='text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-neutral-400'>
+              Additional Specifications & Notes
+            </h3>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder='E.g., Preferred table percentage, depth percentage, target certificate ID, or custom setting requirements...'
+              className='w-full p-4 border border-neutral-200 bg-neutral-50/20 text-xs font-light text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors duration-300 rounded-none'
+              rows={4}
+            />
+          </div>
+
+          {/* Action buttons */}
+          <div className='flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-3 pt-8 border-t border-neutral-100/80'>
+            <button
+              onClick={resetAll}
+              className='px-6 py-3 border border-neutral-250 bg-white text-neutral-700 font-sans font-bold text-[10px] tracking-widest uppercase hover:bg-neutral-50 transition-colors duration-300 cursor-pointer'
+            >
+              Reset
+            </button>
+
+            <button
+              onClick={shareViaEmail}
+              className='inline-flex justify-center items-center gap-2 px-8 py-3 bg-neutral-900 text-white font-sans font-bold text-[10px] tracking-widest uppercase hover:bg-neutral-850 transition-colors duration-300 cursor-pointer shadow-2xs'
+            >
+              <span>send Inquiry</span>
+
+            </button>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
 }

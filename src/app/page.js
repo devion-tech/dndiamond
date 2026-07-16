@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
@@ -103,8 +103,7 @@ function MarqueeStrip({ dark }) {
 }
 
 function BestSellersGrid() {
-  const { bestProducts } = useSelector((state) => state.landing);
-  const gridRef = useRef(null);
+  const { bestProducts } = useSelector((state) => state.landing); const gridRef = useRef(null);
   useReveal(gridRef, { stagger: 0.1, y: 28, duration: 0.7, start: "top 82%" });
   return (
     <div
@@ -828,7 +827,7 @@ export default function Home() {
                 Best selling product
               </h2>
             </div>
-            <BestSellersGrid formatPrice={formatPrice} />
+            <BestSellersGrid />
           </div>
         </section>
 

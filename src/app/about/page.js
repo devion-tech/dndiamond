@@ -345,11 +345,11 @@ export default function AboutPage() {
 
                         {/* Title Header with inline oval image */}
                         <div className="w-full text-center space-y-4 js-about-hero-content">
-                            <h1 className="text-4xl sm:text-7xl lg:text-[90px] font-serif font-light text-neutral-900 tracking-[0.05em] leading-none uppercase flex flex-wrap justify-center items-center">
+                            <h1 className="text-3xl sm:text-6xl lg:text-[80px] font-serif font-light text-neutral-900 tracking-[0.05em] leading-none uppercase flex flex-wrap justify-center items-center">
                                 <span>DISC</span>
-                                <span className="inline-flex w-17 h-17  rounded-full overflow-hidden align-middle border border-neutral-300 mx-2 sm:mx-4 transform translate-y-[-2px] sm:translate-y-[-6px]">
+                                <span className="inline-flex w-17 h-17  rounded-full overflow-hidden align-middle border border-neutral-300 mx-2 sm:mx-4 transform translate-y-[-2px] sm:translate-y-[4px]">
                                     <img
-                                        src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600"
+                                        src="/products/atelier_interior.png"
                                         className="w-full h-full object-cover"
                                         alt="Discover"
                                     />
@@ -388,7 +388,7 @@ export default function AboutPage() {
                             <div className="col-span-1 md:col-span-6 flex justify-center">
                                 <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-[3/4] max-w-[380px] bg-neutral-100 shadow-sm">
                                     <img
-                                        src="/products/atelier_interior.png"
+                                        src="/products/"
                                         alt="Dainty gold necklaces display"
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     />
@@ -413,9 +413,8 @@ export default function AboutPage() {
 
                                 {/* Small horizontal close-up image */}
                                 <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-[16/10] max-w-[240px] bg-neutral-100 shadow-sm">
-                                    <span className="absolute top-3 left-3 text-[10px] font-mono text-neutral-500 z-10 font-medium">/02</span>
                                     <img
-                                        src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=600"
+                                        src="/products/necklace.avif"
                                         alt="Gold ring and necklace details close-up"
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     />

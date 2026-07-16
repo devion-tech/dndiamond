@@ -7,14 +7,16 @@ import {
   FaShoppingCart,
   FaHeartBroken,
 } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { fetchWishlist } from "@/redux/wishlistSlice";
 import { useStore } from "@/context/StoreContext";
 import Link from "next/link";
 
 export default function WishlistDrawer({ isOpen, onClose }) {
-  const { wishlist, toggleWishlist, calculatePrice, formatPrice } = useStore();
-
+  const { wishlist, toggleWishlist, calculatePrice, formatPrice, token } = useStore();
   const { getRegionDetails } = useStore();
   const { prefix } = getRegionDetails();
+  const dispatch = useDispatch();
 
   if (!isOpen) return null;
 
@@ -70,58 +72,62 @@ export default function WishlistDrawer({ isOpen, onClose }) {
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-              {wishlist && wishlist.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-4 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-all bg-white relative group"
-                >
-                  {item.image && item.image.includes("http") ? (
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="h-20 w-20 object-cover rounded-lg border border-slate-100 shrink-0"
-                    />
-                  ) : (
-                    <div className="h-20 w-20 bg-slate-50 border border-slate-100 rounded-lg shrink-0 flex items-center justify-center text-primary font-bold text-lg">
-                      {item.category.charAt(0)}
-                    </div>
-                  )}
+              {wishlist &&
+                wishlist?.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex gap-4 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-all bg-white relative group"
+                  >
+                    {item.image && item.image.includes("http") ? (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="h-20 w-20 object-cover rounded-lg border border-slate-100 shrink-0"
+                      />
+                    ) : (
+                      <div className="h-20 w-20 bg-slate-50 border border-slate-100 rounded-lg shrink-0 flex items-center justify-center text-primary font-bold text-lg">
+                        {item.category.charAt(0)}
+                      </div>
+                    )}
 
-                  <div className="flex-1 min-w-0 text-left flex flex-col justify-between">
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-800 truncate">
-                        {item.title}
-                      </h4>
-                      <p className="text-[10px] text-slate-400 font-semibold tracking-wider mt-0.5">
-                        Category: {item.category}
-                      </p>
+                    <div className="flex-1 min-w-0 text-left flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-800 truncate">
+                          {item.title}
+                        </h4>
+                        <p className="text-[10px] text-slate-400 font-semibold tracking-wider mt-0.5">
+                          Category: {item.category}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/product/${item.id}`}
+                          onClick={onClose}
+                          className="btn-gold px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <FaShoppingCart size={9} /> Move to Cart
+                        </Link>
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/product/${item.id}`}
-                        onClick={onClose}
-                        className="btn-gold px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                    <div className="flex flex-col justify-between items-end">
+                      <button
+                        onClick={async () => {
+                          await toggleWishlist({ product_id: item.id });
+                          dispatch(fetchWishlist({ token }));
+                        }}
+                        className="text-slate-400 hover:text-primary p-2 cursor-pointer transition-colors"
+                        aria-label="Remove item"
                       >
-                        <FaShoppingCart size={9} /> Move to Cart
-                      </Link>
+                        <FaTrash size={12} />
+                      </button>
+                      <span className="text-xs font-extrabold text-slate-900 mt-2">
+                        {`${prefix}${item?.display_price}`}
+                      </span>
                     </div>
                   </div>
-
-                  <div className="flex flex-col justify-between items-end">
-                    <button
-                      onClick={() => toggleWishlist(item)}
-                      className="text-slate-400 hover:text-primary p-2 cursor-pointer transition-colors"
-                      aria-label="Remove item"
-                    >
-                      <FaTrash size={12} />
-                    </button>
-                    <span className="text-xs font-extrabold text-slate-900 mt-2">
-                      {`${prefix}${item?.display_price}`}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </div>

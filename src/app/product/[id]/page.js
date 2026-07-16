@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail, clearSelectedProduct } from "@/redux/productSlice";
+import { fetchWishlist } from "@/redux/wishlistSlice";
 import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
@@ -95,7 +96,7 @@ export default function ProductDetail({ params }) {
   const resolvedParams = use(params);
   const productId = resolvedParams.id;
 
-  const { guestId, addToCart, toggleWishlist, isWishlisted, formatPrice } =
+  const { guestId, addToCart, toggleWishlist, isWishlisted, formatPrice, token } =
     useStore();
 
   const dispatch = useDispatch();
@@ -511,6 +512,7 @@ export default function ProductDetail({ params }) {
                     });
                     if (result?.payload?.success) {
                       dispatch(fetchProductDetail({ productId, guestId }));
+                      dispatch(fetchWishlist({ token }));
                     }
                   }}
                   className="p-2.5 rounded-full border border-slate-100 hover:border-slate-200 bg-white hover:bg-slate-50 active:scale-95 transition-all duration-200 shadow-xs flex items-center justify-center cursor-pointer group shrink-0"

@@ -196,6 +196,7 @@ export function StoreProvider({ children }) {
 
   // --- Wishlist Redux Wrapper ---
   const toggleWishlist = async (product) => {
+    console.log("product :>> ", product);
     const result = await dispatch(
       toggleWishlistThunk({
         ...product,

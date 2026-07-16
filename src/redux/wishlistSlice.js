@@ -124,7 +124,6 @@ const wishlistSlice = createSlice({
       })
       .addCase(toggleWishlist.fulfilled, (state, action) => {
         if (action.payload) {
-          state.items = action.payload;
           state.total = action.payload?.data?.count || 0;
         }
       });

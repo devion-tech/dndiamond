@@ -6,23 +6,21 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
 import toast from "react-hot-toast";
-import { toggleWishlist } from "@/redux/wishlistSlice";
 import { getAuthHeaders } from "@/common/token";
-import { useDispatch } from "react-redux";
 
 const colorMap = Object.fromEntries(
   colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
 );
 
 export default function ProductCard({ item }) {
-  const { token, formatPrice, addToCart } = useStore();
+  const { token, formatPrice, addToCart, isWishlisted, toggleWishlist } =
+    useStore();
   const product = useMemo(() => {
     const colors = item?.options?.filter((opt) => opt.name === "colors") || [];
     return {
       id: item?._id,
       title: item?.name,
       slug: item?.slug,
-      is_wishlist: item?.is_wishlist || false,
       colors: colors && colors.length > 0 ? colors[0].values : [],
       image:
         item?.images && item?.images[0]
@@ -33,7 +31,7 @@ export default function ProductCard({ item }) {
     };
   }, [item]);
   const [isToggling, setIsToggling] = useState(false);
-  const [wishlisted, setWishlisted] = useState(product?.is_wishlist);
+  const wishlisted = isWishlisted(product?.id);
   const [hasError, setHasError] = useState(false);
 
   const colorList = product?.colors || [];
@@ -49,7 +47,6 @@ export default function ProductCard({ item }) {
     if (name.includes("platinum")) return "#E5E4E2";
     return colorMap[name] || "#EDD680";
   };
-  const dispatch = useDispatch();
 
   const handleColorSelect = (e, color) => {
     e.preventDefault();
@@ -100,28 +97,18 @@ export default function ProductCard({ item }) {
       return;
     }
 
-    const newWishlistedState = !wishlisted;
-
-    setWishlisted(newWishlistedState);
     setIsToggling(true);
 
     try {
-      const response = await dispatch(
-        toggleWishlist({
-          product_id: product?.id,
-        }),
-      );
-      if (!response?.payload?.success) {
-        setWishlisted(wishlisted);
-      }
+      const response = await toggleWishlist({
+        product_id: product?.id,
+      });
       if (response?.payload?.success) {
         toast.success(response?.payload?.message);
       } else {
         toast.error(response?.payload?.message);
       }
     } catch (error) {
-      setWishlisted(wishlisted);
-
       toast.error(error.message || "Failed to update wishlist.");
     } finally {
       setIsToggling(false);
@@ -195,10 +182,11 @@ export default function ProductCard({ item }) {
                     key={index}
                     onClick={(e) => handleColorSelect(e, color)}
                     disabled={isDisabled}
-                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
+                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${
+                      isSelected
                         ? "border-neutral-900 scale-110"
                         : "border-neutral-300 hover:border-neutral-500"
-                      } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     style={{ backgroundColor: hex }}
                     title={val}
                     aria-label={val}

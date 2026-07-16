@@ -15,7 +15,6 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail, clearSelectedProduct } from "@/redux/productSlice";
-import { fetchWishlist } from "@/redux/wishlistSlice";
 import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
@@ -96,7 +95,7 @@ export default function ProductDetail({ params }) {
   const resolvedParams = use(params);
   const productId = resolvedParams.id;
 
-  const { guestId, addToCart, toggleWishlist, isWishlisted, formatPrice, token } =
+  const { guestId, addToCart, toggleWishlist, isWishlisted, formatPrice } =
     useStore();
 
   const dispatch = useDispatch();
@@ -132,7 +131,6 @@ export default function ProductDetail({ params }) {
         id: p._id,
         title: p.name,
         slug: p.slug,
-        is_wishlist: p.is_wishlist,
         category: resolveCategoryName(p.category_id, p.subcategory_id),
         image:
           p.images && p.images[0]
@@ -286,8 +284,6 @@ export default function ProductDetail({ params }) {
       </Layout>
     );
   }
-
-  // const wishlisted = isWishlisted(product.id);
 
   const handleAddToCart = async () => {
     try {
@@ -507,22 +503,18 @@ export default function ProductDetail({ params }) {
                 </h1>
                 <button
                   onClick={async () => {
-                    const result = await toggleWishlist({
+                    await toggleWishlist({
                       product_id: product?.id,
                     });
-                    if (result?.payload?.success) {
-                      dispatch(fetchProductDetail({ productId, guestId }));
-                      dispatch(fetchWishlist({ token }));
-                    }
                   }}
                   className="p-2.5 rounded-full border border-slate-100 hover:border-slate-200 bg-white hover:bg-slate-50 active:scale-95 transition-all duration-200 shadow-xs flex items-center justify-center cursor-pointer group shrink-0"
                   aria-label={
-                    product?.is_wishlist
+                    isWishlisted(product?.id)
                       ? "Remove from wishlist"
                       : "Add to wishlist"
                   }
                 >
-                  {product?.is_wishlist ? (
+                  {isWishlisted(product?.id) ? (
                     <FaHeart
                       className="text-rose-500 scale-110 transition-transform duration-200"
                       size={20}

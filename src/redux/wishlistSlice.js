@@ -46,15 +46,8 @@ export const toggleWishlist = createAsyncThunk(
 
 export const fetchWishlist = createAsyncThunk(
   "wishlist/fetchWishlist",
-  async ({ token }) => {
-    if (!token) {
-      // Load guest local wishlist
-      if (typeof window !== "undefined") {
-        const local = localStorage.getItem("praya_wishlist");
-        return local ? JSON.parse(local) : [];
-      }
-      return [];
-    }
+  async () => {
+    console.log("called");
     const data = await apiRequest("/api/wishlist/?page=1&limit=50");
     return data.data || [];
   },

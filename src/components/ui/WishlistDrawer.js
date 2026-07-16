@@ -7,16 +7,13 @@ import {
   FaShoppingCart,
   FaHeartBroken,
 } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { fetchWishlist } from "@/redux/wishlistSlice";
 import { useStore } from "@/context/StoreContext";
 import Link from "next/link";
 
 export default function WishlistDrawer({ isOpen, onClose }) {
-  const { wishlist, toggleWishlist, calculatePrice, formatPrice, token } = useStore();
+  const { wishlist, toggleWishlist, calculatePrice, formatPrice } = useStore();
   const { getRegionDetails } = useStore();
   const { prefix } = getRegionDetails();
-  const dispatch = useDispatch();
 
   if (!isOpen) return null;
 
@@ -113,10 +110,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
 
                     <div className="flex flex-col justify-between items-end">
                       <button
-                        onClick={async () => {
-                          await toggleWishlist({ product_id: item.id });
-                          dispatch(fetchWishlist({ token }));
-                        }}
+                        onClick={() => toggleWishlist({ product_id: item.id })}
                         className="text-slate-400 hover:text-primary p-2 cursor-pointer transition-colors"
                         aria-label="Remove item"
                       >

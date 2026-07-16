@@ -1,29 +1,14 @@
-import { getAuthHeaders } from "@/common/token";
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
 export const fetchMainPage = createAsyncThunk(
   "landing/fetchMainPage",
   async (_, { rejectWithValue }) => {
     try {
-      const headers = getAuthHeaders();
-      const res = await fetch(`${baseUrl}/api/user/mainPage`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        return rejectWithValue(
-          data.message || "Failed to fetch main page data",
-        );
-      }
+      const data = await apiRequest("/api/user/mainPage");
       return data.data || [];
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to connect to server");
+      return rejectWithValue(error.message);
     }
   },
 );

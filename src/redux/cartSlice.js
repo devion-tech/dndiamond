@@ -1,4 +1,4 @@
-import { getAuthHeaders } from "@/common/token";
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const resolvePrice = (item, goldPricePerGram = 75.0) => {
@@ -30,24 +30,12 @@ const resolvePrice = (item, goldPricePerGram = 75.0) => {
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async ({ guestId }) => {
-    const headers = getAuthHeaders();
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    let url = `${baseUrl}/api/cart/getCart`;
-    const token = headers["Authorization"]
-      ? headers["Authorization"].split(" ")[1]
-      : null;
-    if (!headers["Authorization"] || token === "null") {
+    let url = "/api/cart/getCart";
+    const token = typeof window !== "undefined" ? localStorage.getItem("praya_token") : null;
+    if (!token || token === "null") {
       url += `?guest_id=${guestId}`;
     }
-    const res = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        ...headers,
-      },
-    });
-    if (!res.ok) throw new Error("Failed to fetch cart");
-    const data = await res.json();
+    const data = await apiRequest(url);
     return data.data || [];
   },
 );
@@ -55,12 +43,7 @@ export const fetchCart = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ guestId, productId, quantity, selectedOptions }, { dispatch }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = getAuthHeaders();
-    const token = headers["Authorization"]
-      ? headers["Authorization"].split(" ")[1]
-      : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("praya_token") : null;
     const body = {
       product_id: productId,
       quantity,
@@ -70,83 +53,54 @@ export const addToCart = createAsyncThunk(
       body.guest_id = guestId;
     }
 
-    const res = await fetch(`${baseUrl}/api/cart/`, {
+    await apiRequest("/api/cart/", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...headers,
-      },
       body: JSON.stringify(body),
     });
-    if (res.ok) {
-      dispatch(fetchCart({ guestId }));
-    }
+    dispatch(fetchCart({ guestId }));
   },
 );
 
 export const updateCart = createAsyncThunk(
   "cart/updateCart",
   async ({ guestId, itemId, quantity }, { dispatch }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = getAuthHeaders();
-
+    const token = typeof window !== "undefined" ? localStorage.getItem("praya_token") : null;
     const body = { item_id: itemId, quantity };
-    const token = headers["Authorization"]
-      ? headers["Authorization"].split(" ")[1]
-      : null;
     if (!token || token === "null") {
       body.guest_id = guestId;
     }
 
-    const res = await fetch(`${baseUrl}/api/cart/updateCart`, {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-        ...headers,
-      },
+    await apiRequest("/api/cart/updateCart", {
+      method: "PUT",
       body: JSON.stringify(body),
     });
-    if (res.ok) {
-      dispatch(fetchCart({ guestId, token }));
-    }
+    dispatch(fetchCart({ guestId, token }));
   },
 );
 
 export const deleteCart = createAsyncThunk(
   "cart/deleteCart",
   async ({ guestId, itemId, token }, { dispatch }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
     const body = { item_id: itemId };
     if (!token) body.guest_id = guestId;
 
-    const res = await fetch(`${baseUrl}/api/cart/deleteCart`, {
+    await apiRequest("/api/cart/deleteCart", {
       method: "POST",
-      headers,
       body: JSON.stringify(body),
     });
-    if (res.ok) {
-      dispatch(fetchCart({ guestId, token }));
-    }
+    dispatch(fetchCart({ guestId, token }));
   },
 );
 
 export const clearCart = createAsyncThunk(
   "cart/clearCart",
   async ({ guestId, token }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    let url = `${baseUrl}/api/cart/clear`;
+    let url = "/api/cart/clear";
     if (!token && guestId) url += `?guest_id=${guestId}`;
 
-    await fetch(url, { method: "POST", headers });
+    await apiRequest(url, {
+      method: "POST",
+    });
     return [];
   },
 );
@@ -154,14 +108,8 @@ export const clearCart = createAsyncThunk(
 export const mergeCart = createAsyncThunk(
   "cart/mergeCart",
   async ({ guestId, token }, { dispatch }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    await fetch(`${baseUrl}/api/cart/merge`, {
+    await apiRequest("/api/cart/merge", {
       method: "POST",
-      headers,
       body: JSON.stringify({ guest_id: guestId }),
     });
     dispatch(fetchCart({ guestId, token }));

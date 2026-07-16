@@ -1,3 +1,4 @@
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const getOrGenerateGuestId = () => {
@@ -27,27 +28,23 @@ export const initializeAuth = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ email, password }, { rejectWithValue }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
     try {
-      const res = await fetch(`${baseUrl}/api/user/login`, {
+      const data = await apiRequest("/api/user/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (data.success && data?.data?.token) {
+      if (data?.data?.token) {
         localStorage.setItem("praya_token", data.data.token);
         const userObj = data.data.user || {
           name: data.data.name || "User",
           email,
         };
         localStorage.setItem("praya_user", JSON.stringify(userObj));
-        return { token: data?.data?.token, user: userObj };
+        return { token: data.data.token, user: userObj };
       }
-      return rejectWithValue(data.message || "Invalid credentials");
+      return rejectWithValue("Invalid credentials");
     } catch (err) {
-      return rejectWithValue("Connection error");
+      return rejectWithValue(err.message || "Connection error");
     }
   },
 );
@@ -55,19 +52,14 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   "auth/register",
   async ({ name, email, phone, password }, { rejectWithValue }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
     try {
-      const res = await fetch(`${baseUrl}/api/user`, {
+      const data = await apiRequest("/api/user", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, phone, password }),
       });
-      const data = await res.json();
-      if (data.success) return data;
-      return rejectWithValue(data.message || "Registration failed");
+      return data;
     } catch (err) {
-      return rejectWithValue("Connection error");
+      return rejectWithValue(err.message || "Registration failed");
     }
   },
 );
@@ -81,8 +73,15 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     successMessage: null,
+    authModalOpen: false,
   },
   reducers: {
+    openModal(state) {
+      state.authModalOpen = true;
+    },
+    closeModal(state) {
+      state.authModalOpen = false;
+    },
     logoutUser(state) {
       state.token = null;
       state.user = null;
@@ -136,5 +135,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logoutUser, clearAuthMessages } = authSlice.actions;
+export const { logoutUser, clearAuthMessages, openModal, closeModal } = authSlice.actions;
 export default authSlice.reducer;

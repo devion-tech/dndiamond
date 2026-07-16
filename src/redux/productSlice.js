@@ -1,13 +1,9 @@
-import { getAuthHeaders } from "@/common/token";
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (params = {}) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = getAuthHeaders();
-
     const body = {
       page: params.page || 1,
       limit: params.limit || 10,
@@ -32,19 +28,10 @@ export const fetchProducts = createAsyncThunk(
       body.filters = params.filters;
     }
 
-    const response = await fetch(`${baseUrl}/api/product/getProduct`, {
+    const data = await apiRequest("/api/product/getProduct", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...headers,
-      },
       body: JSON.stringify(body),
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch products");
-    }
-    const data = await response.json();
     return data.data || { products: [], pagination: {} };
   },
 );
@@ -52,25 +39,10 @@ export const fetchProducts = createAsyncThunk(
 export const fetchProductDetail = createAsyncThunk(
   "products/fetchProductDetail",
   async ({ productId, guestId }) => {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const headers = getAuthHeaders();
-
-    const response = await fetch(
-      `${baseUrl}/api/product/${productId}?guestId=${guestId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
-      },
+    const data = await apiRequest(
+      `/api/product/${productId}?guestId=${guestId}`,
     );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch product details");
-    }
-    const data = await response.json();
-    if (data && data.success && data.data && data.data.success !== false) {
+    if (data && data.data && data.data.success !== false) {
       return data.data;
     }
     throw new Error("Product not found");

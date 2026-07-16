@@ -1,14 +1,10 @@
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchCategories = createAsyncThunk(
     "categories/fetchCategories",
     async () => {
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-        const response = await fetch(`${baseUrl}/api/category/`);
-        if (!response.ok) {
-            throw new Error("Failed to fetch categories");
-        }
-        const data = await response.json();
+        const data = await apiRequest("/api/category/");
         return data.data;
     }
 );

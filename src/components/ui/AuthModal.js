@@ -34,7 +34,7 @@ const registerSchema = yup.object({
 });
 
 function AuthModal() {
-  const { loginUser, registerUser, authModalOpen, setAuthModalOpen } = useStore();
+  const { loginUser, registerUser, authModalOpen, closeModal } = useStore();
   const [authError, setAuthError] = useState("");
   const [authMode, setAuthMode] = useState("login");
   const [authSuccess, setAuthSuccess] = useState("");
@@ -87,7 +87,7 @@ function AuthModal() {
       if (data && data.success) {
         setAuthSuccess("Vault access granted. Welcome.");
         setTimeout(() => {
-          setAuthModalOpen(false);
+          closeModal(false);
           setAuthSuccess("");
           setFields({ email: "", password: "", name: "", phone: "" });
         }, 1000);
@@ -157,7 +157,7 @@ function AuthModal() {
       {authModalOpen && (
         <>
           <div
-            onClick={() => setAuthModalOpen(false)}
+            onClick={() => closeModal(false)}
             className="fixed inset-0 bg-neutral-900/40 backdrop-blur-xs z-50 transition-opacity duration-300"
           />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md p-8 shadow-2xl z-50 rounded-xs border border-neutral-100 text-left animate-fade-in font-sans">
@@ -166,7 +166,7 @@ function AuthModal() {
                 {authMode === "login" ? "Sign In" : "Register Profile"}
               </span>
               <button
-                onClick={() => setAuthModalOpen(false)}
+                onClick={() => closeModal(false)}
                 className="text-neutral-400 hover:text-neutral-900 transition-colors p-1"
                 aria-label="Close Auth Modal"
               >

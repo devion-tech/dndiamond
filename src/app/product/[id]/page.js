@@ -111,8 +111,6 @@ export default function ProductDetail({ params }) {
   const [successAdded, setSuccessAdded] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
-  const [similarProducts, setSimilarProducts] = useState([]);
-  const [loadingSimilar, setLoadingSimilar] = useState(false);
 
   // Fetch product details on mount/param change
   useEffect(() => {
@@ -133,6 +131,7 @@ export default function ProductDetail({ params }) {
         id: p._id,
         title: p.name,
         slug: p.slug,
+        is_wishlist: p.is_wishlist,
         category: resolveCategoryName(p.category_id, p.subcategory_id),
         image:
           p.images && p.images[0]
@@ -287,7 +286,7 @@ export default function ProductDetail({ params }) {
     );
   }
 
-  const wishlisted = isWishlisted(product.id);
+  // const wishlisted = isWishlisted(product.id);
 
   const handleAddToCart = async () => {
     try {
@@ -506,13 +505,22 @@ export default function ProductDetail({ params }) {
                   {product.title}
                 </h1>
                 <button
-                  onClick={() => toggleWishlist(product)}
+                  onClick={async () => {
+                    const result = await toggleWishlist({
+                      product_id: product?.id,
+                    });
+                    if (result?.payload?.success) {
+                      dispatch(fetchProductDetail({ productId, guestId }));
+                    }
+                  }}
                   className="p-2.5 rounded-full border border-slate-100 hover:border-slate-200 bg-white hover:bg-slate-50 active:scale-95 transition-all duration-200 shadow-xs flex items-center justify-center cursor-pointer group shrink-0"
                   aria-label={
-                    wishlisted ? "Remove from wishlist" : "Add to wishlist"
+                    product?.is_wishlist
+                      ? "Remove from wishlist"
+                      : "Add to wishlist"
                   }
                 >
-                  {wishlisted ? (
+                  {product?.is_wishlist ? (
                     <FaHeart
                       className="text-rose-500 scale-110 transition-transform duration-200"
                       size={20}

@@ -12,6 +12,8 @@ import {
   loginUser as loginUserThunk,
   registerUser as registerUserThunk,
   logoutUser as logoutUserThunk,
+  openModal as openModalAction,
+  closeModal as closeModalAction,
 } from "@/redux/authSlice";
 import {
   fetchCart,
@@ -38,10 +40,10 @@ export function StoreProvider({ children }) {
   const [inquiries, setInquiries] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [region, setRegion] = useState("HK"); // "HK", "AU", "NZ"
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-
   // Redux bindings
-  const { token, user, guestId } = useSelector((state) => state.auth);
+  const { token, user, guestId, authModalOpen } = useSelector(
+    (state) => state.auth,
+  );
   const cart = useSelector((state) => state.cart);
   const wishlist = useSelector((state) => state.wishlist.items);
   const wishlistTotal = useSelector((state) => state.wishlist.total);
@@ -194,12 +196,13 @@ export function StoreProvider({ children }) {
 
   // --- Wishlist Redux Wrapper ---
   const toggleWishlist = async (product) => {
-    dispatch(
+    const result = await dispatch(
       toggleWishlistThunk({
-        product,
+        ...product,
         token,
       }),
     );
+    return result;
   };
 
   const isWishlisted = (id) => wishlist?.some((item) => item.id === id);
@@ -289,6 +292,15 @@ export function StoreProvider({ children }) {
     dispatch(fetchWishlist({ token: null }));
   };
 
+  // --- Auth Modal Actions ---
+  const openModal = () => {
+    dispatch(openModalAction());
+  };
+
+  const closeModal = () => {
+    dispatch(closeModalAction());
+  };
+
   // --- Coupon Actions ---
   const applyCouponCode = (code) => {
     const coupon = coupons.find(
@@ -359,7 +371,8 @@ export function StoreProvider({ children }) {
         user,
         token,
         authModalOpen,
-        setAuthModalOpen,
+        openModal,
+        closeModal,
         saveRegion,
         getRegionDetails,
         getConvertedPrice,

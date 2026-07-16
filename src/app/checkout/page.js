@@ -110,7 +110,6 @@ export default function CheckoutPage() {
     getTaxAmount,
     formatPrice,
     token,
-    setAuthModalOpen,
   } = useStore();
 
   const {

@@ -39,7 +39,7 @@ export default function CartDrawer({ isOpen, onClose }) {
     formatConvertedPrice,
     getTaxAmount,
     token,
-    setAuthModalOpen,
+    openModal,
   } = useStore();
 
   const [promoCode, setPromoCode] = useState("");
@@ -1589,7 +1589,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                   onClick={() => {
                     if (!token) {
                       onClose();
-                      setAuthModalOpen(true);
+                      openModal();
                       return;
                     }
                     router.push("/checkout");

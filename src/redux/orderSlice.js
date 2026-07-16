@@ -1,31 +1,17 @@
-import { getAuthHeaders } from "@/common/token";
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-const baseUrl =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
 export const createOrder = createAsyncThunk(
   "order/createOrder",
   async ({ address_id, promo_code, notes }, { rejectWithValue }) => {
     try {
-      const headers = getAuthHeaders();
-      const res = await fetch(`${baseUrl}/api/order/`, {
+      const data = await apiRequest("/api/order/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
         body: JSON.stringify({ address_id, promo_code, notes }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        return rejectWithValue(data.message || "Failed to place order");
-      }
       return data.data;
     } catch (error) {
-      return rejectWithValue(
-        error.message || "Failed to connect to server",
-      );
+      return rejectWithValue(error.message);
     }
   },
 );

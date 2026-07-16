@@ -1,30 +1,15 @@
-import { getAuthHeaders } from "@/common/token";
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-const baseUrl =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
 export const fetchAddresses = createAsyncThunk(
   "address/fetchAddresses",
   async (_, { rejectWithValue }) => {
     try {
-      const headers = getAuthHeaders();
-      const res = await fetch(`${baseUrl}/api/address`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        return rejectWithValue(data.message || "Failed to fetch addresses");
-      }
-      return data.data || [];
-    } catch (error) {
-      return rejectWithValue(
-        error.message || "Failed to connect to server",
-      );
+      const data = await apiRequest("/api/address");
+
+      return data.data;
+    } catch (err) {
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -33,24 +18,13 @@ export const addAddress = createAsyncThunk(
   "address/addAddress",
   async (addressData, { rejectWithValue }) => {
     try {
-      const headers = getAuthHeaders();
-      const res = await fetch(`${baseUrl}/api/address`, {
+      const data = await apiRequest("/api/address", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
         body: JSON.stringify(addressData),
       });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        return rejectWithValue(data.message || "Failed to save address");
-      }
       return data.data;
     } catch (error) {
-      return rejectWithValue(
-        error.message || "Failed to connect to server",
-      );
+      return rejectWithValue(error.message);
     }
   },
 );
@@ -59,24 +33,13 @@ export const updateAddress = createAsyncThunk(
   "address/updateAddress",
   async ({ id, addressData }, { rejectWithValue }) => {
     try {
-      const headers = getAuthHeaders();
-      const res = await fetch(`${baseUrl}/api/address/${id}`, {
+      const data = await apiRequest(`/api/address/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
         body: JSON.stringify(addressData),
       });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        return rejectWithValue(data.message || "Failed to update address");
-      }
       return data.data;
     } catch (error) {
-      return rejectWithValue(
-        error.message || "Failed to connect to server",
-      );
+      return rejectWithValue(error.message);
     }
   },
 );
@@ -85,23 +48,12 @@ export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
   async (id, { rejectWithValue }) => {
     try {
-      const headers = getAuthHeaders();
-      const res = await fetch(`${baseUrl}/api/address/${id}`, {
+      await apiRequest(`/api/address/${id}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
       });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        return rejectWithValue(data.message || "Failed to delete address");
-      }
       return id;
     } catch (error) {
-      return rejectWithValue(
-        error.message || "Failed to connect to server",
-      );
+      return rejectWithValue(error.message);
     }
   },
 );

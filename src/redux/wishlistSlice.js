@@ -1,4 +1,4 @@
-import { getAuthHeaders } from "@/common/token";
+import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const resolveCategoryName = (categoryField, subcategoryField) => {
@@ -31,22 +31,13 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
 export const toggleWishlist = createAsyncThunk(
   "wishlist/toggleWishlist",
   async ({ product_id }, { dispatch }) => {
-    const headers = getAuthHeaders();
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+    console.log("product_id", product_id);
     try {
-      const res = await fetch(`${baseUrl}/api/wishlist/`, {
+      const data = await apiRequest("/api/wishlist/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
         body: JSON.stringify({ product_id: product_id }),
       });
-      if (!res.ok) {
-        throw new Error(`Failed to toggle wishlist: ${res.status}`);
-      }
-      return await res.json();
+      return data;
     } catch (error) {
       throw error;
     }
@@ -64,36 +55,16 @@ export const fetchWishlist = createAsyncThunk(
       }
       return [];
     }
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-    const res = await fetch(`${baseUrl}/api/wishlist/?page=1&limit=50`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error("Failed to fetch wishlist");
-    const data = await res.json();
+    const data = await apiRequest("/api/wishlist/?page=1&limit=50");
     return data.data || [];
   },
 );
 
 export const toggleWishlistApi = async ({ product }) => {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
-  const headers = getAuthHeaders();
-  const res = await fetch(`${baseUrl}/api/wishlist/`, {
+  const data = await apiRequest("/api/wishlist/", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
     body: JSON.stringify({ product_id: product.id }),
   });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || "Failed to update wishlist.");
-  }
-
   return data;
 };
 

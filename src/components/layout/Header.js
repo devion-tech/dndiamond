@@ -88,7 +88,8 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
     registerUser,
     logoutUser,
     authModalOpen,
-    setAuthModalOpen,
+    openModal,
+    closeModal,
   } = useStore();
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -142,7 +143,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
     // Developer placeholder: User mentioned they will setup login when clicked
     // E.g., if (tab === "natural" && !user) {
     //   setAuthMode("login");
-    //   setAuthModalOpen(true);
+    //   openModal();
     // }
   };
 
@@ -169,7 +170,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
       if (data && data.success) {
         setAuthSuccess("Vault access granted. Welcome.");
         setTimeout(() => {
-          setAuthModalOpen(false);
+          closeModal();
           setAuthSuccess("");
           setEmail("");
           setPassword("");
@@ -507,7 +508,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               onClick={() => {
                 if (!user) {
                   setAuthMode("login");
-                  setAuthModalOpen(true);
+                  openModal();
                 }
               }}
               className="p-2 text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer"
@@ -579,7 +580,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <button
                     onClick={() => {
                       setAuthMode("login");
-                      setAuthModalOpen(true);
+                      openModal();
                     }}
                     className="w-full text-left rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-800 hover:bg-neutral-50 transition-all uppercase tracking-widest cursor-pointer"
                   >
@@ -588,7 +589,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <button
                     onClick={() => {
                       setAuthMode("register");
-                      setAuthModalOpen(true);
+                      openModal();
                     }}
                     className="w-full text-left mt-1 rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-500 hover:bg-neutral-50 transition-all uppercase tracking-widest cursor-pointer"
                   >
@@ -808,7 +809,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     <button
                       onClick={() => {
                         setAuthMode("login");
-                        setAuthModalOpen(true);
+                        openModal();
                         setMobileMenuOpen(false);
                       }}
                       className="text-[10px] font-bold text-neutral-800 uppercase tracking-widest cursor-pointer"
@@ -818,7 +819,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     <button
                       onClick={() => {
                         setAuthMode("register");
-                        setAuthModalOpen(true);
+                        openModal();
                         setMobileMenuOpen(false);
                       }}
                       className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest cursor-pointer"

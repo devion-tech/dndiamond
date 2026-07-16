@@ -303,10 +303,9 @@ export default function CheckoutPage() {
   };
 
   const inputClass = (fieldName) =>
-    `w-full bg-slate-50 border rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-1 transition-all text-slate-800 font-medium ${
-      fieldErrors[fieldName]
-        ? "border-red-500 focus:ring-red-500"
-        : "border-slate-200 focus:ring-neutral-900 focus:bg-white"
+    `w-full bg-slate-50 border rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-1 transition-all text-slate-800 font-medium ${fieldErrors[fieldName]
+      ? "border-red-500 focus:ring-red-500"
+      : "border-slate-200 focus:ring-neutral-900 focus:bg-white"
     }`;
 
   // If cart is empty
@@ -387,11 +386,10 @@ export default function CheckoutPage() {
                             {addresses.map((addr) => (
                               <label
                                 key={addr._id}
-                                className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
-                                  selectedAddressId === addr._id
-                                    ? "border-neutral-900 bg-neutral-50"
-                                    : "border-slate-200 hover:border-slate-400 bg-white"
-                                }`}
+                                className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedAddressId === addr._id
+                                  ? "border-neutral-900 bg-neutral-50"
+                                  : "border-slate-200 hover:border-slate-400 bg-white"
+                                  }`}
                               >
                                 <input
                                   type="radio"
@@ -424,11 +422,10 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="flex flex-col items-center gap-2 shrink-0">
                                   <FaMapMarkerAlt
-                                    className={`text-sm ${
-                                      selectedAddressId === addr._id
-                                        ? "text-neutral-900"
-                                        : "text-slate-300"
-                                    }`}
+                                    className={`text-sm ${selectedAddressId === addr._id
+                                      ? "text-neutral-900"
+                                      : "text-slate-300"
+                                      }`}
                                   />
                                   <div className="flex gap-1">
                                     <button
@@ -714,11 +711,10 @@ export default function CheckoutPage() {
                               type="button"
                               onClick={handleSaveAddress}
                               disabled={savingAddress}
-                              className={`w-full py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer transition-all border-0 ${
-                                savingAddress
-                                  ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                  : "bg-neutral-900 text-white hover:bg-neutral-800"
-                              }`}
+                              className={`w-full py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer transition-all border-0 ${savingAddress
+                                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                                : "bg-neutral-900 text-white hover:bg-neutral-800"
+                                }`}
                             >
                               {savingAddress ? (
                                 <>
@@ -743,33 +739,32 @@ export default function CheckoutPage() {
                   </div>
 
                   {/* Confirm order button */}
-                {!showAddressForm && selectedAddressId && (
-                <button
-                  type="submit"
-                  disabled={addressesLoading || !selectedAddressId || placingOrder}
-                  className={`w-full py-4.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all border-0 ${
-                    addressesLoading || !selectedAddressId || placingOrder
-                      ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                      : "bg-neutral-900 text-white hover:bg-neutral-800 hover:scale-[1.01]"
-                  }`}
-                >
-                  {placingOrder ? (
-                    <>
-                      <div className="h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Placing Order...
-                    </>
-                  ) : (
-                    <>
-                      <FaLock />{" "}
-                      {addressesLoading
-                        ? "Loading..."
-                        : `Confirm inquiry & place order • ${formatConvertedPrice(
-                            getGrandTotal(),
-                          )}`}
-                    </>
+                  {!showAddressForm && selectedAddressId && (
+                    <button
+                      type="submit"
+                      disabled={addressesLoading || !selectedAddressId || placingOrder}
+                      className={`w-full py-4.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all border-0 ${addressesLoading || !selectedAddressId || placingOrder
+                        ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                        : "bg-neutral-900 text-white hover:bg-neutral-800 hover:scale-[1.01]"
+                        }`}
+                    >
+                      {placingOrder ? (
+                        <>
+                          <div className="h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Placing Order...
+                        </>
+                      ) : (
+                        <>
+                          <FaLock />{" "}
+                          {addressesLoading
+                            ? "Loading..."
+                            : `Confirm inquiry & place order • ${formatConvertedPrice(
+                              getGrandTotal(),
+                            )}`}
+                        </>
+                      )}
+                    </button>
                   )}
-                </button>
-                )}
                 </form>
               </div>
 

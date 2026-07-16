@@ -377,7 +377,13 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 </div>
               </div>
             </div>
-
+            {/* Diamond */}
+            <Link
+              href="/diamonds"
+              className="text-[11px] sm:text-xs xl:text-xs font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
+            >
+              Diamond
+            </Link>
 
 
             {/* About Submenu Dropdown */}
@@ -430,13 +436,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               </div>
             </div>
 
-            {/* Contact */}
-            <Link
-              href="/contact"
-              className="text-[11px] sm:text-xs xl:text-xs font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
-            >
-              Contact
-            </Link>
+
           </nav>
         </div>
         {/* Center: Brand Logo Text */}

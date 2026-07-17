@@ -7,6 +7,7 @@ import productReducer from "./productSlice";
 import addressReducer from "./addressSlice";
 import orderReducer from "./orderSlice";
 import landingReducer from "./landingSlice";
+import inquiryReducer from "./inquirySlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     address: addressReducer,
     order: orderReducer,
     landing: landingReducer,
+    inquiry: inquiryReducer,
   },
 });

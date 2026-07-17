@@ -119,9 +119,9 @@ export default function ProductCard({ item }) {
     <>
       <Link
         href={`/product/${product?.id || product?._id || product?.slug}`}
-        className="group relative flex flex-col justify-between bg-white overflow-hidden transition-all duration-500 h-full p-4 hover:shadow-xs"
+        className="group relative flex flex-col justify-between bg-white overflow-hidden transition-all duration-500 h-full  hover:shadow-xs"
       >
-        <div className="relative aspect-square w-full  flex items-center justify-center overflow-hidden rounded-xs p-8">
+        <div className="relative aspect-square w-full  flex items-center justify-center overflow-hidden rounded-xs">
           <button
             onClick={handleWishlistClick}
             disabled={isToggling}
@@ -152,7 +152,7 @@ export default function ProductCard({ item }) {
           </button> */}
         </div>
 
-        <div className="pt-5 text-center flex flex-col items-center space-y-1.5 flex-1 justify-end">
+        <div className="pt-5 text-center flex flex-col items-center space-y-1.5 flex-1 justify-end p-4">
           <h3 className="font-serif text-xs md:text-sm font-medium text-neutral-800 tracking-wider uppercase group-hover:text-neutral-950 transition-colors line-clamp-1">
             {product?.title}
           </h3>
@@ -182,11 +182,10 @@ export default function ProductCard({ item }) {
                     key={index}
                     onClick={(e) => handleColorSelect(e, color)}
                     disabled={isDisabled}
-                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${
-                      isSelected
+                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
                         ? "border-neutral-900 scale-110"
                         : "border-neutral-300 hover:border-neutral-500"
-                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                      } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     style={{ backgroundColor: hex }}
                     title={val}
                     aria-label={val}

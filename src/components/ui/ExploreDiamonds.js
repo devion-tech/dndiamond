@@ -16,14 +16,14 @@ const SHAPES = [
     { name: "HEART", file: "heart.avif", val: "Heart" },
 ];
 
-export default function ExploreDiamonds() {
+export default function sExploreDiamonds() {
     return (
-        <section className="py-20 sm:py-28">
-            <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
+        <section className="py-10">
+            <div className="mx-auto  px-6 sm:px-10 lg:px-16">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
                     {/* Left Column: Jewelry Box Art Image */}
                     <div className="lg:col-span-5 flex justify-center w-full">
-                        <div className="relative aspect-square w-full max-w-[500px] overflow-hidden bg-neutral-50 border border-neutral-100 shadow-xs group">
+                        <div className="relative aspect-square w-full  overflow-hidden bg-neutral-50 border border-neutral-100 shadow-xs group">
                             <img
                                 src="/about/about-diamond.png"
                                 alt="Exquisite loose diamonds in a luxury box"
@@ -59,7 +59,7 @@ export default function ExploreDiamonds() {
                                     className="group flex flex-col items-center justify-between space-y-3"
                                 >
                                     {/* Icon Container with subtle background hover */}
-                                    <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-neutral-50 hover:bg-neutral-100/50 flex items-center justify-center transition-all duration-500 overflow-hidden">
+                                    <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-white  flex items-center justify-center transition-all duration-500 overflow-hidden">
                                         <img
                                             src={`/diamonds/${shape.file}`}
                                             alt={`${shape.val} Cut Diamond`}

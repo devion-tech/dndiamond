@@ -322,7 +322,7 @@ function CatalogContent() {
             )}
           </>
         ) : (
-          <div className="flex flex-col justify-center items-center text-center py-32 px-4 bg-white border border-neutral-100 rounded-sm space-y-5 max-w-lg mx-auto">
+          <div className="flex flex-col justify-center items-center text-center py-32 px-4 border border-neutral-100 rounded-sm space-y-5 max-w-lg mx-auto">
             <span className="font-serif italic text-3xl text-neutral-300">
               ✦
             </span>

@@ -217,17 +217,11 @@ export default function DiamondProductPage() {
 
   return (
     <Layout>
-      <div className='mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-12 relative'>
+      <div className='mx-auto w-full  px-4 sm:px-6 lg:px-8'>
         {/* Header */}
         <div className="text-center space-y-2 ">
-          <span className="text-[9px] text-neutral-400 font-extrabold tracking-[0.3em] uppercase">
-            Bespoke Loose Diamonds
-          </span>
-          <h1 className="text-2xl font-light text-neutral-900 uppercase tracking-widest">
-            The Diamond{" "}
-            <span className="">
-              Collection
-            </span>
+          <h1 className="text-2xl font-light text-neutral-900 uppercase tracking-widest py-10">
+            Explore Diamond{" "}
           </h1>
         </div>
         {/* Main Specification Card */}

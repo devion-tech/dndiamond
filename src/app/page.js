@@ -237,7 +237,7 @@ function CustomBespokeBanner() {
   return (
     <section
       ref={bannerRef}
-      className="relative h-[480px] w-full overflow-hidden flex items-center justify-center"
+      className="relative h-[360px] sm:h-[480px] w-full overflow-hidden flex items-center justify-center"
     >
       {/* Background Image with Parallax Drift / Cover */}
       <div className="absolute inset-0 z-0">
@@ -338,6 +338,14 @@ function StatsTicker() {
   );
 }
 
+const hasSlideText = (slide) => {
+  return !!(
+    (slide?.title && slide.title.trim() !== "") ||
+    (slide?.label && slide.label.trim() !== "") ||
+    (slide?.description && slide.description.trim() !== "")
+  );
+};
+
 export default function Home() {
   const { formatPrice } = useStore();
   const dispatch = useDispatch();
@@ -423,48 +431,60 @@ export default function Home() {
     gsap.set(slideContainersRef.current.slice(1), { opacity: 0, zIndex: 0 });
     gsap.set(firstSlide, { opacity: 1, zIndex: 10 });
 
-    gsap.fromTo(
-      img,
-      { scale: 1.15, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 2, ease: "power3.out" },
-    );
-    gsap.fromTo(
-      label,
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.5 },
-    );
-    gsap.fromTo(
-      lines,
-      { yPercent: 120, opacity: 0 },
-      {
-        yPercent: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 1.2,
-        ease: "power4.out",
-        delay: 0.6,
-      },
-    );
-    gsap.fromTo(
-      paras,
-      { yPercent: 100, opacity: 0 },
-      {
-        yPercent: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 1.0,
-        ease: "power3.out",
-        delay: 0.8,
-      },
-    );
-    gsap.fromTo(
-      button,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", delay: 1.0 },
-    );
+    if (img) {
+      gsap.fromTo(
+        img,
+        { scale: 1.15, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 2, ease: "power3.out" },
+      );
+    }
+    if (label) {
+      gsap.fromTo(
+        label,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.5 },
+      );
+    }
+    if (lines && lines.length) {
+      gsap.fromTo(
+        lines,
+        { yPercent: 120, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 1.2,
+          ease: "power4.out",
+          delay: 0.6,
+        },
+      );
+    }
+    if (paras && paras.length) {
+      gsap.fromTo(
+        paras,
+        { yPercent: 100, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 1.0,
+          ease: "power3.out",
+          delay: 0.8,
+        },
+      );
+    }
+    if (button) {
+      gsap.fromTo(
+        button,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out", delay: 1.0 },
+      );
+    }
 
     // Slow subtle zoom drift
-    gsap.to(img, { scale: 1.05, duration: 6, ease: "none", delay: 2 });
+    if (img) {
+      gsap.to(img, { scale: 1.05, duration: 6, ease: "none", delay: 2 });
+    }
     animateProgressBar(0);
   };
 
@@ -498,11 +518,11 @@ export default function Home() {
     gsap.set(fromSlide, { zIndex: 5 });
 
     // Reset slide parameters
-    gsap.set(toImg, { scale: 1.15, opacity: 0 });
-    gsap.set(toLines, { yPercent: 120, opacity: 0 });
-    gsap.set(toParas, { yPercent: 100, opacity: 0 });
-    gsap.set(toLabel, { y: 20, opacity: 0 });
-    gsap.set(toButton, { y: 30, opacity: 0 });
+    if (toImg) gsap.set(toImg, { scale: 1.15, opacity: 0 });
+    if (toLines && toLines.length) gsap.set(toLines, { yPercent: 120, opacity: 0 });
+    if (toParas && toParas.length) gsap.set(toParas, { yPercent: 100, opacity: 0 });
+    if (toLabel) gsap.set(toLabel, { y: 20, opacity: 0 });
+    if (toButton) gsap.set(toButton, { y: 30, opacity: 0 });
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -516,7 +536,7 @@ export default function Home() {
     // Fade out previous slide elements
     if (fromImg)
       tl.to(fromImg, { opacity: 0, duration: 1.2, ease: "power2.inOut" }, 0);
-    if (fromLines.length)
+    if (fromLines && fromLines.length)
       tl.to(
         fromLines,
         {
@@ -528,7 +548,7 @@ export default function Home() {
         },
         0,
       );
-    if (fromParas.length)
+    if (fromParas && fromParas.length)
       tl.to(
         fromParas,
         {
@@ -554,46 +574,58 @@ export default function Home() {
       );
 
     // Bring in new slide elements
-    tl.to(
-      toImg,
-      { opacity: 1, scale: 1, duration: 1.6, ease: "power3.out" },
-      0.2,
-    );
-    tl.to(
-      toLabel,
-      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-      0.4,
-    );
-    tl.to(
-      toLines,
-      {
-        yPercent: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 1.2,
-        ease: "power4.out",
-      },
-      0.5,
-    );
-    tl.to(
-      toParas,
-      {
-        yPercent: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 1.0,
-        ease: "power3.out",
-      },
-      0.7,
-    );
-    tl.to(
-      toButton,
-      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-      0.9,
-    );
+    if (toImg) {
+      tl.to(
+        toImg,
+        { opacity: 1, scale: 1, duration: 1.6, ease: "power3.out" },
+        0.2,
+      );
+    }
+    if (toLabel) {
+      tl.to(
+        toLabel,
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+        0.4,
+      );
+    }
+    if (toLines && toLines.length) {
+      tl.to(
+        toLines,
+        {
+          yPercent: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 1.2,
+          ease: "power4.out",
+        },
+        0.5,
+      );
+    }
+    if (toParas && toParas.length) {
+      tl.to(
+        toParas,
+        {
+          yPercent: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 1.0,
+          ease: "power3.out",
+        },
+        0.7,
+      );
+    }
+    if (toButton) {
+      tl.to(
+        toButton,
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+        0.9,
+      );
+    }
 
     // Continue drift
-    tl.to(toImg, { scale: 1.05, duration: 5, ease: "none" }, 1.8);
+    if (toImg) {
+      tl.to(toImg, { scale: 1.05, duration: 5, ease: "none" }, 1.8);
+    }
     animateProgressBar(toIdx);
   };
 
@@ -692,73 +724,88 @@ export default function Home() {
     <Layout>
       <div className="w-full flex flex-col  overflow-x-hidden select-none">
         {/* ==================================================
-                    SECTION 1: FULLSCREEN HERO CAROUSEL (100vh)
+                    SECTION 1: FULLSCREEN HERO CAROUSEL (100dvh)
                     ================================================== */}
         <section
           ref={heroContainerRef}
-          className="relative h-screen w-full bg-[#0F0F0F] overflow-hidden select-none"
+          className="relative h-[100dvh] min-h-[600px] w-full bg-[#0F0F0F] overflow-hidden select-none"
         >
           {/* Background Images Layer */}
-          {items?.map((slide, idx) => (
-            <div
-              key={idx}
-              ref={(el) => (slideContainersRef.current[idx] = el)}
-              className="absolute inset-0 w-full h-full flex items-center justify-start opacity-0 z-0"
-            >
-              {/* Background Photo */}
-              <div className="absolute inset-0 overflow-hidden">
-                <img
-                  src={slide?.image?.image}
-                  alt={slide?.title}
-                  className="w-full h-full object-cover select-none js-hero-img"
-                  style={{ transform: "scale(1.15)" }}
-                />
-                {/* Luxury Cinematic Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent z-10" />
-                <div className="absolute inset-0 bg-black/10 z-10" />
-              </div>
-
-              {/* Slide Content Layer */}
-              <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 flex items-center h-full">
-                <div className="max-w-2xl text-left space-y-6 js-hero-content">
-                  {/* Category Label */}
-                  <span className="inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase js-hero-label">
-                    {slide.label}
-                  </span>
-
-                  {/* Headline */}
-                  <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] md:leading-[1.05]">
-                    {renderSplitTitle(slide.title)}
-                  </h1>
-
-                  {/* Description */}
-                  <div className="mt-2 text-neutral-300">
-                    {renderSplitDescription(slide.description)}
-                  </div>
-
-                  {/* Call To Action Button */}
-                  <div className="pt-4 js-hero-button">
-                    <Link href={"/"} passHref>
-                      <button className="group relative overflow-hidden px-8 py-3.5 border border-white/30 text-white text-xs font-bold uppercase tracking-[0.2em] bg-white/10 backdrop-blur-md transition-all duration-500 hover:border-white focus:outline-none shadow-lg">
-                        <span className="relative z-10 group-hover:text-black transition-colors duration-500">
-                          Shop Collection
-                        </span>
-                        <span className="absolute inset-0 bg-white origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
-                      </button>
-                    </Link>
-                  </div>
+          {items?.map((slide, idx) => {
+            const hasText = hasSlideText(slide);
+            return (
+              <div
+                key={idx}
+                ref={(el) => (slideContainersRef.current[idx] = el)}
+                className="absolute inset-0 w-full h-full flex items-center justify-start opacity-0 z-0"
+              >
+                {/* Background Photo */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <img
+                    src={slide?.image?.image}
+                    alt={slide?.title || "Dndiamond Hero Image"}
+                    className="w-full h-full object-cover select-none js-hero-img"
+                    style={{ transform: "scale(1.15)" }}
+                  />
+                  {hasText && (
+                    <>
+                      {/* Luxury Cinematic Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent z-10" />
+                      <div className="absolute inset-0 bg-black/10 z-10" />
+                    </>
+                  )}
                 </div>
+
+                {/* Slide Content Layer */}
+                {hasText && (
+                  <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 flex items-center h-full">
+                    <div className="max-w-2xl text-left space-y-6 js-hero-content">
+                      {/* Category Label */}
+                      {slide.label && slide.label.trim() !== "" && (
+                        <span className="inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase js-hero-label">
+                          {slide.label}
+                        </span>
+                      )}
+
+                      {/* Headline */}
+                      {slide.title && slide.title.trim() !== "" && (
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] md:leading-[1.05]">
+                          {renderSplitTitle(slide.title)}
+                        </h1>
+                      )}
+
+                      {/* Description */}
+                      {slide.description && slide.description.trim() !== "" && (
+                        <div className="mt-2 text-neutral-300">
+                          {renderSplitDescription(slide.description)}
+                        </div>
+                      )}
+
+                      {/* Call To Action Button */}
+                      <div className="pt-4 js-hero-button">
+                        <Link href={"/diamonds"} passHref>
+                          <button className="group relative overflow-hidden px-8 py-3.5 border border-white/30 text-white text-xs font-bold uppercase tracking-[0.2em] bg-white/10 backdrop-blur-md transition-all duration-500 hover:border-white focus:outline-none shadow-lg">
+                            <span className="relative z-10 group-hover:text-black transition-colors duration-500">
+                              Shop Collection
+                            </span>
+                            <span className="absolute inset-0 bg-white origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Vertical Progress Indicators (Right Side) */}
-          <div className="absolute right-6 sm:right-12 top-1/2 -translate-y-1/2 z-30 flex flex-col space-y-3">
+          <div className="absolute right-4 sm:right-12 top-1/2 -translate-y-1/2 z-40 flex flex-col space-y-3">
             {items?.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => handleProgressClick(idx)}
-                className="group relative flex items-center justify-end py-3 px-2 focus:outline-none"
+                className="group relative flex items-center justify-end py-3 px-6 focus:outline-none cursor-pointer"
                 aria-label={`Go to slide ${idx + 1}`}
               >
                 {/* Descriptive label appearing on hover */}
@@ -768,17 +815,7 @@ export default function Home() {
 
                 {/* Progress bar container */}
                 <div className="relative h-10 w-[2px] bg-white/20 transition-all duration-300 group-hover:bg-white/30">
-                  <div
-                    className="absolute top-0 left-0 w-full bg-white js-progress-fill"
-                    style={{
-                      height:
-                        idx < currentSlide
-                          ? "100%"
-                          : idx > currentSlide
-                            ? "0%"
-                            : "0%",
-                    }}
-                  />
+                  <div className="absolute top-0 left-0 w-full bg-white js-progress-fill" />
                 </div>
               </button>
             ))}
@@ -805,13 +842,12 @@ export default function Home() {
                     SECTION 2: SHOP BY CATEGORY
                     ================================================== */}
         <section id="section-categories" className="py-10">
-          ?
-          <div className="text-center space-y-2">
-            <h2 className="font-serif text-3xl sm:text-4xl  tracking-wide text-black">
+          <div className="text-center space-y-2 ">
+            <h2 className="font-serif text-3xl font-medium  tracking-wide text-black">
               Shop by Category
             </h2>
           </div>
-          <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 text-neutral-900">
+          <div className="mx-auto px-6 sm:px-10 lg:px-16 text-neutral-900">
             <CategoryCarousel headerRef={catHeadRef} />
           </div>
         </section>
@@ -820,10 +856,10 @@ export default function Home() {
         <ExploreDiamonds />
 
         {/* BEST SELLERS */}
-        <section className="py-10 ">
-          <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 ">
-            <div className="text-center space-y-2 py-4">
-              <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-wide text-black">
+        <section className="">
+          <div className="mx-auto  px-6 sm:px-10 lg:px-16 ">
+            <div className="text-center space-y-2 ">
+              <h2 className="font-serif text-3xl font-medium py-10 tracking-wide text-black">
                 Best selling product
               </h2>
             </div>
@@ -832,36 +868,126 @@ export default function Home() {
         </section>
 
         {/* Stats bar */}
-        <section className=" py-16">
+        {/* <section className=" py-16">
           <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
             <StatsTicker />
           </div>
-        </section>
-        {/* WHAT WERE WE MADE FOR? */}
-        <section className=" text-black py-24 sm:py-32">
-          <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-              <ParallaxImage
-                src="/products/atelier_interior.png"
-                alt="Dndiamond Atelier Studio"
-                className="aspect-[4/5] "
-              />
-              <EditorialBlock
-                eyebrow="Our Story"
-                heading="What were we made for?"
-                body={[
-                  "We were made to transform the rarest materials on earth into things that hold meaning. Every diamond we source, every band we shape — it carries a story that belongs to you.",
-                  "Founded by craftsmen, driven by detail.",
-                ]}
-                cta="ABOUT US"
-                ctaHref="/about"
-              />
+        </section> */}
+
+        {/* ==================================================
+            SECTION: EDITORIAL COLLAGE (Jewelry That Speaks)
+            ================================================== */}
+        <section className="py-16 sm:py-24">
+          <div className="mx-auto px-6 sm:px-10 lg:px-16 max-w-[1600px]">
+            <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 items-center">
+              {/* Left Column: Portrait Model Photo */}
+              <div className="col-span-1 md:col-span-4 flex justify-center order-2 md:order-1">
+                <div className="relative aspect-[3/4] w-full max-w-[340px] overflow-hidden border border-neutral-100 shadow-sm select-none">
+                  <img
+                    src="/about/glamour-beauty-jewelry-luxury-concept-close-up-beautiful-woman-with-golden-ring-diamond-earring.jpg"
+                    alt="Luxury jewelry model portrait"
+                    className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105"
+                  />
+                </div>
+              </div>
+
+              {/* Middle Column: Central Heading & CTA */}
+              <div className="col-span-2 md:col-span-4 text-center space-y-6 px-2 sm:px-4 order-1 md:order-2">
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-tight font-medium text-neutral-900 tracking-wide">
+                  Jewelry That Speaks Before You Do
+                </h2>
+                <p className="text-neutral-500 font-sans text-xs font-light leading-relaxed max-w-xs mx-auto">
+                  Designed to carry emotion, confidence, and individuality, each piece becomes a reflection of who you are crafted to feel personal, powerful, and timeless.
+                </p>
+                <div className="pt-2">
+                  <Link href="/diamonds" passHref>
+                    <button className="inline-block px-8 py-3 bg-black text-white text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-colors duration-300 cursor-pointer border-none shadow-sm">
+                      SHOP NOW
+                    </button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column: Close-up Jewelry Detail Photo */}
+              <div className="col-span-1 md:col-span-4 flex justify-center order-3">
+                <div className="relative aspect-[3/4] w-full max-w-[340px] overflow-hidden border border-neutral-100 shadow-sm select-none">
+                  <img
+                    src="/about/luxury-white-gold-diamond-necklace-dark-background.jpg"
+                    alt="Gold pendant necklace detail"
+                    className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Custom Bespoke Call-To-Action Banner */}
-        <CustomBespokeBanner />
+        {/* ==================================================
+            SECTION: MARBLE EDITORIAL BADGES (Timeless / Most Loved)
+            ================================================== */}
+        <section className="relative w-full py-24 sm:py-32 lg:py-40 overflow-hidden bg-black">
+          {/* Abstract Fluid Marble Background Image */}
+          <div className="absolute inset-0 z-0 select-none pointer-events-none">
+            <img
+              src="/about/diamond-jewelry-luxury-fashion-jewelry.jpg"
+              alt="Luxury fluid marble background"
+              className="w-full h-full object-cover brightness-[0.25] scale-105"
+            />
+            {/* Cinematic Gradient Tint */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
+          </div>
+
+          <div className="relative z-10 mx-auto px-6 max-w-5xl text-center select-none text-white leading-none space-y-8 sm:space-y-10">
+            {/* Row 1 */}
+            <div className="flex flex-wrap items-center justify-center gap-y-4">
+              <span className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-[0.25em] uppercase">
+                TIMELESS
+              </span>
+              <span className="inline-block h-8 w-14 sm:h-12 sm:w-20 rounded-lg overflow-hidden align-middle mx-3 sm:mx-5 border border-white/10 shrink-0">
+                <img
+                  src="/about/diamond-ring-isolated-black-background-3d-render.jpg"
+                  alt="Timeless product snippet"
+                  className="h-full w-full object-cover"
+                />
+              </span>
+              <span className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light tracking-widest uppercase border border-white/30 rounded-full px-6 py-2">
+                MOST LOVED
+              </span>
+            </div>
+
+            {/* Row 2 */}
+            <div className="flex flex-wrap items-center justify-center gap-y-4 pt-2">
+              <span className="inline-block h-8 w-14 sm:h-12 sm:w-20 rounded-lg overflow-hidden align-middle mx-3 sm:mx-5 border border-white/10 shrink-0">
+                <img
+                  src="/about/gold-diamond-jewelry.jpg"
+                  alt="Modern look product snippet"
+                  className="h-full w-full object-cover"
+                />
+              </span>
+              <span className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light tracking-widest uppercase border border-white/30 rounded-full px-6 py-2">
+                MODERN LOOKS
+              </span>
+            </div>
+
+            {/* Row 3 */}
+            <div className="flex flex-wrap items-center justify-center gap-y-4 pt-2">
+              <span className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light tracking-widest uppercase border border-white/30 rounded-full px-6 py-2">
+                TRENDING
+              </span>
+              <span className="inline-block h-8 w-12 sm:h-12 sm:w-16 rounded-lg overflow-hidden align-middle mx-3 sm:mx-5 border border-white/10 shrink-0">
+                <img
+                  src="/about/elegant-bride-earrings-morning-bridal-preparation-fine-art-wedding-details.jpg"
+                  alt="Trending model snippet"
+                  className="h-full w-full object-cover"
+                />
+              </span>
+            </div>
+          </div>
+        </section>
+
+
+
+
 
         {/* FAQ Section */}
         <FAQSection />

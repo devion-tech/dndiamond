@@ -206,43 +206,6 @@ export default function AboutPage() {
         }
     };
 
-    const handleScrollToLegacy = () => {
-        const section = document.getElementById("section-legacy");
-        if (section) {
-            section.scrollIntoView({ behavior: "smooth" });
-        }
-    };
-
-    // Card Interactive 3D tilt effects
-    const handleCardMouseEnter = (e) => {
-        const gsap = gsapRef.current;
-        if (!gsap) return;
-        gsap.to(e.currentTarget, {
-            y: -8,
-            rotationX: 1.5,
-            rotationY: -1.5,
-            borderColor: "#111111",
-            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.04)",
-            duration: 0.4,
-            ease: "power2.out"
-        });
-    };
-
-    const handleCardMouseLeave = (e) => {
-        const gsap = gsapRef.current;
-        if (!gsap) return;
-        gsap.to(e.currentTarget, {
-            y: 0,
-            rotationX: 0,
-            rotationY: 0,
-            borderColor: "#E5E5E5",
-            boxShadow: "0 0px 0px rgba(0,0,0,0)",
-            duration: 0.4,
-            ease: "power2.out"
-        });
-    };
-
-    // Animation Initialization Trigger
     useEffect(() => {
         if (!gsapLoaded) return;
 
@@ -250,7 +213,6 @@ export default function AboutPage() {
         const ScrollTrigger = scrollTriggerRef.current;
 
         const ctx = gsap.context(() => {
-            // Animate editorial static hero on load
             const heroContent = document.querySelector(".js-about-hero-content");
             if (heroContent) {
                 gsap.fromTo(Array.from(heroContent.children),
@@ -280,6 +242,11 @@ export default function AboutPage() {
 
             // Initial render
             updateOrbit();
+
+            window.addEventListener("resize", updateOrbit);
+            return () => {
+                window.removeEventListener("resize", updateOrbit);
+            };
 
             // Auto spin setup
             const autoSpin = gsap.to(orbitTrack, {
@@ -335,21 +302,21 @@ export default function AboutPage() {
 
     return (
         <Layout>
-            <div className="w-full bg-[#FAF9F6] text-[#111111] font-sans selection:bg-neutral-900/10 selection:text-[#111111] overflow-x-hidden">
+            <div className="w-full font-sans  overflow-x-hidden">
 
                 {/* ==================================================
                     SECTION 1: EDITORIAL MINIMALIST HERO (Discover World's Best Jewelry)
                     ================================================== */}
-                <section className="relative w-full bg-[#FAF9F6] pt-16 pb-20 sm:pt-24 sm:pb-28">
+                <section className="relative w-full pt-16 pb-20 sm:pt-24 sm:pb-28">
                     <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 flex flex-col items-center">
 
                         {/* Title Header with inline oval image */}
                         <div className="w-full text-center space-y-4 js-about-hero-content">
                             <h1 className="text-3xl sm:text-6xl lg:text-[80px] font-serif font-light text-neutral-900 tracking-[0.05em] leading-none uppercase flex flex-wrap justify-center items-center">
                                 <span>DISC</span>
-                                <span className="inline-flex w-17 h-17  rounded-full overflow-hidden align-middle border border-neutral-300 mx-2 sm:mx-4 transform translate-y-[-2px] sm:translate-y-[4px]">
+                                <span className="inline-flex w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden align-middle border border-neutral-300 mx-2 sm:mx-4 transform translate-y-[-2px] sm:translate-y-[4px]">
                                     <img
-                                        src="/products/atelier_interior.png"
+                                        src="/about/diamond-ring-isolated-black-background-3d-render.jpg"
                                         className="w-full h-full object-cover"
                                         alt="Discover"
                                     />
@@ -372,7 +339,7 @@ export default function AboutPage() {
                                 <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-square max-w-[240px] bg-neutral-100 shadow-sm">
                                     <span className="absolute top-3 left-3 text-[10px] font-mono text-neutral-500 z-10 font-medium">/01</span>
                                     <img
-                                        src=""
+                                        src="/about/close-up-brunette-woman-hand-pushing-her-hair-back-her-ear-baring-silver-earring.jpg"
                                         alt="Earrings close-up"
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     />
@@ -388,7 +355,7 @@ export default function AboutPage() {
                             <div className="col-span-1 md:col-span-6 flex justify-center">
                                 <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-[3/4] max-w-[380px] bg-neutral-100 shadow-sm">
                                     <img
-                                        src="/products/"
+                                        src="/about/retro-style-portrait-young-woman-dark-background.jpg"
                                         alt="Dainty gold necklaces display"
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     />
@@ -414,7 +381,7 @@ export default function AboutPage() {
                                 {/* Small horizontal close-up image */}
                                 <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-[16/10] max-w-[240px] bg-neutral-100 shadow-sm">
                                     <img
-                                        src="/products/necklace.avif"
+                                        src="/about/luxury-white-gold-diamond-necklace-dark-background.jpg"
                                         alt="Gold ring and necklace details close-up"
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     />

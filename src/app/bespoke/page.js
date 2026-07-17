@@ -185,7 +185,7 @@ function BespokeContent() {
                             <div className="space-y-6">
                                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-left">Select Category & Layout Style</h3>
                                 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {[
                                         { val: "Ring", label: "Custom Ring", desc: "Solitaire bands, engagement halo rings, wedding bands.", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=200" },
                                         { val: "Earring", label: "Custom Earrings", desc: "Claw solitaire studs, halo drop earrings, everyday studs.", img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=200" },

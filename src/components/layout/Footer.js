@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   FaFacebook,
@@ -6,10 +6,8 @@ import {
   FaTwitter,
   FaYoutube,
   FaLinkedin,
-  FaArrowRight,
 } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCategories } from "@/redux/categorySlice";
+import { useSelector } from "react-redux";
 import { useStore } from "@/context/StoreContext";
 
 const getDBCategory = (apiName) => {
@@ -33,13 +31,23 @@ const getDisplayCategoryName = (apiName) => {
 };
 
 export default function Footer() {
-  // const dispatch = useDispatch();
   const { items: apiCategories } = useSelector((state) => state.categories);
   const { region } = useStore();
 
-  // useEffect(() => {
-  //   dispatch(fetchCategories());
-  // }, [dispatch]);
+  // Accordion toggle state for mobile view
+  const [openSections, setOpenSections] = useState({
+    shop: false,
+    about: false,
+    services: false,
+    locations: false,
+  });
+
+  const toggleSection = (section) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
 
   const getLocations = () => {
     switch (region) {
@@ -68,250 +76,305 @@ export default function Footer() {
     }
   };
 
+  // Fallback static categories in case Redux is not populated yet
+  const fallbackCategories = [
+    { name: "Rings", slug: "ring" },
+    { name: "Earrings", slug: "earring" },
+    { name: "Necklaces", slug: "necklace" },
+    { name: "Bracelets & Bangles", slug: "bracelet" },
+    { name: "Pendants", slug: "pendant" },
+  ];
+
+  const categoriesList =
+    apiCategories && apiCategories.length > 0
+      ? apiCategories.map((cat) => ({
+          name: getDisplayCategoryName(cat.name),
+          slug: cat.slug,
+        }))
+      : fallbackCategories;
+
   return (
-    <footer className="bg-[#FAFAFA] text-neutral-600 font-sans border-t border-neutral-200/60 pt-16 pb-8 text-left">
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
-        {/* Footer Main Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b border-neutral-200/50 pb-12">
-          {/* Columns 1-4 (Links and locations) */}
-          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
-            {/* 1. Customer Services */}
-            <div>
-              <h4 className="text-[10px] font-bold tracking-[0.25em] text-neutral-900 uppercase mb-5">
-                Customer Services
-              </h4>
-              <ul className="space-y-3 text-[11px] font-light">
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Track your Order
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Shipping & Returns
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/#faq"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Frequently Asked Questions
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Schedule an appointment
-                  </Link>
-                </li>
-              </ul>
+    <footer className="bg-[#0B0B0B] text-neutral-400 font-sans border-t border-[#1A1A1A] pt-16 pb-10 text-left">
+      <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
+        {/* Footer Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 border-b border-[#1A1A1A] pb-16">
+          {/* Column 1: Brand Info */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="space-y-3">
+              <Link href="/" className="inline-block">
+                <span className="font-serif text-xl sm:text-2xl font-light tracking-[0.35em] text-white uppercase">
+                  DNDIAMOND
+                </span>
+              </Link>
+              <p className="text-xs font-light leading-relaxed max-w-sm text-neutral-400">
+                Ethically sourced diamonds, masterfully crafted bespoke jewelry, and 
+                extraordinary designs created to celebrate your life's most meaningful moments.
+              </p>
             </div>
-
-            {/* 2. About Us */}
-            <div>
-              <h4 className="text-[10px] font-bold tracking-[0.25em] text-neutral-900 uppercase mb-5">
-                About Us
-              </h4>
-              <ul className="space-y-3 text-[11px] font-light">
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/our-story"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Our Story
-                  </Link>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Sustainability
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Giving Back
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* 3. Shop Jewelry */}
-            <div>
-              <h4 className="text-[10px] font-bold tracking-[0.25em] text-neutral-900 uppercase mb-5">
-                Shop Jewelry
-              </h4>
-              <ul className="space-y-3 text-[11px] font-light">
-                {apiCategories &&
-                  apiCategories.map((cat) => (
-                    <li key={cat.name}>
-                      <Link
-                        href={`/category/${cat?.slug}`}
-                        className="hover:text-neutral-900 transition-colors"
-                      >
-                        {getDisplayCategoryName(cat.name)}
-                      </Link>
-                    </li>
-                  ))}
-                <li>
-                  <Link
-                    href="/diamonds"
-                    className="hover:text-neutral-900 transition-colors"
-                  >
-                    Loose Diamonds
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* 4. Main Locations */}
-            <div>
-              <h4 className="text-[10px] font-bold tracking-[0.25em] text-neutral-900 uppercase mb-5">
-                Main Locations
-              </h4>
-              <ul className="space-y-3 text-[11px] font-light text-neutral-500">
-                {getLocations().map((loc, index) => (
-                  <li key={index}>{loc}</li>
-                ))}
-              </ul>
-              {region === "HK" && (
-                <div className="text-[10px] font-light text-neutral-400 space-y-1 pt-4 mt-4 border-t border-neutral-200/50">
-                  <p>Tel: +852 3693 4141</p>
-                  <p>Email: dndiamondhk@yahoo.com</p>
-                </div>
-              )}
+            {/* Social Links */}
+            <div className="flex items-center gap-5 pt-2">
+              <a
+                href="#"
+                className="text-neutral-500 hover:text-white transition-colors duration-300"
+                aria-label="Instagram"
+              >
+                <FaInstagram size={16} />
+              </a>
+              <a
+                href="#"
+                className="text-neutral-500 hover:text-white transition-colors duration-300"
+                aria-label="Twitter"
+              >
+                <FaTwitter size={16} />
+              </a>
+              <a
+                href="#"
+                className="text-neutral-500 hover:text-white transition-colors duration-300"
+                aria-label="Facebook"
+              >
+                <FaFacebook size={16} />
+              </a>
+              <a
+                href="#"
+                className="text-neutral-500 hover:text-white transition-colors duration-300"
+                aria-label="YouTube"
+              >
+                <FaYoutube size={16} />
+              </a>
+              <a
+                href="#"
+                className="text-neutral-500 hover:text-white transition-colors duration-300"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin size={16} />
+              </a>
             </div>
           </div>
 
-          {/* Newsletter and Socials Block (Col span 4) */}
-          <div className="md:col-span-4 space-y-6">
-            <div className="space-y-2">
-              <h4 className="text-[14px] font-serif text-neutral-900 font-medium tracking-wide">
-                You can be one step ahead.
-              </h4>
-              <p className="text-[11px] text-neutral-500 font-light leading-relaxed">
-                Sign up to hear about our updates on the dot.
-              </p>
+          {/* Collapsible/Grid Columns (Columns 2-4) */}
+          <div className="lg:col-span-5 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {/* Column 2: Shop Jewelry */}
+            <div className="border-b border-[#1A1A1A] md:border-b-0 pb-4 md:pb-0">
+              <button
+                onClick={() => toggleSection("shop")}
+                className="w-full flex justify-between items-center py-2 text-left md:pointer-events-none focus:outline-none group"
+              >
+                <h4 className="text-[10px] font-sans font-bold tracking-[0.25em] text-white uppercase">
+                  Shop Jewelry
+                </h4>
+                <span className="text-sm font-light text-neutral-500 md:hidden">
+                  {openSections.shop ? "−" : "+"}
+                </span>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
+                  openSections.shop ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
+                }`}
+              >
+                <ul className="space-y-3.5 text-xs font-light">
+                  {categoriesList.map((cat) => (
+                    <li key={cat.slug}>
+                      <Link
+                        href={`/category/${cat.slug}`}
+                        className="hover:text-white transition-colors duration-300 block py-0.5"
+                      >
+                        {cat.name}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link
+                      href="/diamonds"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      Loose Diamonds
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
 
-            {/* Email Input Form */}
-            <form className="relative flex items-center border-b border-neutral-300 py-1.5 w-full">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="bg-transparent text-xs w-full focus:outline-none text-neutral-800 placeholder-neutral-400 font-light pr-16"
-                required
-              />
+            {/* Column 3: About Us */}
+            <div className="border-b border-[#1A1A1A] md:border-b-0 pb-4 md:pb-0">
               <button
-                type="submit"
-                className="absolute right-0 text-neutral-800 hover:text-neutral-950 text-[10px] font-bold tracking-widest transition-colors cursor-pointer"
-                aria-label="Subscribe"
+                onClick={() => toggleSection("about")}
+                className="w-full flex justify-between items-center py-2 text-left md:pointer-events-none focus:outline-none"
               >
-                SIGN UP
+                <h4 className="text-[10px] font-sans font-bold tracking-[0.25em] text-white uppercase">
+                  About
+                </h4>
+                <span className="text-sm font-light text-neutral-500 md:hidden">
+                  {openSections.about ? "−" : "+"}
+                </span>
               </button>
-            </form>
+              <div
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
+                  openSections.about ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
+                }`}
+              >
+                <ul className="space-y-3.5 text-xs font-light">
+                  <li>
+                    <Link
+                      href="/about"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/our-story"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      Our Story
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/bespoke"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      Bespoke Design
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-4 pt-2">
-              <a
-                href="#"
-                className="text-neutral-400 hover:text-neutral-900 transition-colors"
+            {/* Column 4: Customer Services */}
+            <div className="border-b border-[#1A1A1A] md:border-b-0 pb-4 md:pb-0">
+              <button
+                onClick={() => toggleSection("services")}
+                className="w-full flex justify-between items-center py-2 text-left md:pointer-events-none focus:outline-none"
               >
-                <FaInstagram size={14} />
-              </a>
-              <a
-                href="#"
-                className="text-neutral-400 hover:text-neutral-900 transition-colors"
+                <h4 className="text-[10px] font-sans font-bold tracking-[0.25em] text-white uppercase">
+                  Services
+                </h4>
+                <span className="text-sm font-light text-neutral-500 md:hidden">
+                  {openSections.services ? "−" : "+"}
+                </span>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
+                  openSections.services ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
+                }`}
               >
-                <FaTwitter size={14} />
-              </a>
-              <a
-                href="#"
-                className="text-neutral-400 hover:text-neutral-900 transition-colors"
+                <ul className="space-y-3.5 text-xs font-light">
+                  <li>
+                    <Link
+                      href="/contact"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      Contact Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/orders"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      Track Order
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/profile"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      My Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/#faq"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      FAQs
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 5: Locations & Newsletter */}
+          <div className="lg:col-span-3 space-y-8">
+            {/* Locations Column */}
+            <div>
+              <button
+                onClick={() => toggleSection("locations")}
+                className="w-full flex justify-between items-center py-2 text-left lg:pointer-events-none focus:outline-none"
               >
-                <FaFacebook size={14} />
-              </a>
-              <a
-                href="#"
-                className="text-neutral-400 hover:text-neutral-900 transition-colors"
+                <h4 className="text-[10px] font-sans font-bold tracking-[0.25em] text-white uppercase">
+                  Showrooms
+                </h4>
+                <span className="text-sm font-light text-neutral-500 lg:hidden">
+                  {openSections.locations ? "−" : "+"}
+                </span>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${
+                  openSections.locations ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 lg:mt-5"
+                }`}
               >
-                <FaYoutube size={14} />
-              </a>
-              <a
-                href="#"
-                className="text-neutral-400 hover:text-neutral-900 transition-colors"
-              >
-                <FaLinkedin size={14} />
-              </a>
+                <ul className="space-y-2.5 text-xs font-light text-neutral-400">
+                  {getLocations().map((loc, idx) => (
+                    <li key={idx} className="block py-0.5">
+                      {loc}
+                    </li>
+                  ))}
+                </ul>
+                {region === "HK" && (
+                  <div className="text-[11px] font-light text-neutral-500 space-y-1 pt-3.5 mt-3.5 border-t border-[#1A1A1A]">
+                    <p>Tel: +852 3693 4141</p>
+                    <p>Email: dndiamondhk@yahoo.com</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Newsletter Subscription */}
+            <div className="space-y-4 pt-2">
+              <div className="space-y-1.5">
+                <h4 className="text-xs font-serif font-medium tracking-wider text-white">
+                  Join the Inner Circle
+                </h4>
+                <p className="text-[11px] text-neutral-500 font-light leading-relaxed">
+                  Subscribe to receive updates on collections, design inspiration, and private boutique events.
+                </p>
+              </div>
+
+              <form className="relative flex items-center border-b border-neutral-800 py-1.5 w-full">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="bg-transparent text-xs w-full focus:outline-none text-white placeholder-neutral-600 font-light pr-16"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="absolute right-0 text-white hover:text-neutral-300 text-[10px] font-bold tracking-widest transition-colors cursor-pointer"
+                  aria-label="Subscribe"
+                >
+                  SIGN UP
+                </button>
+              </form>
             </div>
           </div>
         </div>
 
         {/* Footer Bottom Block */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-10 text-[9px] font-semibold text-neutral-500 tracking-wider">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-10 text-[9px] font-medium text-neutral-500 tracking-widest uppercase">
           {/* Copyright & Trademark */}
           <div>
-            <span>© DNDIAMOND, LLC</span>
+            <span>© DNDIAMOND, LLC. ALL RIGHTS RESERVED.</span>
           </div>
 
-          {/* Inline Legals */}
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            <a href="#" className="hover:text-neutral-800 transition-colors">
-              PRIVACY POLICY
-            </a>
-            <span>•</span>
-            <a href="#" className="hover:text-neutral-800 transition-colors">
-              TERMS OF USE
-            </a>
-            <span>•</span>
-            <a href="#" className="hover:text-neutral-800 transition-colors">
-              SITEMAP
-            </a>
-            <span>•</span>
-            <a href="#" className="hover:text-neutral-800 transition-colors">
-              DO NOT SELL MY INFORMATION
-            </a>
-            <span>•</span>
-            <a href="#" className="hover:text-neutral-800 transition-colors">
-              COOKIES
-            </a>
+          {/* Clean Contact Anchor as alternative support link */}
+          <div>
+            <Link href="/contact" className="hover:text-white transition-colors duration-300">
+              Support & Inquiries
+            </Link>
           </div>
         </div>
       </div>

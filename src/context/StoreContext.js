@@ -26,6 +26,7 @@ import {
   fetchWishlist,
   toggleWishlist as toggleWishlistThunk,
 } from "@/redux/wishlistSlice";
+import { setCurrency } from "@/utils/api";
 
 const StoreContext = createContext();
 
@@ -82,6 +83,7 @@ export function StoreProvider({ children }) {
     if (storedInquiries) setInquiries(JSON.parse(storedInquiries));
     if (storedGoldPrice) setGoldPricePerGram(Number(storedGoldPrice));
     if (storedRegion) setRegion(storedRegion || "HK");
+    setCurrency(storedRegion || "HK");
 
     // Dispatch initialize auth, then load cart & wishlist
     dispatch(initializeAuth()).then((res) => {
@@ -100,6 +102,7 @@ export function StoreProvider({ children }) {
 
   const saveRegion = (newRegion) => {
     setRegion(newRegion);
+    setCurrency(newRegion);
     localStorage.setItem("praya_region", newRegion);
   };
 

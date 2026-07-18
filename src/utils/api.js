@@ -2,6 +2,13 @@ import { getAuthHeaders } from "@/common/token";
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
+let currentCurrency = "HKD";
+
+export const setCurrency = (region) => {
+  const map = { HK: "HKD", AU: "AUD", NZ: "NZD" };
+  currentCurrency = map[region] || "HKD";
+};
+
 export const apiRequest = async (url, options = {}) => {
   const headers = getAuthHeaders();
 
@@ -9,6 +16,7 @@ export const apiRequest = async (url, options = {}) => {
     ...options,
     headers: {
       "Content-Type": "application/json",
+      "x-currency": currentCurrency,
       ...headers,
       ...(options.headers || {}),
     },

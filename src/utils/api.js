@@ -1,12 +1,21 @@
+"use client";
+
 import { getAuthHeaders } from "@/common/token";
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
-let currentCurrency = "HKD";
+const getCurrency = () => {
+  if (typeof window === "undefined") return "HKD";
 
-export const setCurrency = (region) => {
-  const map = { HK: "HKD", AU: "AUD", NZ: "NZD" };
-  currentCurrency = map[region] || "HKD";
+  const region = localStorage.getItem("praya_region") || "HK";
+
+  const currencyMap = {
+    HK: "HKD",
+    AU: "AUD",
+    NZ: "NZD",
+  };
+
+  return currencyMap[region] || "HKD";
 };
 
 export const apiRequest = async (url, options = {}) => {
@@ -16,7 +25,7 @@ export const apiRequest = async (url, options = {}) => {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      "x-currency": currentCurrency,
+      "x-currency": getCurrency(),
       ...headers,
       ...(options.headers || {}),
     },
@@ -27,6 +36,7 @@ export const apiRequest = async (url, options = {}) => {
   if (res.status === 401) {
     const { store } = await import("@/redux/store");
     const { openModal } = await import("@/redux/authSlice");
+
     store.dispatch(openModal());
     throw new Error("Unauthorized");
   }

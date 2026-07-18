@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   FaFacebook,
@@ -33,6 +35,13 @@ const getDisplayCategoryName = (apiName) => {
 export default function Footer() {
   const { items: apiCategories } = useSelector((state) => state.categories);
   const { region } = useStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeRegion = mounted ? region : "HK";
 
   // Accordion toggle state for mobile view
   const [openSections, setOpenSections] = useState({
@@ -50,7 +59,7 @@ export default function Footer() {
   };
 
   const getLocations = () => {
-    switch (region) {
+    switch (activeRegion) {
       case "AU":
         return [
           "Sydney, NSW (Primary Showroom)",
@@ -88,9 +97,9 @@ export default function Footer() {
   const categoriesList =
     apiCategories && apiCategories.length > 0
       ? apiCategories.map((cat) => ({
-        name: getDisplayCategoryName(cat.name),
-        slug: cat.slug,
-      }))
+          name: getDisplayCategoryName(cat.name),
+          slug: cat.slug,
+        }))
       : fallbackCategories;
 
   return (
@@ -107,8 +116,9 @@ export default function Footer() {
                 </span>
               </Link>
               <p className="text-xs font-light leading-relaxed max-w-sm text-neutral-400">
-                Ethically sourced diamonds, masterfully crafted bespoke jewelry, and
-                extraordinary designs created to celebrate your life's most meaningful moments.
+                Ethically sourced diamonds, masterfully crafted bespoke jewelry,
+                and extraordinary designs created to celebrate your life's most
+                meaningful moments.
               </p>
             </div>
             {/* Social Links */}
@@ -167,8 +177,11 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.shop ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
-                  }`}
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
+                  openSections.shop
+                    ? "max-h-96 opacity-100 mt-4"
+                    : "max-h-0 opacity-0 md:mt-5"
+                }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   {categoriesList.map((cat) => (
@@ -207,8 +220,11 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.about ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
-                  }`}
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
+                  openSections.about
+                    ? "max-h-96 opacity-100 mt-4"
+                    : "max-h-0 opacity-0 md:mt-5"
+                }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   <li>
@@ -253,8 +269,11 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.services ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
-                  }`}
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
+                  openSections.services
+                    ? "max-h-96 opacity-100 mt-4"
+                    : "max-h-0 opacity-0 md:mt-5"
+                }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   <li>
@@ -310,8 +329,11 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${openSections.locations ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 lg:mt-5"
-                  }`}
+                className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${
+                  openSections.locations
+                    ? "max-h-96 opacity-100 mt-4"
+                    : "max-h-0 opacity-0 lg:mt-5"
+                }`}
               >
                 <ul className="space-y-2.5 text-xs font-light text-neutral-400">
                   {getLocations().map((loc, idx) => (
@@ -320,7 +342,7 @@ export default function Footer() {
                     </li>
                   ))}
                 </ul>
-                {region === "HK" && (
+                {activeRegion === "HK" && (
                   <div className="text-[11px] font-light text-neutral-500 space-y-1 pt-3.5 mt-3.5 border-t border-[#1A1A1A]">
                     <p>Tel: +852 3693 4141</p>
                     <p>Email: dndiamondhk@yahoo.com</p>
@@ -336,7 +358,8 @@ export default function Footer() {
                   Join the Inner Circle
                 </h4>
                 <p className="text-[11px] text-neutral-500 font-light leading-relaxed">
-                  Subscribe to receive updates on collections, design inspiration, and private boutique events.
+                  Subscribe to receive updates on collections, design
+                  inspiration, and private boutique events.
                 </p>
               </div>
 
@@ -368,7 +391,10 @@ export default function Footer() {
 
           {/* Clean Contact Anchor as alternative support link */}
           <div>
-            <Link href="/contact" className="hover:text-white transition-colors duration-300">
+            <Link
+              href="/contact"
+              className="hover:text-white transition-colors duration-300"
+            >
               Support & Inquiries
             </Link>
           </div>

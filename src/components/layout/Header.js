@@ -14,7 +14,6 @@ import {
   FaBars,
   FaMapMarkerAlt,
   FaShoppingBag,
-  FaQrcode,
 } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import AuthModal from "../ui/AuthModal";
@@ -92,6 +91,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
     closeModal,
   } = useStore();
 
+  const [mounted, setMounted] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -123,15 +123,15 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
     }
   };
 
-
-
   const handleAboutMouseEnter = () => {
-    if (aboutHoverTimeoutRef.current) clearTimeout(aboutHoverTimeoutRef.current);
+    if (aboutHoverTimeoutRef.current)
+      clearTimeout(aboutHoverTimeoutRef.current);
     setIsAboutHovered(true);
   };
 
   const handleAboutMouseLeave = () => {
-    if (aboutHoverTimeoutRef.current) clearTimeout(aboutHoverTimeoutRef.current);
+    if (aboutHoverTimeoutRef.current)
+      clearTimeout(aboutHoverTimeoutRef.current);
     aboutHoverTimeoutRef.current = setTimeout(() => {
       setIsAboutHovered(false);
     }, 200);
@@ -229,8 +229,13 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   useEffect(() => {
     return () => {
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      if (aboutHoverTimeoutRef.current) clearTimeout(aboutHoverTimeoutRef.current);
+      if (aboutHoverTimeoutRef.current)
+        clearTimeout(aboutHoverTimeoutRef.current);
     };
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -242,17 +247,17 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const filteredSearchItems =
     searchQuery.trim() !== ""
       ? [
-        ...jewelry.filter(
-          (j) =>
-            j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            j.category.toLowerCase().includes(searchQuery.toLowerCase()),
-        ),
-        ...diamonds.filter(
-          (d) =>
-            d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
-        ),
-      ].slice(0, 5)
+          ...jewelry.filter(
+            (j) =>
+              j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              j.category.toLowerCase().includes(searchQuery.toLowerCase()),
+          ),
+          ...diamonds.filter(
+            (d) =>
+              d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
+          ),
+        ].slice(0, 5)
       : [];
 
   const handleSearchSubmit = (e) => {
@@ -325,19 +330,21 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 <div className="flex justify-center border-b border-neutral-100 pb-4 mb-6 gap-8 w-full">
                   <button
                     onClick={() => handleTabClick("labgrown")}
-                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${jewelryTab === "labgrown"
-                      ? "border-neutral-900 text-neutral-900"
-                      : "border-transparent text-neutral-400 hover:text-neutral-600"
-                      }`}
+                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
+                      jewelryTab === "labgrown"
+                        ? "border-neutral-900 text-neutral-900"
+                        : "border-transparent text-neutral-400 hover:text-neutral-600"
+                    }`}
                   >
                     Lab Grown
                   </button>
                   <button
                     onClick={() => handleTabClick("natural")}
-                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${jewelryTab === "natural"
-                      ? "border-neutral-900 text-neutral-900"
-                      : "border-transparent text-neutral-400 hover:text-neutral-600"
-                      }`}
+                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
+                      jewelryTab === "natural"
+                        ? "border-neutral-900 text-neutral-900"
+                        : "border-transparent text-neutral-400 hover:text-neutral-600"
+                    }`}
                   >
                     Natural
                   </button>
@@ -384,7 +391,6 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             >
               Diamond
             </Link>
-
 
             {/* About Submenu Dropdown */}
             <div
@@ -435,8 +441,6 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 </ul>
               </div>
             </div>
-
-
           </nav>
         </div>
         {/* Center: Brand Logo Text */}
@@ -503,7 +507,10 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </button>
 
           {/* 3. Profile */}
-          <div className="relative group hidden md:block" onMouseEnter={fetchRecentOrder}>
+          <div
+            className="relative group hidden md:block"
+            onMouseEnter={fetchRecentOrder}
+          >
             <button
               onClick={() => {
                 if (!user) {
@@ -546,7 +553,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     <div className="mt-2 p-2.5 bg-slate-50 border border-slate-100 rounded-md text-left text-[9px] space-y-1 font-sans">
                       <div className="flex justify-between font-bold text-slate-800 uppercase tracking-wider">
                         <span>Recent Order</span>
-                        <Link href="/orders" className="text-neutral-500 hover:text-neutral-800 underline">View</Link>
+                        <Link
+                          href="/orders"
+                          className="text-neutral-500 hover:text-neutral-800 underline"
+                        >
+                          View
+                        </Link>
                       </div>
                       <div className="flex justify-between text-slate-500 font-medium">
                         <span>ID: {recentOrder.id}</span>
@@ -601,37 +613,39 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </div>
 
           {/* 4. Country Selector */}
-          <div className="relative group hidden md:block">
-            <button
-              className="flex items-center gap-0.5 p-2 text-neutral-700 hover:text-neutral-900 transition-colors text-[10px] lg:text-xs xl:text-sm font-bold tracking-wider uppercase cursor-pointer"
-              aria-label="Country Selector"
-            >
-              <FaMapMarkerAlt size={11} className="text-neutral-500 mr-0.5" />
-              <span>{region}</span>
-              <FaChevronDown
-                size={5}
-                className="text-neutral-400 group-hover:rotate-180 transition-transform duration-300 ml-0.5"
-              />
-            </button>
-            <div className="absolute right-0 top-full hidden group-hover:block w-44 bg-white border border-neutral-100 rounded-sm p-1.5 shadow-md animate-fade-in z-50">
-              <div className="px-3 py-1 border-b border-neutral-100 mb-1 text-[8px] lg:text-[9px] xl:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
-                Country Selector
+          {mounted && (
+            <div className="relative group hidden md:block">
+              <button
+                className="flex items-center gap-0.5 p-2 text-neutral-700 hover:text-neutral-900 transition-colors text-[10px] lg:text-xs xl:text-sm font-bold tracking-wider uppercase cursor-pointer"
+                aria-label="Country Selector"
+              >
+                <FaMapMarkerAlt size={11} className="text-neutral-500 mr-0.5" />
+                <span>{region}</span>
+                <FaChevronDown
+                  size={5}
+                  className="text-neutral-400 group-hover:rotate-180 transition-transform duration-300 ml-0.5"
+                />
+              </button>
+              <div className="absolute right-0 top-full hidden group-hover:block w-44 bg-white border border-neutral-100 rounded-sm p-1.5 shadow-md animate-fade-in z-50">
+                <div className="px-3 py-1 border-b border-neutral-100 mb-1 text-[8px] lg:text-[9px] xl:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+                  Country Selector
+                </div>
+                {[
+                  { code: "HK", label: "Hong Kong (HKD)" },
+                  { code: "AU", label: "Australia (AUD)" },
+                  { code: "NZ", label: "New Zealand (NZD)" },
+                ].map((reg) => (
+                  <button
+                    key={reg.code}
+                    onClick={() => saveRegion(reg.code)}
+                    className={`w-full text-left px-3 py-1.5 text-[9px] lg:text-[10px] xl:text-[11px] font-bold tracking-wider uppercase transition-all rounded-sm block cursor-pointer ${region === reg.code ? "bg-neutral-50 text-neutral-900" : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"}`}
+                  >
+                    {reg.label}
+                  </button>
+                ))}
               </div>
-              {[
-                { code: "HK", label: "Hong Kong (HKD)" },
-                { code: "AU", label: "Australia (AUD)" },
-                { code: "NZ", label: "New Zealand (NZD)" },
-              ].map((reg) => (
-                <button
-                  key={reg.code}
-                  onClick={() => saveRegion(reg.code)}
-                  className={`w-full text-left px-3 py-1.5 text-[9px] lg:text-[10px] xl:text-[11px] font-bold tracking-wider uppercase transition-all rounded-sm block cursor-pointer ${region === reg.code ? "bg-neutral-50 text-neutral-900" : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"}`}
-                >
-                  {reg.label}
-                </button>
-              ))}
             </div>
-          </div>
+          )}
         </div>
       </div>
       {mobileMenuOpen && (
@@ -654,19 +668,21 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <div className="flex border-b border-neutral-100 pb-2 mb-2 gap-4">
                     <button
                       onClick={() => handleTabClick("labgrown")}
-                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${jewelryTab === "labgrown"
-                        ? "border-neutral-900 text-neutral-900"
-                        : "border-transparent text-neutral-400"
-                        }`}
+                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
+                        jewelryTab === "labgrown"
+                          ? "border-neutral-900 text-neutral-900"
+                          : "border-transparent text-neutral-400"
+                      }`}
                     >
                       Lab Grown
                     </button>
                     <button
                       onClick={() => handleTabClick("natural")}
-                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${jewelryTab === "natural"
-                        ? "border-neutral-900 text-neutral-900"
-                        : "border-transparent text-neutral-400"
-                        }`}
+                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
+                        jewelryTab === "natural"
+                          ? "border-neutral-900 text-neutral-900"
+                          : "border-transparent text-neutral-400"
+                      }`}
                     >
                       Natural
                     </button>
@@ -679,7 +695,9 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     href={`/category?origin=${jewelryTab}`}
                     className="block text-[11px] font-bold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest"
                   >
-                    Shop All {jewelryTab === "labgrown" ? "Lab Grown" : "Natural"} Jewelry
+                    Shop All{" "}
+                    {jewelryTab === "labgrown" ? "Lab Grown" : "Natural"}{" "}
+                    Jewelry
                   </Link>
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-1.5">
@@ -792,7 +810,10 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 {user ? (
                   <div className="space-y-2 pl-2">
                     <p className="text-[10px] font-semibold text-neutral-700">
-                      Welcome, <span className="text-neutral-900 font-bold">{user.name || user.email}</span>
+                      Welcome,{" "}
+                      <span className="text-neutral-900 font-bold">
+                        {user.name || user.email}
+                      </span>
                     </p>
                     <button
                       onClick={() => {
@@ -831,32 +852,35 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               </div>
 
               {/* Region Selector */}
-              <div className="space-y-2 pb-2">
-                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">
-                  Region
-                </p>
-                <div className="flex gap-2 pl-2 flex-wrap">
-                  {[
-                    { code: "HK", label: "HK (HKD)" },
-                    { code: "AU", label: "AU (AUD)" },
-                    { code: "NZ", label: "NZ (NZD)" },
-                  ].map((reg) => (
-                    <button
-                      key={reg.code}
-                      onClick={() => {
-                        saveRegion(reg.code);
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`px-2 py-1 text-[9px] font-bold tracking-wider rounded-sm uppercase transition-all border cursor-pointer ${region === reg.code
-                        ? "bg-neutral-900 text-white border-neutral-900"
-                        : "text-neutral-500 bg-neutral-50 border-neutral-200"
+              {mounted && (
+                <div className="space-y-2 pb-2">
+                  <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">
+                    Region
+                  </p>
+                  <div className="flex gap-2 pl-2 flex-wrap">
+                    {[
+                      { code: "HK", label: "HK (HKD)" },
+                      { code: "AU", label: "AU (AUD)" },
+                      { code: "NZ", label: "NZ (NZD)" },
+                    ].map((reg) => (
+                      <button
+                        key={reg.code}
+                        onClick={() => {
+                          saveRegion(reg.code);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`px-2 py-1 text-[9px] font-bold tracking-wider rounded-sm uppercase transition-all border cursor-pointer ${
+                          region === reg.code
+                            ? "bg-neutral-900 text-white border-neutral-900"
+                            : "text-neutral-500 bg-neutral-50 border-neutral-200"
                         }`}
-                    >
-                      {reg.label}
-                    </button>
-                  ))}
+                      >
+                        {reg.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </nav>
         </div>

@@ -26,7 +26,7 @@ import {
   fetchWishlist,
   toggleWishlist as toggleWishlistThunk,
 } from "@/redux/wishlistSlice";
-import { setCurrency } from "@/utils/api";
+// import { setCurrency } from "@/utils/api";
 
 const StoreContext = createContext();
 
@@ -40,7 +40,11 @@ export function StoreProvider({ children }) {
 
   const [inquiries, setInquiries] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [region, setRegion] = useState("HK"); // "HK", "AU", "NZ"
+  const [region, setRegion] = useState(() => {
+    if (typeof window === "undefined") return "HK";
+    return localStorage.getItem("praya_region") || "HK";
+  });
+  console.log("region :>> ", region);
   // Redux bindings
   const { token, user, guestId, authModalOpen } = useSelector(
     (state) => state.auth,
@@ -83,7 +87,7 @@ export function StoreProvider({ children }) {
     if (storedInquiries) setInquiries(JSON.parse(storedInquiries));
     if (storedGoldPrice) setGoldPricePerGram(Number(storedGoldPrice));
     if (storedRegion) setRegion(storedRegion || "HK");
-    setCurrency(storedRegion || "HK");
+    // setCurrency(storedRegion || "HK");
 
     // Dispatch initialize auth, then load cart & wishlist
     dispatch(initializeAuth()).then((res) => {
@@ -102,8 +106,9 @@ export function StoreProvider({ children }) {
 
   const saveRegion = (newRegion) => {
     setRegion(newRegion);
-    setCurrency(newRegion);
+    // setCurrency(newRegion);
     localStorage.setItem("praya_region", newRegion);
+    window.location.reload();
   };
 
   const getRegionDetails = () => {
@@ -140,8 +145,8 @@ export function StoreProvider({ children }) {
 
   const formatPrice = (basePrice) => {
     const { prefix } = getRegionDetails();
-    const converted = getConvertedPrice(basePrice);
-    return `${prefix} ${converted.toLocaleString()}`;
+    // const converted = getConvertedPrice(basePrice);
+    return `${prefix} ${basePrice.toLocaleString()}`;
   };
 
   const formatConvertedPrice = (convertedPrice) => {

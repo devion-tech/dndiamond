@@ -178,181 +178,189 @@ export default function OrdersPage() {
 
   return (
     <Layout>
-      <div className="bg-[#FAF9F6] min-h-screen py-10 md:py-16 px-4 md:px-8 font-sans text-neutral-800 relative selection:bg-neutral-900 selection:text-white">
+      <div className="bg-[#FAF9F6] min-h-screen py-12 md:py-20 px-4 md:px-8 font-sans text-neutral-800 relative selection:bg-neutral-900 selection:text-white">
 
         {/* Toast Notification Banner */}
         {toastMessage && (
-          <div className="fixed bottom-6 right-6 z-50 bg-neutral-900 text-white px-6 py-4 rounded-2xl shadow-2xl border border-neutral-700 flex items-center gap-3 animate-fade-in text-xs font-medium max-w-md">
-            <FaCheckCircle className="text-lime-400 shrink-0" size={16} />
+          <div className="fixed bottom-6 right-6 z-50 bg-neutral-955 text-white px-5 py-3.5 border border-neutral-850 flex items-center gap-3 animate-fade-in text-[10px] font-bold uppercase tracking-wider max-w-md shadow-2xl">
+            <FaCheckCircle className="text-neutral-200 shrink-0" size={13} />
             <span>{toastMessage}</span>
           </div>
         )}
 
-        <div className="max-w-6xl mx-auto space-y-10">
+        <div className="max-w-6xl mx-auto space-y-12">
 
           {/* Header & Title Section */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-neutral-200">
-            <div className="space-y-2 text-left">
-              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] flex items-center gap-2">
-                <FaShieldAlt className="text-neutral-700" size={12} />
-                Client Concierge & Atelier Archive
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-8 border-b border-neutral-200">
+            <div className="space-y-3 text-left">
+              <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-[0.25em] flex items-center gap-2">
+                Atelier Client Portal
               </span>
-              <h1 className="text-3xl sm:text-5xl font-serif font-light text-neutral-900 uppercase tracking-widest text-left">
+              <h1 className="text-3xl sm:text-4xl font-serif font-light text-neutral-900 uppercase tracking-wider text-left">
                 My Order Portfolio
               </h1>
             </div>
 
             {/* Concierge Support Badge */}
-            <div className="bg-white px-5 py-3 rounded-2xl border border-neutral-200 shadow-sm flex items-center gap-3 text-left">
-              <div className="h-9 w-9 rounded-full bg-neutral-900 text-white flex items-center justify-center font-serif font-bold text-sm shrink-0">
+            <div className="border border-neutral-200 bg-white/40 px-5 py-3 flex items-center gap-3 text-left">
+              <div className="h-8 w-8 bg-neutral-900 text-white flex items-center justify-center font-serif font-semibold text-xs shrink-0">
                 DN
               </div>
               <div>
-                <span className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider block">Assigned Private Jeweler</span>
-                <span className="text-xs font-semibold text-neutral-800">Victoria Kensington • (Direct Atelier)</span>
+                <span className="text-[8px] text-neutral-400 uppercase font-bold tracking-wider block">Assigned Private Jeweler</span>
+                <span className="text-[11px] font-semibold text-neutral-800">Victoria Kensington • Direct Atelier</span>
               </div>
             </div>
           </div>
 
           {/* Controls Bar: Filter Tabs & Search */}
-          <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 bg-white p-2 sm:p-3 rounded-2xl border border-neutral-200 shadow-sm">
+          <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6 border-b border-neutral-200 pb-2">
             {/* Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
+            <div className="flex items-center gap-8 overflow-x-auto scrollbar-none">
               {[
                 { id: "all", label: "All Purchases", count: STATIC_MOCK_ORDERS.length },
-                { id: "in_progress", label: "In Progress / Transit", count: 2 },
-                { id: "delivered", label: "Delivered & Vaulted", count: 1 }
+                { id: "in_progress", label: "In Progress", count: 2 },
+                { id: "delivered", label: "Vaulted", count: 1 }
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 whitespace-nowrap cursor-pointer flex items-center gap-2 ${activeTab === tab.id
-                    ? "bg-neutral-900 text-white shadow-md"
-                    : "text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100"
+                  className={`pb-3.5 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 cursor-pointer relative ${activeTab === tab.id
+                    ? "text-neutral-955 font-semibold"
+                    : "text-neutral-400 hover:text-neutral-955"
                     }`}
                 >
                   <span>{tab.label}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${activeTab === tab.id ? "bg-white/20 text-white" : "bg-neutral-200 text-neutral-700"
-                    }`}>
-                    {tab.count}
-                  </span>
+                  <span className="ml-1.5 text-[9px] font-mono text-neutral-400">({tab.count})</span>
+                  {activeTab === tab.id && (
+                    <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-neutral-900" />
+                  )}
                 </button>
               ))}
             </div>
 
             {/* Search Input */}
-            <div className="relative w-full lg:w-80">
-              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" size={13} />
+            <div className="relative w-full md:w-72 pb-2">
+              <FaSearch className="absolute right-1 top-1/2 -translate-y-1/2 text-neutral-400" size={12} />
               <input
                 type="text"
-                placeholder="Search order #, diamond specs, metal..."
+                placeholder="Search specifications..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-neutral-900 focus:bg-white transition-all text-neutral-800"
+                className="w-full bg-transparent border-b border-neutral-200 py-1.5 pr-6 text-xs tracking-wider focus:outline-none focus:border-neutral-950 transition-colors text-neutral-850 placeholder:text-neutral-400 placeholder:font-light"
               />
             </div>
           </div>
 
           {/* Order Cards List */}
           {filteredOrders.length > 0 ? (
-            <div className="space-y-8">
+            <div className="space-y-12">
               {filteredOrders.map((order) => {
                 const isExpanded = expandedOrder === order.id;
 
                 return (
                   <div
                     key={order.id}
-                    className="bg-white border border-neutral-200 shadow-sm rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-lg"
+                    className="bg-white border border-neutral-200/70 space-y-0 transition-all duration-300 hover:border-neutral-350"
                   >
                     {/* Top Order Summary Bar */}
-                    <div className="bg-neutral-900 text-white px-6 sm:px-8 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs">
-                      <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-left">
+                    <div className="bg-transparent border-b border-neutral-100 px-6 sm:px-8 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs">
+                      <div className="flex flex-wrap items-center gap-x-10 gap-y-3 text-left">
                         <div>
-                          <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest block">Reference Number</span>
-                          <span className="font-mono font-bold text-white text-sm sm:text-base tracking-wider">{order.id}</span>
+                          <span className="text-[8px] text-neutral-400 font-bold uppercase tracking-[0.2em] block">Reference</span>
+                          <span className="font-mono font-semibold text-neutral-900 text-sm tracking-wider">{order.id}</span>
                         </div>
                         <div>
-                          <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest block">Date Placed</span>
-                          <span className="font-semibold text-neutral-200 flex items-center gap-1.5 mt-0.5">
-                            <FaCalendarAlt className="text-neutral-400" size={11} />
-                            {order.date}
-                          </span>
+                          <span className="text-[8px] text-neutral-400 font-bold uppercase tracking-[0.2em] block">Date Placed</span>
+                          <span className="font-medium text-neutral-600 mt-0.5 block">{order.date}</span>
                         </div>
                         <div>
-                          <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest block">Total Escrow</span>
-                          <span className="font-serif font-bold text-white text-base tracking-wide">{formatPrice(order.totalAmount)}</span>
+                          <span className="text-[8px] text-neutral-400 font-bold uppercase tracking-[0.2em] block">Total Escrow</span>
+                          <span className="font-serif font-bold text-neutral-900 text-sm tracking-wide block">{formatPrice(order.totalAmount)}</span>
                         </div>
                       </div>
 
                       {/* Status Badge & Expand Toggle */}
-                      <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-neutral-800">
-                        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm ${order.statusCategory === "delivered"
-                          ? "bg-lime-950/80 text-lime-400 border border-lime-700/60"
-                          : "bg-amber-950/80 text-amber-300 border border-amber-700/60"
+                      <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
+                        <span className={`inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.25em] ${order.statusCategory === "delivered"
+                          ? "text-neutral-950"
+                          : "text-neutral-600"
                           }`}>
-                          <span className={`h-2 w-2 rounded-full ${order.statusCategory === "delivered" ? "bg-lime-400 animate-pulse" : "bg-amber-400 animate-pulse"
+                          <span className={`h-1.5 w-1.5 rounded-full ${order.statusCategory === "delivered" ? "bg-emerald-500" : "bg-amber-500 animate-pulse"
                             }`}></span>
                           {order.status}
                         </span>
 
                         <button
                           onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
-                          className="px-3.5 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1.5"
+                          className="text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-905 hover:text-neutral-550 transition-colors cursor-pointer flex items-center gap-1.5"
                         >
-                          <span>{isExpanded ? "Hide Timeline" : "Track Steps"}</span>
-                          <FaChevronRight className={`transition-transform duration-300 ${isExpanded ? "rotate-90" : ""}`} size={10} />
+                          <span>{isExpanded ? "Hide Tracking" : "Track Shipment"}</span>
+                          <FaChevronRight className={`transition-transform duration-300 ${isExpanded ? "rotate-90" : ""}`} size={8} />
                         </button>
                       </div>
                     </div>
 
                     {/* Interactive Tracking Timeline Section (Shown when expanded) */}
                     {isExpanded && (
-                      <div className="bg-neutral-50/80 border-b border-neutral-200 px-6 sm:px-8 py-6 space-y-6 animate-fade-in text-left">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="bg-[#FAF9F6]/50 border-b border-neutral-100 px-6 sm:px-8 py-8 space-y-6 animate-fade-in text-left">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           <div>
-                            <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider flex items-center gap-2">
-                              <FaTruck className="text-neutral-700" size={14} />
-                              Security Tracking Progress
+                            <h4 className="text-[10px] font-bold text-neutral-905 uppercase tracking-[0.2em] flex items-center gap-2">
+                              <FaTruck className="text-neutral-705" size={12} />
+                              Courier Log
                             </h4>
-                            <p className="text-[11px] text-neutral-500 mt-0.5">
-                              Waybill / Courier Code: <span className="font-mono font-semibold text-neutral-800">{order.trackingNumber}</span>
+                            <p className="text-[11px] text-neutral-500 mt-1">
+                              Waybill ID: <span className="font-mono text-neutral-800">{order.trackingNumber}</span>
                             </p>
                           </div>
-                          <div className="bg-white px-4 py-2 rounded-xl border border-neutral-200 text-right text-[11px]">
-                            <span className="text-neutral-400 uppercase text-[9px] font-bold block">Estimated Arrival</span>
+                          <div className="text-left sm:text-right text-[11px]">
+                            <span className="text-neutral-400 uppercase text-[9px] font-bold tracking-[0.15em] block">Delivery Details</span>
                             <span className="font-semibold text-neutral-800">{order.estimatedDelivery}</span>
                           </div>
                         </div>
 
-                        {/* Step Bar */}
-                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2">
-                          {order.steps.map((step, idx) => (
-                            <div
-                              key={idx}
-                              className={`p-4 rounded-2xl border relative flex flex-col justify-between transition-all ${step.active
-                                ? "bg-white border-neutral-900 shadow-md ring-2 ring-neutral-900/10"
-                                : step.completed
-                                  ? "bg-neutral-100/70 border-neutral-200 text-neutral-700"
-                                  : "bg-transparent border-neutral-200/60 opacity-50"
-                                }`}
-                            >
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="text-[10px] font-mono font-bold uppercase text-neutral-400">Step 0{idx + 1}</span>
-                                {step.completed ? (
-                                  <span className="h-4 w-4 rounded-full bg-neutral-900 text-white flex items-center justify-center text-[9px]">✓</span>
-                                ) : (
-                                  <span className="h-4 w-4 rounded-full border border-neutral-300 flex items-center justify-center text-[8px] text-neutral-400">○</span>
-                                )}
-                              </div>
-                              <div className="mt-2">
-                                <h5 className="text-xs font-bold text-neutral-900">{step.title}</h5>
-                                <p className="text-[10px] text-neutral-500 font-light mt-0.5">{step.desc}</p>
-                              </div>
-                              <span className="text-[9px] font-mono text-neutral-400 block mt-3 pt-2 border-t border-neutral-200/50">
-                                {step.date}
-                              </span>
-                            </div>
-                          ))}
+                        {/* Step Bar (Linear timeline) */}
+                        <div className="relative pt-6">
+                          {/* Connecting Line */}
+                          <div className="absolute top-[37px] left-0 right-0 h-[1px] bg-neutral-200 -translate-y-1/2 hidden sm:block z-0" />
+
+                          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 relative z-10">
+                            {order.steps.map((step, idx) => {
+                              const isStepCompleted = step.completed;
+                              const isStepActive = step.active;
+
+                              return (
+                                <div key={idx} className="flex sm:flex-col items-start gap-4 sm:gap-3">
+                                  {/* Step Indicator Dot */}
+                                  <div className="flex items-center justify-center shrink-0">
+                                    <div className={`h-6 w-6 rounded-full flex items-center justify-center transition-all duration-300 ${isStepActive
+                                      ? "bg-neutral-955 text-white ring-4 ring-neutral-955/15"
+                                      : isStepCompleted
+                                        ? "bg-neutral-955 text-white"
+                                        : "bg-white border border-neutral-300 text-neutral-300"
+                                      }`}>
+                                      {isStepCompleted ? (
+                                        <span className="text-[8px]">✓</span>
+                                      ) : (
+                                        <span className="text-[8px] font-mono">{idx + 1}</span>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* Step Content */}
+                                  <div className="space-y-0.5">
+                                    <h5 className={`text-xs font-bold uppercase tracking-wider ${isStepActive ? "text-neutral-955" : isStepCompleted ? "text-neutral-700" : "text-neutral-400"
+                                      }`}>
+                                      {step.title}
+                                    </h5>
+                                    <p className="text-[10px] text-neutral-500 font-light leading-relaxed">{step.desc}</p>
+                                    <span className="text-[9px] font-mono text-neutral-400 block pt-1">{step.date}</span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -361,76 +369,72 @@ export default function OrdersPage() {
                     <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
                       {/* Left Column: Items Requested */}
-                      <div className="lg:col-span-8 space-y-5 text-left">
-                        <div className="flex justify-between items-center border-b border-neutral-150 pb-3">
-                          <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest flex items-center gap-2">
-                            <FaGem className="text-neutral-800" size={12} />
-                            Jewelry Pieces in Portfolio ({order.items.length})
+                      <div className="lg:col-span-8 space-y-6 text-left">
+                        <div className="flex justify-between items-center border-b border-neutral-100 pb-3.5">
+                          <h3 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-2">
+                            <FaGem className="text-neutral-600" size={11} />
+                            Jewelry Pieces ({order.items.length})
                           </h3>
                           {order.appliedCouponCode && (
-                            <span className="bg-lime-50 text-lime-900 border border-lime-200 text-[10px] font-bold px-3 py-1 rounded-full">
-                              Promo Applied: {order.appliedCouponCode} (-{formatPrice(order.discountAmount)})
+                            <span className="text-[9px] font-bold px-3 py-1 bg-neutral-50 border border-neutral-200 text-neutral-800 uppercase tracking-wider">
+                              Code: {order.appliedCouponCode} (-{formatPrice(order.discountAmount)})
                             </span>
                           )}
                         </div>
 
-                        <div className="space-y-6">
+                        <div className="divide-y divide-neutral-100">
                           {order.items.map((item, idx) => (
                             <div
                               key={idx}
-                              className="flex flex-col sm:flex-row gap-5 p-4 rounded-2xl bg-neutral-50/50 border border-neutral-150/80 hover:bg-neutral-50 transition-colors"
+                              className="flex flex-col sm:flex-row gap-6 py-6 first:pt-0 last:pb-0"
                             >
                               {/* Product Thumbnail */}
-                              <div className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-2xl overflow-hidden border border-neutral-200 shrink-0 bg-white shadow-sm">
+                              <div className="relative h-28 w-28 overflow-hidden border border-neutral-200/60 shrink-0 bg-neutral-50">
                                 <img
                                   src={item.image}
                                   alt={item.title}
                                   className="w-full h-full object-cover"
                                 />
-                                <span className="absolute top-2 right-2 bg-neutral-900/80 text-white text-[9px] font-mono px-1.5 py-0.5 rounded backdrop-blur-sm">
-                                  ×{item.quantity}
+                                <span className="absolute top-2 right-2 bg-neutral-900/90 text-white text-[9px] font-mono px-1.5 py-0.5 tracking-wider">
+                                  QTY {item.quantity}
                                 </span>
                               </div>
 
                               {/* Item Details */}
-                              <div className="flex-1 min-w-0 flex flex-col justify-between space-y-3">
+                              <div className="flex-1 min-w-0 flex flex-col justify-between space-y-4">
                                 <div>
                                   <div className="flex justify-between items-start gap-4">
-                                    <h4 className="text-base sm:text-lg font-serif text-neutral-900 font-semibold leading-tight">
+                                    <h4 className="text-base sm:text-lg font-serif text-neutral-900 font-light tracking-wide leading-tight">
                                       {item.title}
                                     </h4>
-                                    <span className="text-sm sm:text-base font-serif font-bold text-neutral-900 shrink-0">
+                                    <span className="text-sm sm:text-base font-serif font-medium text-neutral-900 shrink-0">
                                       {formatPrice(item.total)}
                                     </span>
                                   </div>
 
-                                  {/* Specifications pills */}
-                                  <div className="flex flex-wrap gap-2 mt-2">
-                                    <span className="px-2.5 py-1 bg-white border border-neutral-200 rounded-lg text-[10px] font-medium text-neutral-700">
-                                      {item.metal}
-                                    </span>
-                                    <span className="px-2.5 py-1 bg-white border border-neutral-200 rounded-lg text-[10px] font-medium text-neutral-700">
-                                      {item.carat} Carats
-                                    </span>
-                                    <span className="px-2.5 py-1 bg-white border border-neutral-200 rounded-lg text-[10px] font-medium text-neutral-700">
-                                      {item.specs}
-                                    </span>
-                                  </div>
+                                  {/* Specifications Inline Text */}
+                                  <p className="text-[11px] text-neutral-500 mt-2 flex flex-wrap gap-x-2 gap-y-1 items-center font-light uppercase tracking-wider">
+                                    <span>{item.metal}</span>
+                                    <span className="text-neutral-300">•</span>
+                                    <span>{item.carat} Carats</span>
+                                    <span className="text-neutral-300">•</span>
+                                    <span>{item.specs}</span>
+                                  </p>
                                 </div>
 
                                 {/* Certification Dossier Badge */}
-                                <div className="flex items-center justify-between pt-3 border-t border-neutral-200/60">
-                                  <div className="flex items-center gap-2 text-neutral-700 text-[11px]">
-                                    <FaCertificate className="text-neutral-900" size={13} />
-                                    <span className="font-semibold text-neutral-800">Laser Inscription:</span>
-                                    <span className="font-mono text-neutral-600 underline cursor-pointer hover:text-black">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3 border-t border-neutral-100 text-[11px]">
+                                  <div className="flex items-center gap-1.5 text-neutral-550">
+                                    <FaCertificate className="text-neutral-600" size={11} />
+                                    <span className="font-semibold text-neutral-805">GIA Inscription:</span>
+                                    <span className="font-mono text-neutral-500 underline cursor-pointer hover:text-black">
                                       {item.certificate}
                                     </span>
                                   </div>
 
                                   <button
                                     onClick={() => triggerToast(`Verified ${item.certificate} inside GIA/IGI Vault Database`)}
-                                    className="text-[10px] font-bold uppercase tracking-wider text-neutral-800 hover:text-black underline cursor-pointer flex items-center gap-1"
+                                    className="text-[9px] font-bold uppercase tracking-wider text-neutral-800 hover:text-black underline cursor-pointer flex items-center gap-1"
                                   >
                                     Verify Report →
                                   </button>
@@ -445,53 +449,53 @@ export default function OrdersPage() {
                       <div className="lg:col-span-4 lg:border-l border-neutral-200 lg:pl-8 space-y-6 text-left">
 
                         {/* Shipping Destination */}
-                        <div className="space-y-3 bg-neutral-50 p-5 rounded-2xl border border-neutral-200/60">
-                          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest flex items-center gap-1.5">
-                            <FaMapMarkerAlt size={11} className="text-neutral-700" /> Secure Destination
+                        <div className="space-y-3 pb-6 border-b border-neutral-100">
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <FaMapMarkerAlt size={10} className="text-neutral-705" /> Secure Address
                           </span>
                           <div className="space-y-1 text-xs text-neutral-700">
-                            <p className="font-bold text-neutral-900 text-sm">{order.customerName}</p>
-                            <p className="font-light leading-relaxed">{order.address}</p>
-                            <p className="font-mono text-[11px] text-neutral-500 pt-1">{order.phone} • {order.email}</p>
+                            <p className="font-semibold text-neutral-900 text-sm tracking-wide">{order.customerName}</p>
+                            <p className="font-light leading-relaxed text-neutral-505">{order.address}</p>
+                            <p className="font-mono text-[10px] text-neutral-400 pt-1">{order.phone} • {order.email}</p>
                           </div>
                         </div>
 
                         {/* Quick Atelier Actions */}
                         <div className="space-y-3">
-                          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">
-                            Atelier Documents & Support
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider block">
+                            Documents & Concierge
                           </span>
 
                           <div className="grid grid-cols-1 gap-2.5">
                             <button
                               onClick={() => triggerToast(`Downloading Official GIA/IGI Valuation Dossier for ${order.id}...`)}
-                              className="w-full py-3 px-4 bg-white hover:bg-neutral-900 hover:text-white border border-neutral-250 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 flex items-center justify-between cursor-pointer group"
+                              className="w-full py-3.5 px-4 bg-transparent hover:bg-neutral-900 text-neutral-900 hover:text-white border border-neutral-900 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-between cursor-pointer"
                             >
                               <span className="flex items-center gap-2.5">
-                                <FaFileDownload className="text-neutral-500 group-hover:text-white transition-colors" size={13} />
-                                Download Certified Dossier
+                                <FaFileDownload size={11} />
+                                Download Dossier
                               </span>
                               <span>↓</span>
                             </button>
 
                             <button
                               onClick={() => triggerToast(`Generating Official Escrow Tax Invoice for ${order.id}...`)}
-                              className="w-full py-3 px-4 bg-white hover:bg-neutral-900 hover:text-white border border-neutral-250 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 flex items-center justify-between cursor-pointer group"
+                              className="w-full py-3.5 px-4 bg-transparent hover:bg-neutral-900 text-neutral-900 hover:text-white border border-neutral-900 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-between cursor-pointer"
                             >
                               <span className="flex items-center gap-2.5">
-                                <FaPrint className="text-neutral-500 group-hover:text-white transition-colors" size={13} />
-                                Print Official Invoice
+                                <FaPrint size={11} />
+                                Print Invoice
                               </span>
                               <span>→</span>
                             </button>
 
                             <button
                               onClick={() => triggerToast(`Atelier Concierge notified: Requesting private ring resize / maintenance service`)}
-                              className="w-full py-3 px-4 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 rounded-xl text-xs font-bold tracking-wider uppercase transition-all text-neutral-800 flex items-center justify-between cursor-pointer"
+                              className="w-full py-3.5 px-4 bg-neutral-100 hover:bg-neutral-900 hover:text-white border border-transparent text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-between cursor-pointer text-neutral-800"
                             >
                               <span className="flex items-center gap-2.5">
-                                <FaRedoAlt size={11} className="text-neutral-600" />
-                                Request Concierge Resize
+                                <FaRedoAlt size={10} />
+                                Concierge Resize
                               </span>
                               <span>✦</span>
                             </button>
@@ -499,8 +503,8 @@ export default function OrdersPage() {
                         </div>
 
                         {/* Concierge Help Note */}
-                        <p className="text-[11px] text-neutral-400 font-light leading-relaxed pt-2 border-t border-neutral-200">
-                          Need modifications before dispatch? Contact your private jeweler directly or email <span className="underline font-medium text-neutral-700">concierge@dndiamond.com</span> quoting reference <span className="font-mono text-neutral-800">{order.id}</span>.
+                        <p className="text-[10px] text-neutral-400 font-light leading-relaxed pt-2 border-t border-neutral-100">
+                          Need modifications before dispatch? Contact your private jeweler directly or email <span className="underline font-medium text-neutral-600">concierge@dndiamond.com</span> quoting reference <span className="font-mono text-neutral-808">{order.id}</span>.
                         </p>
 
                       </div>
@@ -512,16 +516,16 @@ export default function OrdersPage() {
             </div>
           ) : (
             /* Empty State when Search/Tab yields no matches */
-            <div className="bg-white border border-neutral-200 rounded-3xl p-16 max-w-xl mx-auto text-center space-y-6 shadow-sm">
-              <div className="h-20 w-20 bg-neutral-50 rounded-full flex items-center justify-center text-neutral-400 mx-auto border border-neutral-200">
-                <FaInbox size={26} />
+            <div className="bg-white border border-neutral-200 p-16 max-w-xl mx-auto text-center space-y-6">
+              <div className="h-16 w-16 bg-neutral-50 rounded-full flex items-center justify-center text-neutral-450 mx-auto border border-neutral-200">
+                <FaInbox size={20} />
               </div>
               <div className="space-y-2">
-                <h3 className="font-serif text-2xl tracking-wide text-neutral-900">
+                <h3 className="font-serif text-xl tracking-wide text-neutral-900">
                   No Matching Inquiries
                 </h3>
-                <p className="text-xs sm:text-sm text-neutral-500 leading-relaxed font-light max-w-md mx-auto">
-                  No orders matched your current filter &apos;<span className="font-semibold text-neutral-800">{activeTab}</span>&apos; or search query &apos;<span className="font-mono text-neutral-800">{searchQuery}</span>&apos;.
+                <p className="text-xs text-neutral-500 leading-relaxed font-light max-w-md mx-auto">
+                  No orders matched your current filter &apos;<span className="font-semibold text-neutral-808">{activeTab}</span>&apos; or search query &apos;<span className="font-mono text-neutral-808">{searchQuery}</span>&apos;.
                 </p>
               </div>
               <button
@@ -529,7 +533,7 @@ export default function OrdersPage() {
                   setActiveTab("all");
                   setSearchQuery("");
                 }}
-                className="inline-block px-8 py-3.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer border-0 transition-colors"
+                className="inline-block px-8 py-3.5 bg-neutral-900 hover:bg-neutral-808 text-white text-[10px] font-bold uppercase tracking-wider cursor-pointer border-0 transition-colors"
               >
                 Reset Filters & View All
               </button>
@@ -537,21 +541,21 @@ export default function OrdersPage() {
           )}
 
           {/* Bottom Security Assurance Banner */}
-          <div className="bg-neutral-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 text-left">
+          <div className="border border-neutral-200 bg-white p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-left transition-all duration-300 hover:border-neutral-350">
             <div className="space-y-3 max-w-2xl">
-              <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-400 uppercase block">
+              <span className="text-[9px] font-bold tracking-[0.25em] text-neutral-400 uppercase block">
                 INSURED VAULT SHIPPING
               </span>
-              <h3 className="text-2xl sm:text-3xl font-serif font-light text-white tracking-wide">
+              <h3 className="text-2xl sm:text-3xl font-serif font-light text-neutral-900 tracking-wide">
                 100% Fully Insured Armored Delivery
               </h3>
-              <p className="text-xs sm:text-sm text-neutral-300 font-light leading-relaxed">
+              <p className="text-xs text-neutral-500 font-light leading-relaxed">
                 Every DN Diamond delivery travels via Brinks or Malca-Amit armored security couriers, fully insured from our Antwerp/New York ateliers directly to your doorstep. All deliveries require dual signature identification.
               </p>
             </div>
             <button
               onClick={() => router.push("/jewelry")}
-              className="px-8 py-4 bg-white hover:bg-neutral-100 text-neutral-900 text-xs font-bold uppercase tracking-widest rounded-xl transition-colors shrink-0 cursor-pointer shadow-md"
+              className="px-8 py-4 bg-neutral-900 hover:bg-neutral-808 text-white text-[10px] font-bold uppercase tracking-widest transition-colors shrink-0 cursor-pointer shadow-none"
             >
               Explore New Collections
             </button>

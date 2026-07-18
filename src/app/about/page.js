@@ -308,7 +308,7 @@ export default function AboutPage() {
                     SECTION 1: EDITORIAL MINIMALIST HERO (Discover World's Best Jewelry)
                     ================================================== */}
                 <section className="relative w-full pt-16 pb-20 sm:pt-24 sm:pb-28">
-                    <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 flex flex-col items-center">
+                    <div className="container mx-auto px-6 sm:px-12 lg:px-24 flex flex-col items-center">
 
                         {/* Title Header with inline oval image */}
                         <div className="w-full text-center space-y-4 js-about-hero-content">
@@ -336,7 +336,7 @@ export default function AboutPage() {
 
                             {/* Left Column: Square profile image & Shop Now pill button */}
                             <div className="col-span-1 md:col-span-3 flex flex-col items-center md:items-start space-y-6">
-                                <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-square max-w-[240px] bg-neutral-100 shadow-sm">
+                                <div className="relative group overflow-hidden  w-full aspect-square max-w-[240px] bg-neutral-100 shadow-sm">
                                     <span className="absolute top-3 left-3 text-[10px] font-mono text-neutral-500 z-10 font-medium">/01</span>
                                     <img
                                         src="/about/close-up-brunette-woman-hand-pushing-her-hair-back-her-ear-baring-silver-earring.jpg"
@@ -353,7 +353,7 @@ export default function AboutPage() {
 
                             {/* Middle Column: Dominant Portrait Necklaces Image */}
                             <div className="col-span-1 md:col-span-6 flex justify-center">
-                                <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-[3/4] max-w-[380px] bg-neutral-100 shadow-sm">
+                                <div className="relative group overflow-hidden  w-full aspect-[3/4] max-w-[380px] bg-neutral-100 shadow-sm">
                                     <img
                                         src="/about/retro-style-portrait-young-woman-dark-background.jpg"
                                         alt="Dainty gold necklaces display"

@@ -1,4 +1,4 @@
-import { Mulish, Manrope, Quicksand } from "next/font/google";
+import { Mulish, Cormorant_Garamond, Quicksand } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/context/StoreContext";
 import ReduxProvider from "@/redux/ReduxProvider";
@@ -11,10 +11,11 @@ const mulish = Mulish({
   style: ["normal", "italic"],
 });
 
-const manrope = Manrope({
+const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const quicksand = Quicksand({
@@ -33,7 +34,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${mulish.variable} ${manrope.variable} ${quicksand.variable} h-full scroll-smooth antialiased`}
+      className={`${mulish.variable} ${cormorantGaramond.variable} ${quicksand.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-slate-background text-primary font-sans flex flex-col">
         <ReduxProvider>

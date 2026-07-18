@@ -10,6 +10,7 @@ import ProductCard from "@/components/ui/ProductCard";
 import EditorialBlock from "@/components/ui/EditorialBlock";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMainPage } from "@/redux/landingSlice";
+import { fetchCategories } from "@/redux/categorySlice";
 
 const MARQUEE_ITEMS = [
   "Fine Jewellery",
@@ -350,6 +351,20 @@ export default function Home() {
   const { formatPrice } = useStore();
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.landing);
+  const { items: apiCategories } = useSelector((state) => state.categories);
+
+  const ringCat = useMemo(() => apiCategories?.find(cat => cat.slug === 'rings' || cat.name?.toLowerCase().includes('ring')), [apiCategories]);
+  const necklaceCat = useMemo(() => apiCategories?.find(cat => cat.slug === 'necklaces' || cat.name?.toLowerCase().includes('necklace') || cat.name?.toLowerCase().includes('pendant')), [apiCategories]);
+  const earringCat = useMemo(() => apiCategories?.find(cat => cat.slug === 'earrings' || cat.name?.toLowerCase().includes('earring')), [apiCategories]);
+
+  const fallbackCategories = useMemo(() => [
+    { name: "Rings", slug: "ring", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80" },
+    { name: "Earrings", slug: "earring", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80" },
+    { name: "Necklaces", slug: "necklace", image: "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400&q=80" },
+    { name: "Bracelets & Bangles", slug: "bracelet", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80" },
+    { name: "Pendants", slug: "pendant", image: "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400&q=80" },
+  ], []);
+  const categoriesList = useMemo(() => apiCategories && apiCategories.length > 0 ? apiCategories : fallbackCategories, [apiCategories, fallbackCategories]);
   // Slider State
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -370,6 +385,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(fetchMainPage());
+    dispatch(fetchCategories());
   }, [dispatch]);
 
   useReveal(catHeadRef, { y: 24, duration: 0.75 });
@@ -660,6 +676,20 @@ export default function Home() {
     startAutoplay();
   };
 
+  const handlePrevClick = () => {
+    if (!items || items.length === 0 || isAnimatingRef.current) return;
+    const prevIdx = (slideRef.current - 1 + items.length) % items.length;
+    transitionSlides(slideRef.current, prevIdx, "prev");
+    startAutoplay();
+  };
+
+  const handleNextClick = () => {
+    if (!items || items.length === 0 || isAnimatingRef.current) return;
+    const nextIdx = (slideRef.current + 1) % items.length;
+    transitionSlides(slideRef.current, nextIdx, "next");
+    startAutoplay();
+  };
+
   const handleScrollToNextSection = () => {
     const categoriesSection = document.querySelector("#section-categories");
     if (categoriesSection) {
@@ -759,7 +789,7 @@ export default function Home() {
                 {/* Slide Content Layer */}
                 {hasText && (
                   <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 flex items-center h-full">
-                    <div className="max-w-2xl text-left space-y-6 js-hero-content">
+                    <div className="max-w-xl md:max-w-2xl text-left space-y-6 js-hero-content">
                       {/* Category Label */}
                       {slide.label && slide.label.trim() !== "" && (
                         <span className="inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase js-hero-label">
@@ -783,13 +813,14 @@ export default function Home() {
 
                       {/* Call To Action Button */}
                       <div className="pt-4 js-hero-button">
-                        <Link href={"/diamonds"} passHref>
-                          <button className="group relative overflow-hidden px-8 py-3.5 border border-white/30 text-white text-xs font-bold uppercase tracking-[0.2em] bg-white/10 backdrop-blur-md transition-all duration-500 hover:border-white focus:outline-none shadow-lg">
-                            <span className="relative z-10 group-hover:text-black transition-colors duration-500">
-                              Shop Collection
-                            </span>
-                            <span className="absolute inset-0 bg-white origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
-                          </button>
+                        <Link
+                          href="/diamonds"
+                          className="inline-flex items-center text-[11px] font-bold uppercase tracking-[0.25em] text-white transition-colors duration-300 border-b border-white pb-1.5 hover:text-neutral-300 hover:border-white/60 group cursor-pointer"
+                        >
+                          <span>SHOP NOW</span>
+                          <span className="ml-1.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 text-[10px]">
+                            ↗
+                          </span>
                         </Link>
                       </div>
                     </div>
@@ -837,20 +868,82 @@ export default function Home() {
               </span>
             </button>
           </div>
-        </section>
-        {/* ==================================================
-                    SECTION 2: SHOP BY CATEGORY
-                    ================================================== */}
-        <section id="section-categories" className="py-10">
-          <div className="text-center space-y-2 ">
-            <h2 className="font-serif text-3xl font-medium  tracking-wide text-black">
-              Shop by Category
-            </h2>
+
+          {/* Navigation Arrows (Bottom Right) */}
+          <div className="absolute right-6 sm:right-12 bottom-10 z-40 flex items-center space-x-4">
+            <button
+              onClick={handlePrevClick}
+              className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-white hover:border-white hover:bg-white/10 transition-all duration-300 focus:outline-none cursor-pointer"
+              aria-label="Previous slide"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <button
+              onClick={handleNextClick}
+              className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-white hover:border-white hover:bg-white/10 transition-all duration-300 focus:outline-none cursor-pointer"
+              aria-label="Next slide"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
           </div>
-          <div className="mx-auto px-6 sm:px-10 lg:px-16 text-neutral-900">
-            <CategoryCarousel headerRef={catHeadRef} />
+        </section>
+        <section id="section-categories" className="py-20 bg-neutral-50 border-y border-neutral-100/40 text-neutral-900">
+          <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 space-y-12">
+            <div className="text-center space-y-2">
+              <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
+                Explore Collections
+              </span>
+              <h2 className="font-serif text-3xl font-light tracking-wide text-black ">
+                Shop by Category
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 pt-4">
+              {categoriesList.map((cat) => (
+                <Link
+                  href={`/category/${cat.slug}`}
+                  className="group block text-center"
+                  key={cat._id || cat.slug}
+                >
+                  <div className="overflow-hidden bg-white aspect-[4/5] border border-neutral-100/60 shadow-2xs rounded-xs">
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 rounded-xl"
+                    />
+                  </div>
+                  <h3 className="mt-4 font-sans text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-neutral-500 group-hover:text-black transition-colors duration-300">
+                    {cat.name}
+                  </h3>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
+
 
         {/* Explore Diamonds shape cut section */}
         <ExploreDiamonds />
@@ -874,15 +967,12 @@ export default function Home() {
           </div>
         </section> */}
 
-        {/* ==================================================
-            SECTION: EDITORIAL COLLAGE (Jewelry That Speaks)
-            ================================================== */}
-        <section className="py-16 sm:py-24">
-          <div className="mx-auto px-6 sm:px-10 lg:px-16 max-w-[1600px]">
-            <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 items-center">
+        <section className="py-20 sm:py-28 bg-[#FAF9F5]/40">
+          <div className="mx-auto px-6 sm:px-10 max-w-[1600px]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
               {/* Left Column: Portrait Model Photo */}
               <div className="col-span-1 md:col-span-4 flex justify-center order-2 md:order-1">
-                <div className="relative aspect-[3/4] w-full max-w-[340px] overflow-hidden border border-neutral-100 shadow-sm select-none">
+                <div className="relative aspect-[3/4] w-full overflow-hidden border border-neutral-100 shadow-xs select-none">
                   <img
                     src="/about/glamour-beauty-jewelry-luxury-concept-close-up-beautiful-woman-with-golden-ring-diamond-earring.jpg"
                     alt="Luxury jewelry model portrait"
@@ -893,16 +983,19 @@ export default function Home() {
 
               {/* Middle Column: Central Heading & CTA */}
               <div className="col-span-2 md:col-span-4 text-center space-y-6 px-2 sm:px-4 order-1 md:order-2">
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-tight font-medium text-neutral-900 tracking-wide">
+                <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.35em] text-neutral-400 uppercase">
+                  Atelier Philosophy
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-tight font-light text-neutral-900 tracking-wide">
                   Jewelry That Speaks Before You Do
                 </h2>
                 <p className="text-neutral-500 font-sans text-xs font-light leading-relaxed max-w-xs mx-auto">
-                  Designed to carry emotion, confidence, and individuality, each piece becomes a reflection of who you are crafted to feel personal, powerful, and timeless.
+                  Designed to carry emotion, confidence, and individuality, each piece becomes a reflection of who you are—crafted to feel personal, powerful, and timeless.
                 </p>
-                <div className="pt-2">
+                <div className="pt-4">
                   <Link href="/diamonds" passHref>
-                    <button className="inline-block px-8 py-3 bg-black text-white text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-colors duration-300 cursor-pointer border-none shadow-sm">
-                      SHOP NOW
+                    <button className="inline-flex items-center justify-center px-8 py-3.5 border border-neutral-900 bg-transparent text-neutral-900 text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] transition-all duration-300 hover:bg-neutral-900 hover:text-white cursor-pointer">
+                      Shop Collection
                     </button>
                   </Link>
                 </div>
@@ -910,7 +1003,7 @@ export default function Home() {
 
               {/* Right Column: Close-up Jewelry Detail Photo */}
               <div className="col-span-1 md:col-span-4 flex justify-center order-3">
-                <div className="relative aspect-[3/4] w-full max-w-[340px] overflow-hidden border border-neutral-100 shadow-sm select-none">
+                <div className="relative aspect-[3/4] w-full overflow-hidden border border-neutral-100 shadow-xs select-none">
                   <img
                     src="/about/luxury-white-gold-diamond-necklace-dark-background.jpg"
                     alt="Gold pendant necklace detail"
@@ -925,70 +1018,38 @@ export default function Home() {
         {/* ==================================================
             SECTION: MARBLE EDITORIAL BADGES (Timeless / Most Loved)
             ================================================== */}
-        <section className="relative w-full py-24 sm:py-32 lg:py-40 overflow-hidden bg-black">
+        <section className="relative w-full py-32 sm:py-40 lg:py-48 overflow-hidden bg-black text-center flex items-center justify-center">
           {/* Abstract Fluid Marble Background Image */}
           <div className="absolute inset-0 z-0 select-none pointer-events-none">
             <img
               src="/about/diamond-jewelry-luxury-fashion-jewelry.jpg"
               alt="Luxury fluid marble background"
-              className="w-full h-full object-cover brightness-[0.25] scale-105"
+              className="w-full h-full object-cover brightness-[0.2] scale-105"
             />
             {/* Cinematic Gradient Tint */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
           </div>
 
-          <div className="relative z-10 mx-auto px-6 max-w-5xl text-center select-none text-white leading-none space-y-8 sm:space-y-10">
-            {/* Row 1 */}
-            <div className="flex flex-wrap items-center justify-center gap-y-4">
-              <span className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-[0.25em] uppercase">
-                TIMELESS
-              </span>
-              <span className="inline-block h-8 w-14 sm:h-12 sm:w-20 rounded-lg overflow-hidden align-middle mx-3 sm:mx-5 border border-white/10 shrink-0">
-                <img
-                  src="/about/diamond-ring-isolated-black-background-3d-render.jpg"
-                  alt="Timeless product snippet"
-                  className="h-full w-full object-cover"
-                />
-              </span>
-              <span className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light tracking-widest uppercase border border-white/30 rounded-full px-6 py-2">
-                MOST LOVED
-              </span>
-            </div>
-
-            {/* Row 2 */}
-            <div className="flex flex-wrap items-center justify-center gap-y-4 pt-2">
-              <span className="inline-block h-8 w-14 sm:h-12 sm:w-20 rounded-lg overflow-hidden align-middle mx-3 sm:mx-5 border border-white/10 shrink-0">
-                <img
-                  src="/about/gold-diamond-jewelry.jpg"
-                  alt="Modern look product snippet"
-                  className="h-full w-full object-cover"
-                />
-              </span>
-              <span className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light tracking-widest uppercase border border-white/30 rounded-full px-6 py-2">
-                MODERN LOOKS
-              </span>
-            </div>
-
-            {/* Row 3 */}
-            <div className="flex flex-wrap items-center justify-center gap-y-4 pt-2">
-              <span className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light tracking-widest uppercase border border-white/30 rounded-full px-6 py-2">
-                TRENDING
-              </span>
-              <span className="inline-block h-8 w-12 sm:h-12 sm:w-16 rounded-lg overflow-hidden align-middle mx-3 sm:mx-5 border border-white/10 shrink-0">
-                <img
-                  src="/about/elegant-bride-earrings-morning-bridal-preparation-fine-art-wedding-details.jpg"
-                  alt="Trending model snippet"
-                  className="h-full w-full object-cover"
-                />
-              </span>
+          <div className="relative z-10 mx-auto px-6 max-w-4xl space-y-8 select-none text-white">
+            <span className="block text-[11px] font-sans font-bold tracking-[0.35em] text-neutral-400 uppercase">
+              ✦ Atelier Curation ✦
+            </span>
+            <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-light tracking-wide text-white uppercase leading-tight">
+              Timeless Elegance &amp; Most Loved
+            </h2>
+            <p className="text-xs sm:text-sm text-neutral-300 font-light leading-relaxed max-w-xl mx-auto tracking-wide">
+              Designed to carry emotion, confidence, and individuality. Each piece in our curation becomes a reflection of who you are—crafted to feel personal, powerful, and enduring.
+            </p>
+            <div className="pt-4">
+              <Link href="/diamonds" className="inline-flex items-center text-[11px] font-bold uppercase tracking-[0.25em] text-white transition-colors duration-300 border-b border-white pb-1.5 hover:text-neutral-300 hover:border-white/60 group cursor-pointer">
+                <span>Explore the collections</span>
+                <span className="ml-1.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 text-[10px]">
+                  ↗
+                </span>
+              </Link>
             </div>
           </div>
         </section>
-
-
-
-
-
         {/* FAQ Section */}
         <FAQSection />
       </div>

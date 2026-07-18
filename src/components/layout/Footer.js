@@ -88,13 +88,13 @@ export default function Footer() {
   const categoriesList =
     apiCategories && apiCategories.length > 0
       ? apiCategories.map((cat) => ({
-          name: getDisplayCategoryName(cat.name),
-          slug: cat.slug,
-        }))
+        name: getDisplayCategoryName(cat.name),
+        slug: cat.slug,
+      }))
       : fallbackCategories;
 
   return (
-    <footer className="bg-[#0B0B0B] text-neutral-400 font-sans border-t border-[#1A1A1A] pt-16 pb-10 text-left">
+    <footer className="bg-[#0B0B0B] text-white font-sans pt-16 pb-10 text-left">
       <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
         {/* Footer Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 border-b border-[#1A1A1A] pb-16">
@@ -107,7 +107,7 @@ export default function Footer() {
                 </span>
               </Link>
               <p className="text-xs font-light leading-relaxed max-w-sm text-neutral-400">
-                Ethically sourced diamonds, masterfully crafted bespoke jewelry, and 
+                Ethically sourced diamonds, masterfully crafted bespoke jewelry, and
                 extraordinary designs created to celebrate your life's most meaningful moments.
               </p>
             </div>
@@ -167,9 +167,8 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
-                  openSections.shop ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
-                }`}
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.shop ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
+                  }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   {categoriesList.map((cat) => (
@@ -208,9 +207,8 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
-                  openSections.about ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
-                }`}
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.about ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
+                  }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   <li>
@@ -255,9 +253,8 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
-                  openSections.services ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
-                }`}
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.services ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 md:mt-5"
+                  }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   <li>
@@ -313,9 +310,8 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${
-                  openSections.locations ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 lg:mt-5"
-                }`}
+                className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${openSections.locations ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 lg:mt-5"
+                  }`}
               >
                 <ul className="space-y-2.5 text-xs font-light text-neutral-400">
                   {getLocations().map((loc, idx) => (

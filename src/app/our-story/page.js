@@ -40,11 +40,11 @@ const MILESTONES = [
 
 export default function OurStoryPage() {
     const [gsapLoaded, setGsapLoaded] = useState(false);
-    
+
     // Refs for animations
     const gsapRef = useRef(null);
     const scrollTriggerRef = useRef(null);
-    
+
     const heroContentRef = useRef(null);
     const visionSectionRef = useRef(null);
     const philosophySectionRef = useRef(null);
@@ -57,7 +57,7 @@ export default function OurStoryPage() {
             try {
                 const { gsap } = await import("gsap");
                 const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-                
+
                 gsap.registerPlugin(ScrollTrigger);
                 gsapRef.current = gsap;
                 scrollTriggerRef.current = ScrollTrigger;
@@ -72,10 +72,10 @@ export default function OurStoryPage() {
     // Animate page elements on mount/gsap load
     useEffect(() => {
         if (!gsapLoaded) return;
-        
+
         const gsap = gsapRef.current;
         const ScrollTrigger = scrollTriggerRef.current;
-        
+
         const ctx = gsap.context(() => {
             // Hero fade up
             if (heroContentRef.current) {
@@ -101,7 +101,7 @@ export default function OurStoryPage() {
             if (philosophySectionRef.current) {
                 const quote = philosophySectionRef.current.querySelector(".js-quote");
                 const author = philosophySectionRef.current.querySelector(".js-author");
-                
+
                 gsap.fromTo([quote, author],
                     { opacity: 0, y: 25 },
                     {
@@ -156,7 +156,7 @@ export default function OurStoryPage() {
     return (
         <Layout>
             <div className="w-full bg-[#FAF9F6] text-[#111111] font-sans selection:bg-neutral-900/10 selection:text-[#111111] overflow-x-hidden font-light">
-                
+
                 {/* HERO SECTION */}
                 <section className="relative h-[80vh] w-full overflow-hidden flex items-center justify-start bg-black text-white">
                     <div className="absolute inset-0 z-0">
@@ -224,7 +224,7 @@ export default function OurStoryPage() {
                         </h2>
                         <div data-anim className="w-16 h-[1px] bg-neutral-800" />
                         <p data-anim className="text-neutral-700 font-sans font-light text-sm sm:text-base leading-relaxed">
-                            DN Diamond was born from a singular obsession: to liberate the maximum fire hidden within the diamond crystalline structure. Standard commercial cuts prioritize carat weight over light returns; we set out to do the exact opposite. 
+                            DN Diamond was born from a singular obsession: to liberate the maximum fire hidden within the diamond crystalline structure. Standard commercial cuts prioritize carat weight over light returns; we set out to do the exact opposite.
                         </p>
                         <p data-anim className="text-neutral-600 font-sans font-light text-sm sm:text-base leading-relaxed">
                             By selecting only conflict-free rough stones showing zero fluorescence and superb crystal purity, and setting them in custom-made, hand-forged mounts, we established a new benchmark for GIA certified diamond artistry.
@@ -265,17 +265,17 @@ export default function OurStoryPage() {
                 {/* THE BRAND PHILOSOPHY QUOTE PANEL (Dark Parallax Panel) */}
                 <section
                     ref={philosophySectionRef}
-                    className="relative bg-black text-white py-24 sm:py-32 lg:py-40 text-center px-6"
+                    className="relative bg-black text-white py-24 sm:py-32 lg:py-40 text-center px-6 mt-[200px]"
                 >
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[130px] pointer-events-none" />
-                    
+
                     <div className="relative z-10 max-w-4xl mx-auto space-y-8">
                         <FaQuoteLeft className="text-3xl sm:text-5xl text-neutral-400 opacity-60 mx-auto animate-pulse-slow" />
-                        
+
                         <blockquote className="js-quote text-2xl sm:text-4xl lg:text-5xl font-serif font-light tracking-wide leading-relaxed text-neutral-100 max-w-3xl mx-auto italic">
                             "A diamond has no light of its own. It is the jeweler’s sacred duty to shape the facets so they capture passing rays and turn them into fire. We do not craft jewelry; we organize light."
                         </blockquote>
-                        
+
                         <div className="js-author w-12 h-[1px] bg-white/40 mx-auto mt-8" />
                         <span className="block text-[11px] font-bold tracking-[0.3em] text-neutral-300 uppercase">
                             DN Diamond Master Lapidary
@@ -286,7 +286,7 @@ export default function OurStoryPage() {
                 {/* HISTORICAL MILESTONES TIMELINE */}
                 <section ref={timelineRef} className="py-24 sm:py-32 lg:py-40 bg-white">
                     <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24">
-                        
+
                         {/* Title Header */}
                         <div className="text-center space-y-4 mb-20">
                             <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
@@ -302,7 +302,7 @@ export default function OurStoryPage() {
 
                         {/* Interactive Timeline Core Layout */}
                         <div className="relative border-l border-neutral-200 ml-4 md:ml-0 md:flex md:flex-col md:items-center md:border-l-0">
-                            
+
                             {/* Central Desktop Axis Line */}
                             <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-neutral-200 hidden md:block" />
 
@@ -346,7 +346,7 @@ export default function OurStoryPage() {
                                     </div>
                                 );
                             })}
-                            
+
                         </div>
 
                     </div>
@@ -355,10 +355,10 @@ export default function OurStoryPage() {
                 {/* FINAL CALL TO ACTION */}
                 <section
                     ref={ctaRef}
-                    className="bg-black py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden"
+                    className="bg-[#0B0B0B] py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden"
                 >
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
-                    
+
                     <div className="relative z-10 max-w-3xl mx-auto px-6 js-cta-content space-y-6 sm:space-y-8">
                         <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block">
                             THE NEXT CHAPTER
@@ -369,7 +369,7 @@ export default function OurStoryPage() {
                         <p className="text-neutral-400 font-sans font-light text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
                             Whether seeking a classic solitaire, an intricate halo configuration, or a fully custom creation, start your journey today with our master setters.
                         </p>
-                        
+
                         <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="/bespoke">
                                 <button className="group relative overflow-hidden px-10 py-4 bg-white border border-white text-black text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 cursor-pointer focus:outline-none">

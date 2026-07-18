@@ -27,7 +27,7 @@ export default function sExploreDiamonds() {
                             <img
                                 src="/about/about-diamond.png"
                                 alt="Exquisite loose diamonds in a luxury box"
-                                className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
+                                className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103 rounded-xl"
                             />
                             {/* Ambient overlay */}
                             <div className="absolute inset-0 bg-neutral-950/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -51,23 +51,23 @@ export default function sExploreDiamonds() {
                         </div>
 
                         {/* Shape Icons Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-y-10 gap-x-6 sm:gap-x-8 w-full pt-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-y-14 gap-x-8 sm:gap-x-12 w-full pt-6">
                             {SHAPES.map((shape) => (
                                 <Link
                                     key={shape.name}
                                     href={`/diamonds?shape=${shape.val}`}
-                                    className="group flex flex-col items-center justify-between space-y-3"
+                                    className="group flex flex-col items-center justify-center space-y-4"
                                 >
                                     {/* Icon Container with subtle background hover */}
-                                    <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-white  flex items-center justify-center transition-all duration-500 overflow-hidden">
+                                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-white border border-neutral-100/60 shadow-xs flex items-center justify-center transition-all duration-500 overflow-hidden">
                                         <img
                                             src={`/diamonds/${shape.file}`}
                                             alt={`${shape.val} Cut Diamond`}
-                                            className="h-10 w-10 sm:h-12 sm:w-12 object-contain transition-transform duration-700 ease-out group-hover:scale-115 group-hover:rotate-[15deg] will-change-transform"
+                                            className="h-11 w-11 sm:h-14 sm:w-14 object-contain transition-transform duration-700 ease-out group-hover:scale-115 group-hover:rotate-[15deg] will-change-transform"
                                         />
                                     </div>
                                     {/* Label */}
-                                    <span className="font-sans text-[9px] sm:text-[10px] tracking-[0.2em] text-neutral-700 font-semibold uppercase group-hover:text-neutral-950 transition-colors duration-300">
+                                    <span className="w-full text-center font-sans text-[9px] sm:text-[10px] tracking-[0.25em] text-neutral-500 font-normal uppercase group-hover:text-black transition-colors duration-300">
                                         {shape.name}
                                     </span>
                                 </Link>

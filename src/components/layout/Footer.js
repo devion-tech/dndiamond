@@ -97,9 +97,9 @@ export default function Footer() {
   const categoriesList =
     apiCategories && apiCategories.length > 0
       ? apiCategories.map((cat) => ({
-          name: getDisplayCategoryName(cat.name),
-          slug: cat.slug,
-        }))
+        name: getDisplayCategoryName(cat.name),
+        slug: cat.slug,
+      }))
       : fallbackCategories;
 
   return (
@@ -177,11 +177,10 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
-                  openSections.shop
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.shop
                     ? "max-h-96 opacity-100 mt-4"
                     : "max-h-0 opacity-0 md:mt-5"
-                }`}
+                  }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   {categoriesList.map((cat) => (
@@ -220,11 +219,10 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
-                  openSections.about
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.about
                     ? "max-h-96 opacity-100 mt-4"
                     : "max-h-0 opacity-0 md:mt-5"
-                }`}
+                  }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   <li>
@@ -241,6 +239,14 @@ export default function Footer() {
                       className="hover:text-white transition-colors duration-300 block py-0.5"
                     >
                       Our Story
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/certification"
+                      className="hover:text-white transition-colors duration-300 block py-0.5"
+                    >
+                      Certification
                     </Link>
                   </li>
                   <li>
@@ -269,11 +275,10 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${
-                  openSections.services
+                className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.services
                     ? "max-h-96 opacity-100 mt-4"
                     : "max-h-0 opacity-0 md:mt-5"
-                }`}
+                  }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
                   <li>
@@ -329,11 +334,10 @@ export default function Footer() {
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${
-                  openSections.locations
+                className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${openSections.locations
                     ? "max-h-96 opacity-100 mt-4"
                     : "max-h-0 opacity-0 lg:mt-5"
-                }`}
+                  }`}
               >
                 <ul className="space-y-2.5 text-xs font-light text-neutral-400">
                   {getLocations().map((loc, idx) => (
@@ -388,13 +392,15 @@ export default function Footer() {
           <div>
             <span>© DNDIAMOND, LLC. ALL RIGHTS RESERVED.</span>
           </div>
-
-          {/* Clean Contact Anchor as alternative support link */}
-          <div>
-            <Link
-              href="/contact"
-              className="hover:text-white transition-colors duration-300"
-            >
+          {/* Legal and Contact Links */}
+          <div className="flex flex-wrap items-center gap-6 justify-center md:justify-end">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors duration-300">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-of-service" className="hover:text-white transition-colors duration-300">
+              Terms of Service
+            </Link>
+            <Link href="/contact" className="hover:text-white transition-colors duration-300">
               Support & Inquiries
             </Link>
           </div>

@@ -153,12 +153,12 @@ export default function ProductCard({ item }) {
         </div>
 
         <div className="pt-5 text-center flex flex-col items-center space-y-1.5 flex-1 justify-end p-4">
-          <h3 className="font-serif text-xs md:text-sm font-semibold text-black tracking-wide uppercase transition-colors line-clamp-1">
+          <h3 className="font-serif text-sm font-medium text-black tracking-wide  transition-colors line-clamp-1">
             {product?.title}
           </h3>
 
           <div>
-            <span className="text-[11px] md:text-sm font-bold text-black tracking-wide">
+            <span className="text-[11px]  font-bold text-black tracking-wide">
               {formatPrice(product?.display_price)}
             </span>
           </div>

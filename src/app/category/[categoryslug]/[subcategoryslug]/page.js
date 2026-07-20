@@ -219,17 +219,11 @@ function CatalogContent() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-12 relative">
+    <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 relative">
       {/* Page Header */}
-      <div className="text-center space-y-2 mb-12">
-        <span className="text-[9px] text-neutral-400 font-extrabold tracking-[0.3em] uppercase">
-          High Jewelry Atelier
-        </span>
-        <h1 className="text-3xl lg:text-4xl font-serif font-light text-neutral-900 uppercase tracking-widest">
-          The Jewelry{" "}
-          <span className="font-serif italic font-light lowercase">
-            Collection
-          </span>
+      <div className="text-center space-y-2 ">
+        <h1 className="text-3xl font-serif font-light text-neutral-900  tracking-widest">
+          The Jewelry Collection
         </h1>
       </div>
 
@@ -301,7 +295,7 @@ function CatalogContent() {
           </div>
         ) : data?.length > 0 ? (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-12 animate-fade-in">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-12 animate-fade-in">
               {data.map((item) => (
                 <ProductCard key={item?._id} item={item} />
               ))}

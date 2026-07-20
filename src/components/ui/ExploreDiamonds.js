@@ -16,7 +16,7 @@ const SHAPES = [
     { name: "HEART", file: "heart.avif", val: "Heart" },
 ];
 
-export default function sExploreDiamonds() {
+export default function ExploreDiamonds() {
     return (
         <section className="py-10">
             <div className="mx-auto  px-6 sm:px-10 lg:px-16">
@@ -37,10 +37,10 @@ export default function sExploreDiamonds() {
                     {/* Right Column: Diamond Shape Selector Grid */}
                     <div className="lg:col-span-7 space-y-10 text-center lg:text-left flex flex-col justify-center items-center lg:items-start w-full">
                         <div className="space-y-3 w-full">
-                            <span className="block text-[9px] lg:text-[10px] xl:text-[11px] font-bold tracking-[0.35em] uppercase text-neutral-400">
+                            <span className="block text-[9px] lg:text-[10px] xl:text-[11px] font-bold tracking-[0.35em]  text-neutral-400">
                                 Certified Shapes
                             </span>
-                            <h2 className="font-serif text-3xl sm:text-4xl text-neutral-900 font-light tracking-wide leading-tight uppercase">
+                            <h2 className="font-serif text-3xl sm:text-4xl text-neutral-900 font-light tracking-wide leading-tight ">
                                 Explore Our Diamonds
                             </h2>
                             <p className="text-xs xl:text-sm text-neutral-500 font-light leading-relaxed max-w-xl mx-auto lg:mx-0">
@@ -78,7 +78,7 @@ export default function sExploreDiamonds() {
                         <div className="pt-6 w-full flex justify-center lg:justify-start">
                             <Link
                                 href="/diamonds"
-                                className="btn-apollonian-outline btn-apollonian-outline-light text-[10px] sm:text-xs tracking-widest font-bold"
+                                className="border border-black px-6 py-3 text-[10px] sm:text-xs tracking-widest  rounded-xl"
                             >
                                 EXPLORE DIAMONDS
                             </Link>

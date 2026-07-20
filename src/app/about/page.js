@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Layout from "@/components/layout/Layout";
+import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 import {
     FaChevronDown,
     FaChevronLeft,
@@ -12,7 +13,10 @@ import {
     FaFingerprint,
     FaGlobe,
     FaCertificate,
-    FaAward
+    FaAward,
+    FaTruck,
+    FaHistory,
+    FaExchangeAlt
 } from "react-icons/fa";
 
 // Diamond Cut Shapes Data
@@ -314,10 +318,10 @@ export default function AboutPage() {
                         <div className="w-full text-center space-y-4 js-about-hero-content">
                             <h1 className="text-3xl sm:text-6xl lg:text-[80px] font-serif font-light text-neutral-900 tracking-[0.05em] leading-none uppercase flex flex-wrap justify-center items-center">
                                 <span>DISC</span>
-                                <span className="inline-flex w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden align-middle border border-neutral-300 mx-2 sm:mx-4 transform translate-y-[-2px] sm:translate-y-[4px]">
+                                <span className="inline-flex w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden align-middle border border-neutral-300 mx-2  transform translate-y-[-2px] sm:translate-y-[2px]">
                                     <img
                                         src="/about/diamond-ring-isolated-black-background-3d-render.jpg"
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover rounded-xl"
                                         alt="Discover"
                                     />
                                 </span>
@@ -341,11 +345,11 @@ export default function AboutPage() {
                                     <img
                                         src="/about/close-up-brunette-woman-hand-pushing-her-hair-back-her-ear-baring-silver-earring.jpg"
                                         alt="Earrings close-up"
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-xl"
                                     />
                                 </div>
                                 <a href="/jewelry" className="inline-block">
-                                    <button className="px-6 py-2 border border-neutral-800 rounded-full text-xs font-semibold uppercase tracking-widest text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all duration-300 flex items-center gap-2 cursor-pointer bg-transparent">
+                                    <button className="px-6 py-2 border border-neutral-800 rounded-xl text-xs font-semibold uppercase tracking-widest text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all duration-300 flex items-center gap-2 cursor-pointer bg-transparent">
                                         Shop Now <span className="text-sm">→</span>
                                     </button>
                                 </a>
@@ -357,7 +361,7 @@ export default function AboutPage() {
                                     <img
                                         src="/about/retro-style-portrait-young-woman-dark-background.jpg"
                                         alt="Dainty gold necklaces display"
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-xl"
                                     />
                                 </div>
                             </div>
@@ -379,11 +383,11 @@ export default function AboutPage() {
                                 </div>
 
                                 {/* Small horizontal close-up image */}
-                                <div className="relative group overflow-hidden border border-neutral-250 w-full aspect-[16/10] max-w-[240px] bg-neutral-100 shadow-sm">
+                                <div className="relative group overflow-hidden  w-full aspect-[16/10] max-w-[240px] bg-neutral-100 shadow-sm">
                                     <img
                                         src="/about/luxury-white-gold-diamond-necklace-dark-background.jpg"
                                         alt="Gold ring and necklace details close-up"
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-xl"
                                     />
                                 </div>
 
@@ -491,271 +495,72 @@ export default function AboutPage() {
 
 
 
+
+
                 {/* ==================================================
-                    SECTION: CERTIFICATION & TRUST STANDARDS (Multiple Laboratory Verifications)
+                    SECTION: OUR PROMISE
                     ================================================== */}
-                <section
-                    id="certification"
-                    className="py-24 sm:py-32 bg-[#FAF9F6] border-y border-neutral-200"
-                >
-                    <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 space-y-16">
-
-                        {/* Heading header row */}
-                        <div className="text-left space-y-4 max-w-3xl">
-                            <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
-                                GEMOLOGICAL AUTHENTICITY
-                            </span>
-                            <h2 className="text-3xl sm:text-5xl font-serif font-light tracking-wide text-neutral-900 leading-tight">
-                                International Diamond Grading Standards
-                            </h2>
-                            <div className="w-16 h-[1px] bg-neutral-800 my-4" />
-                            <p className="text-neutral-700 font-sans font-light text-sm sm:text-base leading-relaxed">
-                                Every loose diamond and bespoke commission curated by DN Diamond undergoes strict independent certification matching global gemological criteria. We guarantee authenticity by sourcing diamonds holding verification credentials from the world&apos;s three leading independent authorities: GIA, IGI, and HRD Antwerp.
-                            </p>
-                        </div>
-
-                        {/* Six column comprehensive certification standards */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-
-                            {/* Card 1: GIA */}
-                            <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 text-left hover:shadow-md hover:border-neutral-300 transition-all">
-                                <div className="space-y-4 flex-1">
-                                    <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
-                                        <h3 className="font-serif text-xl text-neutral-900 font-semibold uppercase tracking-wide">
-                                            GIA
-                                        </h3>
-                                        <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded">
-                                            USA Benchmark
-                                        </span>
-                                    </div>
-                                    <h4 className="text-xs font-bold text-neutral-800 tracking-wider uppercase">Gemological Institute of America</h4>
-                                    <p className="text-xs text-neutral-600 leading-relaxed font-light">
-                                        The global gold standard for natural loose diamond grading. Renowned for inventing the original 4Cs evaluation system and maintaining the strictest standards for cut symmetry and clarity.
-                                    </p>
-                                    <ul className="text-[11px] text-neutral-700 space-y-2 font-sans pt-2 border-t border-neutral-50">
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Invisible micro laser inscription
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Global online report database
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Uncompromising cut & clarity grading
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="pt-4 border-t border-neutral-100 text-[10px] font-mono text-neutral-400 flex justify-between items-center">
-                                    <span>EST. 1931</span>
-                                    <span>Carlsbad, CA</span>
-                                </div>
-                            </div>
-
-                            {/* Card 2: IGI */}
-                            <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 text-left hover:shadow-md hover:border-neutral-300 transition-all">
-                                <div className="space-y-4 flex-1">
-                                    <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
-                                        <h3 className="font-serif text-xl text-neutral-900 font-semibold uppercase tracking-wide">
-                                            IGI
-                                        </h3>
-                                        <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded">
-                                            Global Authority
-                                        </span>
-                                    </div>
-                                    <h4 className="text-xs font-bold text-neutral-800 tracking-wider uppercase">International Gemological Institute</h4>
-                                    <p className="text-xs text-neutral-600 leading-relaxed font-light">
-                                        The world&apos;s premier independent laboratory for lab-grown diamonds, finished luxury jewelry pieces, and bespoke gemstone verification across 20+ worldwide labs.
-                                    </p>
-                                    <ul className="text-[11px] text-neutral-700 space-y-2 font-sans pt-2 border-t border-neutral-50">
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Advanced CVD/HPHT lab-grown screening
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Full studded jewelry mapping dossiers
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Tamper-evident security sealing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="pt-4 border-t border-neutral-100 text-[10px] font-mono text-neutral-400 flex justify-between items-center">
-                                    <span>EST. 1975</span>
-                                    <span>Antwerp / NY / Tokyo</span>
-                                </div>
-                            </div>
-
-                            {/* Card 3: HRD */}
-                            <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 text-left hover:shadow-md hover:border-neutral-300 transition-all">
-                                <div className="space-y-4 flex-1">
-                                    <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
-                                        <h3 className="font-serif text-xl text-neutral-900 font-semibold uppercase tracking-wide">
-                                            HRD
-                                        </h3>
-                                        <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded">
-                                            Europe Standard
-                                        </span>
-                                    </div>
-                                    <h4 className="text-xs font-bold text-neutral-800 tracking-wider uppercase">Hoge Raad voor Diamant</h4>
-                                    <p className="text-xs text-neutral-600 leading-relaxed font-light">
-                                        Antwerp&apos;s leading diamond authority, respected across European court systems and luxury European design houses for ultra-precise high-security certificates.
-                                    </p>
-                                    <ul className="text-[11px] text-neutral-700 space-y-2 font-sans pt-2 border-t border-neutral-50">
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Micro-text & UV-security grading cards
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Detailed luminescence & fluorescence scale
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Anonymized double-blind grading
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="pt-4 border-t border-neutral-100 text-[10px] font-mono text-neutral-400 flex justify-between items-center">
-                                    <span>EST. 1973</span>
-                                    <span>Antwerp, Belgium</span>
-                                </div>
-                            </div>
-
-                            {/* Card 4: GCAL */}
-                            <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 text-left hover:shadow-md hover:border-neutral-300 transition-all">
-                                <div className="space-y-4 flex-1">
-                                    <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
-                                        <h3 className="font-serif text-xl text-neutral-900 font-semibold uppercase tracking-wide">
-                                            GCAL
-                                        </h3>
-                                        <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded">
-                                            8X Cut Grade
-                                        </span>
-                                    </div>
-                                    <h4 className="text-xs font-bold text-neutral-800 tracking-wider uppercase">Gem Certification & Assurance Lab</h4>
-                                    <p className="text-xs text-neutral-600 leading-relaxed font-light">
-                                        Famous for the GCAL 8X Ultimate Cut grade and zero-tolerance accuracy. Every certificate includes actual photomicrographs of the diamond&apos;s internal inclusions and laser inscription.
-                                    </p>
-                                    <ul className="text-[11px] text-neutral-700 space-y-2 font-sans pt-2 border-t border-neutral-50">
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Gemprint® unique optical fingerprinting
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            360° optical brilliance & scintillation scan
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Consumer guaranteed grading accuracy
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="pt-4 border-t border-neutral-100 text-[10px] font-mono text-neutral-400 flex justify-between items-center">
-                                    <span>EST. 2001</span>
-                                    <span>New York, NY</span>
-                                </div>
-                            </div>
-
-                            {/* Card 5: AGS */}
-                            <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 text-left hover:shadow-md hover:border-neutral-300 transition-all">
-                                <div className="space-y-4 flex-1">
-                                    <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
-                                        <h3 className="font-serif text-xl text-neutral-900 font-semibold uppercase tracking-wide">
-                                            AGS
-                                        </h3>
-                                        <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded">
-                                            Ideal Cut Pioneer
-                                        </span>
-                                    </div>
-                                    <h4 className="text-xs font-bold text-neutral-800 tracking-wider uppercase">American Gem Society Laboratories</h4>
-                                    <p className="text-xs text-neutral-600 leading-relaxed font-light">
-                                        The scientific pioneers of light performance grading. Now integrated with GIA digital reports, AGS developed the industry&apos;s first mathematical standard for the &apos;Ideal Cut 0&apos; rating.
-                                    </p>
-                                    <ul className="text-[11px] text-neutral-700 space-y-2 font-sans pt-2 border-t border-neutral-50">
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            ASET light performance ray-tracing
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Exact angular tilt & leakage mapping
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Precision proportions check
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="pt-4 border-t border-neutral-100 text-[10px] font-mono text-neutral-400 flex justify-between items-center">
-                                    <span>EST. 1934</span>
-                                    <span>Las Vegas, NV</span>
-                                </div>
-                            </div>
-
-                            {/* Card 6: SGL / EGL */}
-                            <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 text-left hover:shadow-md hover:border-neutral-300 transition-all">
-                                <div className="space-y-4 flex-1">
-                                    <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
-                                        <h3 className="font-serif text-xl text-neutral-900 font-semibold uppercase tracking-wide">
-                                            SGL & EGL
-                                        </h3>
-                                        <span className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest bg-neutral-100 px-2.5 py-1 rounded">
-                                            International Lab
-                                        </span>
-                                    </div>
-                                    <h4 className="text-xs font-bold text-neutral-800 tracking-wider uppercase">Solitaire & European Gemological Labs</h4>
-                                    <p className="text-xs text-neutral-600 leading-relaxed font-light">
-                                        Widely recognized across international jewelry markets for fastidious certification of multi-stone studded jewelry, solitaire rings, and high-precision diamond assortments.
-                                    </p>
-                                    <ul className="text-[11px] text-neutral-700 space-y-2 font-sans pt-2 border-t border-neutral-50">
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Mobile laboratory studded jewelry checks
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Multi-tier diamond authenticity screening
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 bg-neutral-900 rounded-full shrink-0"></span>
-                                            Covers both natural & lab-grown stones
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="pt-4 border-t border-neutral-100 text-[10px] font-mono text-neutral-400 flex justify-between items-center">
-                                    <span>Global Network</span>
-                                    <span>London / Dubai / Mumbai</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        {/* Kimberley Process & Ethical Assurance Wide Banner */}
-                        <div className="bg-neutral-900 text-white rounded-3xl p-8 sm:p-12 shadow-md text-left flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mt-12">
-                            <div className="space-y-4 max-w-3xl">
-                                <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-400 uppercase block">
-                                    ETHICAL ORIGIN & COMPLIANCE
-                                </span>
-                                <h3 className="text-2xl sm:text-3xl font-serif font-light tracking-wide text-white">
-                                    Kimberley Process (KPCS) & RJC Certified
-                                </h3>
-                                <p className="text-neutral-300 text-xs sm:text-sm font-light leading-relaxed">
-                                    In addition to individual gemological grading reports, every diamond sourced by DN Diamond adheres strictly to the United Nations-backed Kimberley Process Certification Scheme (KPCS) and the Responsible Jewellery Council (RJC). We guarantee zero conflict origin, ethical mining practices, transparent chain-of-custody documentation, and 100% recycled 18K gold and platinum hallmarking on all finished creations.
+                <section className="py-20 sm:py-28 bg-[#FAF9F6] border-t border-neutral-200 text-center">
+                    <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 space-y-12">
+                        <div className="max-w-2xl mx-auto space-y-4">
+                            <AnimateOnScroll direction="up" delay={100}>
+                                <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-wide text-neutral-900">
+                                    Our Promise
+                                </h2>
+                                <p className="text-neutral-500 font-sans font-light text-xs sm:text-sm leading-relaxed mt-4">
+                                    At DN Diamond, we&apos;re committed to sustainable luxury and transparent craftsmanship. Every diamond jewellery piece reflects our dedication to quality, ethics, and customer satisfaction.
                                 </p>
-                            </div>
-                            <div className="shrink-0 flex flex-wrap gap-3">
-                                <span className="px-4 py-2 bg-white/10 border border-white/20 rounded-full text-[11px] font-mono tracking-wider uppercase text-neutral-200">
-                                    ✓ 100% Conflict-Free
-                                </span>
-                                <span className="px-4 py-2 bg-white/10 border border-white/20 rounded-full text-[11px] font-mono tracking-wider uppercase text-neutral-200">
-                                    ✓ Traceable Origin
-                                </span>
-                            </div>
+                            </AnimateOnScroll>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 pt-6">
+                            {/* Promise 1 */}
+                            <AnimateOnScroll direction="up" delay={150}>
+                                <div className="flex flex-col items-center p-6 space-y-4 lg:border-r lg:border-neutral-200/50 last:border-r-0 h-full">
+                                    <div className="text-neutral-800 text-3xl mb-1">
+                                        <FaCertificate />
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-serif font-light text-neutral-900 uppercase tracking-wider text-center max-w-[200px]">
+                                        Certified Diamond Jewellery
+                                    </span>
+                                </div>
+                            </AnimateOnScroll>
+
+                            {/* Promise 2 */}
+                            <AnimateOnScroll direction="up" delay={250}>
+                                <div className="flex flex-col items-center p-6 space-y-4 lg:border-r lg:border-neutral-200/50 last:border-r-0 h-full">
+                                    <div className="text-neutral-800 text-3xl mb-1">
+                                        <FaTruck />
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-serif font-light text-neutral-900 uppercase tracking-wider text-center max-w-[200px]">
+                                        Free Shipping with Insurance
+                                    </span>
+                                </div>
+                            </AnimateOnScroll>
+
+                            {/* Promise 3 */}
+                            <AnimateOnScroll direction="up" delay={350}>
+                                <div className="flex flex-col items-center p-6 space-y-4 lg:border-r lg:border-neutral-200/50 last:border-r-0 h-full">
+                                    <div className="text-neutral-800 text-3xl mb-1">
+                                        <FaShieldAlt />
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-serif font-light text-neutral-900 uppercase tracking-wider text-center max-w-[200px]">
+                                        Lifetime Warranty
+                                    </span>
+                                </div>
+                            </AnimateOnScroll>
+
+                            {/* Promise 4 */}
+                            <AnimateOnScroll direction="up" delay={450}>
+                                <div className="flex flex-col items-center p-6 space-y-4 h-full">
+                                    <div className="text-neutral-800 text-3xl mb-1">
+                                        <FaGlobe />
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-serif font-light text-neutral-900 uppercase tracking-wider text-center max-w-[200px]">
+                                        Conflict-Free Sourcing
+                                    </span>
+                                </div>
+                            </AnimateOnScroll>
                         </div>
                     </div>
                 </section>
@@ -765,7 +570,7 @@ export default function AboutPage() {
                 {/* ==================================================
                     SECTION 8: FINAL CTA (Luxury Dark Section)
                     ================================================== */}
-                <section className="bg-black py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden">
+                <section className="bg-[#0B0B0B] py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
 
                     <div className="relative z-10 max-w-3xl mx-auto px-6 js-cta-content space-y-6 sm:space-y-8">
@@ -781,7 +586,7 @@ export default function AboutPage() {
 
                         <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="/jewelry">
-                                <button className="group relative overflow-hidden px-10 py-4 bg-white border border-white text-black text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer">
+                                <button className="group relative rounded-xl overflow-hidden px-10 py-4 bg-white border border-white text-black text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer">
                                     <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                                         Explore Collection
                                     </span>
@@ -789,7 +594,7 @@ export default function AboutPage() {
                                 </button>
                             </a>
                             <a href="/contact">
-                                <button className="group relative overflow-hidden px-10 py-4 border border-white text-white text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer bg-transparent">
+                                <button className="group relative overflow-hidden rounded-xl px-10 py-4 border border-white text-white text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer bg-transparent">
                                     <span className="relative z-10 group-hover:text-[#111111] transition-colors duration-500">
                                         Book Atelier Visit
                                     </span>

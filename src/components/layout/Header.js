@@ -20,36 +20,6 @@ import AuthModal from "../ui/AuthModal";
 
 // Fallback categories removed to make the component fully dynamic.
 
-const FEATURED_PRODUCTS = {
-  ring: {
-    title: "TIARA DIAMOND RING",
-    designer: "by Design Lab",
-    image:
-      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80",
-    path: "/category/JW-108",
-  },
-  earring: {
-    title: "STELLA SOLITAIRE STUDS",
-    designer: "by Atelier dn",
-    image:
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80",
-    path: "/category/JW-103",
-  },
-  bracelets: {
-    title: "SIGNATURE TENNIS BRACELET",
-    designer: "by Atelier dn",
-    image:
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80",
-    path: "/category/JW-104",
-  },
-  necklace: {
-    title: "ETERNAL BLOSSOM PENDANT",
-    designer: "by Design Lab",
-    image:
-      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400&q=80",
-    path: "/category/JW-105",
-  },
-};
 
 function getDBCategory(apiName) {
   const lower = apiName.toLowerCase();
@@ -431,7 +401,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
                   <li>
                     <Link
-                      href="/about#certification"
+                      href="/certification"
                       onClick={() => setIsAboutHovered(false)}
                       className="hover:text-neutral-955 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
                     >
@@ -446,7 +416,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         {/* Center: Brand Logo Text */}
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Link href="/">
-            <span className="text-[11px] min-[375px]:text-sm sm:text-lg md:text-2xl font-light tracking-[0.15em] sm:tracking-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
+            <span className="text-[11px] min-[375px]:text-sm sm:text-lg md:text-2xl font-light tracking-[0.15em] sm:tracking-[0.3em] pl-[0.15em] sm:pl-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
               DNDIAMOND
             </span>
           </Link>

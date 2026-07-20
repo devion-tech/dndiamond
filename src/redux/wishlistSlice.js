@@ -31,7 +31,6 @@ const resolveCategoryName = (categoryField, subcategoryField) => {
 export const toggleWishlist = createAsyncThunk(
   "wishlist/toggleWishlist",
   async ({ product_id }, { dispatch }) => {
-    console.log("product_id", product_id);
     try {
       const data = await apiRequest("/api/wishlist/", {
         method: "POST",
@@ -47,7 +46,6 @@ export const toggleWishlist = createAsyncThunk(
 export const fetchWishlist = createAsyncThunk(
   "wishlist/fetchWishlist",
   async () => {
-    console.log("called");
     const data = await apiRequest("/api/wishlist/?page=1&limit=50");
     return data.data || [];
   },

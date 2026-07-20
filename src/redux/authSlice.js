@@ -57,6 +57,15 @@ export const registerUser = createAsyncThunk(
         method: "POST",
         body: JSON.stringify({ name, email, phone, password }),
       });
+      if (data?.data?.token) {
+        localStorage.setItem("praya_token", data.data.token);
+        const userObj = data.data.user || {
+          name: data.data.name || "User",
+          email,
+        };
+        localStorage.setItem("praya_user", JSON.stringify(userObj));
+        return { token: data.data.token, user: userObj };
+      }
       return data;
     } catch (err) {
       return rejectWithValue(err.message || "Registration failed");
@@ -112,7 +121,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user;
-        // state.guestId = null; // Clear guestId on successful login
         state.successMessage = "Vault access granted. Welcome.";
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -123,10 +131,11 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.successMessage =
-          "Profile registered successfully. Please sign in.";
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.successMessage = "Vault access granted. Welcome.";
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -135,5 +144,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logoutUser, clearAuthMessages, openModal, closeModal } = authSlice.actions;
+export const { logoutUser, clearAuthMessages, openModal, closeModal } =
+  authSlice.actions;
 export default authSlice.reducer;

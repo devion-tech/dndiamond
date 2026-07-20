@@ -44,7 +44,6 @@ export function StoreProvider({ children }) {
     if (typeof window === "undefined") return "HK";
     return localStorage.getItem("praya_region") || "HK";
   });
-  console.log("region :>> ", region);
   // Redux bindings
   const { token, user, guestId, authModalOpen } = useSelector(
     (state) => state.auth,
@@ -210,7 +209,6 @@ export function StoreProvider({ children }) {
         token,
       }),
     );
-    console.log("result :>> ", result);
     dispatch(fetchWishlist({ token }));
     return result;
   };
@@ -264,10 +262,29 @@ export function StoreProvider({ children }) {
     const result = await dispatch(
       registerUserThunk({ name, email, phone, password }),
     );
+
     if (registerUserThunk.fulfilled.match(result)) {
+      const authState = result.payload;
+      // Trigger cart merge and fetches
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080"}/api/cart/merge`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authState.token}`,
+          },
+          body: JSON.stringify({ guest_id: guestId }),
+        },
+      );
+      dispatch(fetchCart({ guestId }));
+      dispatch(fetchWishlist({ token: authState.token }));
       return { success: true };
     }
-    return { success: false, message: result.payload || "Registration failed" };
+    return {
+      success: false,
+      message: result.payload || "Registration failed",
+    };
   };
 
   const loginUser = async (email, password) => {

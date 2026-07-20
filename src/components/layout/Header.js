@@ -20,7 +20,6 @@ import AuthModal from "../ui/AuthModal";
 
 // Fallback categories removed to make the component fully dynamic.
 
-
 function getDBCategory(apiName) {
   const lower = apiName.toLowerCase();
   if (lower === "ring") return "Ring";
@@ -568,7 +567,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   >
                     Sign In
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => {
                       setAuthMode("register");
                       openModal();
@@ -576,7 +575,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     className="w-full text-left mt-1 rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-500 hover:bg-neutral-50 transition-all uppercase tracking-widest cursor-pointer"
                   >
                     Create Account
-                  </button>
+                  </button> */}
                 </>
               )}
             </div>
@@ -807,7 +806,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     >
                       Sign In
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => {
                         setAuthMode("register");
                         openModal();
@@ -816,7 +815,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest cursor-pointer"
                     >
                       Create Account
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </div>

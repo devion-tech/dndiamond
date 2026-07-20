@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import * as yup from "yup";
 import { useStore } from "@/context/StoreContext";
@@ -54,6 +54,9 @@ function AuthModal() {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
+  useEffect(() => {
+    setAuthMode("login");
+  }, [authModalOpen]);
 
   const validateField = async (name, schema) => {
     try {
@@ -129,7 +132,7 @@ function AuthModal() {
       if (data && data.success) {
         setAuthSuccess("Profile registered successfully. Please sign in.");
         setTimeout(() => {
-          setAuthMode("login");
+          closeModal(false);
           setAuthSuccess("");
           setFields({ email: "", password: "", name: "", phone: "" });
         }, 1500);

@@ -284,13 +284,13 @@ export default function DiamondProductPage() {
     <Layout>
       <div className="mx-auto w-full  px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center space-y-2 ">
-          <h1 className="text-2xl font-light text-neutral-900 uppercase tracking-widest py-10">
-            Explore Diamond{" "}
+        <div className="text-center space-y-2 py-10 ">
+          <h1 className="text-3xl font-medium text-neutral-900 tracking-widest">
+            Explore Diamonds
           </h1>
         </div>
         {/* Main Specification Card */}
-        <div className="bg-white p-6 sm:p-12 space-y-12 shadow-xs rounded-none">
+        <div className="bg-white p-6 sm:p-12 space-y-12 shadow-xs rounded-xl">
           {/* Inputs Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 pt-4">
             {/* Budget Range Section */}
@@ -308,12 +308,11 @@ export default function DiamondProductPage() {
                     <button
                       key={p.label}
                       onClick={() => handleBudgetPreset(p)}
-                      className={`px-3 py-2.5 border text-[10px] font-sans font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer text-center
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white shadow-3xs"
-                              : "border-neutral-200/60 text-neutral-600 bg-transparent hover:border-neutral-900 hover:text-neutral-900"
-                          }`}
+                      className={`px-3 py-2.5 rounded-xl border text-[10px] font-sans font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer text-center
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white shadow-3xs"
+                          : "border-neutral-200/60 text-neutral-600 bg-transparent hover:border-neutral-900 hover:text-neutral-900"
+                        }`}
                     >
                       {p.label}
                     </button>
@@ -331,7 +330,7 @@ export default function DiamondProductPage() {
                     type="number"
                     value={filters.price[0] === "" ? "" : filters.price[0]}
                     onChange={(e) => handleMinPriceChange(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none"
+                    className="w-full pl-12 pr-4 py-3  border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-xl"
                     placeholder="Min HKD"
                   />
                 </div>
@@ -346,7 +345,7 @@ export default function DiamondProductPage() {
                     type="number"
                     value={filters.price[1] === "" ? "" : filters.price[1]}
                     onChange={(e) => handleMaxPriceChange(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none"
+                    className="w-full pl-12 pr-4 py-3  border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-xl"
                     placeholder="Max HKD"
                   />
                 </div>
@@ -367,12 +366,11 @@ export default function DiamondProductPage() {
                     <button
                       key={p.label}
                       onClick={() => handleCaratPreset(p)}
-                      className={`px-3 py-2.5 border text-[10px] font-sans font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer text-center
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white shadow-3xs"
-                              : "border-neutral-200/60 text-neutral-600 bg-transparent hover:border-neutral-900 hover:text-neutral-900"
-                          }`}
+                      className={`px-3 py-2.5 border rounded-xl text-[10px] font-sans font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer text-center
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white shadow-3xs"
+                          : "border-neutral-200/60 text-neutral-600 bg-transparent hover:border-neutral-900 hover:text-neutral-900"
+                        }`}
                     >
                       {p.label}
                     </button>
@@ -391,7 +389,7 @@ export default function DiamondProductPage() {
                     step="0.01"
                     value={filters.carat[0] === "" ? "" : filters.carat[0]}
                     onChange={(e) => handleMinCaratChange(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none"
+                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-xl"
                     placeholder="Min ct"
                   />
                 </div>
@@ -407,7 +405,7 @@ export default function DiamondProductPage() {
                     step="0.01"
                     value={filters.carat[1] === "" ? "" : filters.carat[1]}
                     onChange={(e) => handleMaxCaratChange(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-none"
+                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 text-xs font-light text-neutral-800 focus:outline-none focus:border-neutral-900 bg-transparent rounded-xl"
                     placeholder="Max ct"
                   />
                 </div>
@@ -426,12 +424,11 @@ export default function DiamondProductPage() {
                   <button
                     key={s.id}
                     onClick={() => setSingle("shape", s.id)}
-                    className={`group flex flex-col items-center justify-center py-5 px-3 border transition-all duration-350 cursor-pointer
-                        ${
-                          active
-                            ? "border-neutral-900 bg-neutral-950/5 text-neutral-900"
-                            : "border-neutral-200/60 hover:border-neutral-500 text-neutral-450 bg-transparent"
-                        }`}
+                    className={`group flex flex-col items-center justify-center py-5 px-3 border rounded-xl transition-all duration-350 cursor-pointer
+                        ${active
+                        ? "border-neutral-900 bg-neutral-950/5 text-neutral-900"
+                        : "border-neutral-200/60 hover:border-neutral-500 text-neutral-450 bg-transparent"
+                      }`}
                     title={s.id}
                   >
                     <div className="h-9 w-9 flex items-center justify-center transition-transform duration-500 group-hover:scale-105 select-none">
@@ -460,12 +457,11 @@ export default function DiamondProductPage() {
                     <button
                       key={c}
                       onClick={() => toggleMulti("clarity", c)}
-                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
-                          }`}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-xl cursor-pointer
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
+                        }`}
                     >
                       {c}
                     </button>
@@ -486,12 +482,11 @@ export default function DiamondProductPage() {
                     <button
                       key={c}
                       onClick={() => toggleMulti("color", c)}
-                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
-                          }`}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-xl cursor-pointer
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
+                        }`}
                     >
                       {c}
                     </button>
@@ -512,12 +507,11 @@ export default function DiamondProductPage() {
                     <button
                       key={l}
                       onClick={() => toggleMulti("lab", l)}
-                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
-                          }`}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-xl cursor-pointer
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
+                        }`}
                     >
                       {l}
                     </button>
@@ -538,12 +532,11 @@ export default function DiamondProductPage() {
                     <button
                       key={v}
                       onClick={() => setSingle("cut", v)}
-                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
-                          }`}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-xl cursor-pointer
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
+                        }`}
                     >
                       {v}
                     </button>
@@ -564,12 +557,11 @@ export default function DiamondProductPage() {
                     <button
                       key={v}
                       onClick={() => setSingle("polish", v)}
-                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
-                          }`}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-xl cursor-pointer
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
+                        }`}
                     >
                       {v}
                     </button>
@@ -590,12 +582,11 @@ export default function DiamondProductPage() {
                     <button
                       key={v}
                       onClick={() => setSingle("symmetry", v)}
-                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
-                          }`}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-xl cursor-pointer
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
+                        }`}
                     >
                       {v}
                     </button>
@@ -616,12 +607,11 @@ export default function DiamondProductPage() {
                     <button
                       key={v}
                       onClick={() => setSingle("fluorescence", v)}
-                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-full cursor-pointer
-                          ${
-                            active
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
-                          }`}
+                      className={`px-4 py-2 border text-[10px] font-sans font-bold uppercase tracking-widest transition-all duration-300 rounded-xl cursor-pointer
+                          ${active
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 text-neutral-600 bg-transparent hover:border-neutral-900"
+                        }`}
                     >
                       {v}
                     </button>
@@ -640,7 +630,7 @@ export default function DiamondProductPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="E.g., Preferred table percentage, depth percentage, target certificate ID, or custom setting requirements..."
-              className="w-full p-4 border border-neutral-200 bg-neutral-50/20 text-xs font-light text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors duration-300 rounded-none"
+              className="w-full p-4 border border-neutral-200 bg-neutral-50/20 text-xs font-light text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors duration-300 rounded-xl"
               rows={4}
             />
           </div>
@@ -649,7 +639,7 @@ export default function DiamondProductPage() {
           <div className="flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-3 pt-8 border-t border-neutral-100/80">
             <button
               onClick={resetAll}
-              className="px-6 py-3 border border-neutral-250 bg-white text-neutral-700 font-sans font-bold text-[10px] tracking-widest uppercase hover:bg-neutral-50 transition-colors duration-300 cursor-pointer"
+              className="px-6 py-3 rounded-xl border border-neutral-250 bg-white text-neutral-700 font-sans font-bold text-[10px] tracking-widest uppercase hover:bg-neutral-50 transition-colors duration-300 cursor-pointer"
             >
               Reset
             </button>
@@ -657,7 +647,7 @@ export default function DiamondProductPage() {
             <button
               onClick={shareViaEmail}
               disabled={submitting}
-              className="inline-flex justify-center items-center gap-2 px-8 py-3 bg-neutral-900 text-white font-sans font-bold text-[10px] tracking-widest uppercase hover:bg-neutral-850 transition-colors duration-300 cursor-pointer shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex rounded-xl justify-center items-center gap-2 px-8 py-3 bg-neutral-900 text-white font-sans font-bold text-[10px] tracking-widest uppercase hover:bg-neutral-850 transition-colors duration-300 cursor-pointer shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span>{submitting ? "Submitting..." : "send Inquiry"}</span>
             </button>

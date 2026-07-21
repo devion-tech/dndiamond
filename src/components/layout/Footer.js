@@ -111,7 +111,7 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-6">
             <div className="space-y-3">
               <Link href="/" className="inline-block">
-                <span className="font-serif text-xl sm:text-2xl font-light tracking-[0.35em] text-white uppercase">
+                <span className="text-xl sm:text-2xl font-light tracking-[0.35em] text-white uppercase">
                   DNDIAMOND
                 </span>
               </Link>
@@ -358,7 +358,7 @@ export default function Footer() {
             {/* Newsletter Subscription */}
             <div className="space-y-4 pt-2">
               <div className="space-y-1.5">
-                <h4 className="text-xs font-serif font-medium tracking-wider text-white">
+                <h4 className="text-xs font-medium tracking-wider text-white">
                   Join the Inner Circle
                 </h4>
                 <p className="text-[11px] text-neutral-500 font-light leading-relaxed">

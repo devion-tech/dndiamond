@@ -121,7 +121,7 @@ export default function CartDrawer({ isOpen, onClose }) {
       getCartTotal() +
       Math.round(
         getShippingFee() *
-          (shippingMethod === "Express Insured Delivery" ? feeMultiplier : 0),
+        (shippingMethod === "Express Insured Delivery" ? feeMultiplier : 0),
       )
     );
   };
@@ -460,159 +460,159 @@ export default function CartDrawer({ isOpen, onClose }) {
                     {["AlipayHK", "WeChat Pay HK"].includes(
                       orderConfirmed.paymentMethod,
                     ) && (
-                      <div className="space-y-2 text-center">
-                        <div className="flex justify-center p-2 bg-white rounded-xl border border-slate-100 max-w-[120px] mx-auto">
-                          <svg
-                            width="100"
-                            height="100"
-                            viewBox="0 0 100 100"
-                            className="text-neutral-800"
-                          >
-                            <rect width="100" height="100" fill="white" />
-                            <path
-                              d="M5,5 h20 v20 h-20 z M10,10 h10 v10 h-10 z M75,5 h20 v20 h-20 z M80,10 h10 v10 h-10 z M5,75 h20 v20 h-20 z M10,80 h10 v10 h-10 z"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="35"
-                              y="5"
-                              width="5"
-                              height="15"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="45"
-                              y="10"
-                              width="10"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="60"
-                              y="5"
-                              width="5"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="35"
-                              y="25"
-                              width="20"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="65"
-                              y="25"
-                              width="5"
-                              height="15"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="5"
-                              y="35"
-                              width="15"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="25"
-                              y="35"
-                              width="5"
-                              height="10"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="35"
-                              y="40"
-                              width="10"
-                              height="15"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="50"
-                              y="35"
-                              width="15"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="75"
-                              y="35"
-                              width="20"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="80"
-                              y="45"
-                              width="10"
-                              height="10"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="5"
-                              y="55"
-                              width="10"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="20"
-                              y="50"
-                              width="5"
-                              height="15"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="55"
-                              y="55"
-                              width="15"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="35"
-                              y="70"
-                              width="15"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="60"
-                              y="70"
-                              width="10"
-                              height="10"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="75"
-                              y="75"
-                              width="10"
-                              height="5"
-                              fill="currentColor"
-                            />
-                            <rect
-                              x="85"
-                              y="85"
-                              width="10"
-                              height="10"
-                              fill="currentColor"
-                            />
-                            <circle cx="50" cy="50" r="8" fill="#1A1A1A" />
-                          </svg>
+                        <div className="space-y-2 text-center">
+                          <div className="flex justify-center p-2 bg-white rounded-xl border border-slate-100 max-w-[120px] mx-auto">
+                            <svg
+                              width="100"
+                              height="100"
+                              viewBox="0 0 100 100"
+                              className="text-neutral-800"
+                            >
+                              <rect width="100" height="100" fill="white" />
+                              <path
+                                d="M5,5 h20 v20 h-20 z M10,10 h10 v10 h-10 z M75,5 h20 v20 h-20 z M80,10 h10 v10 h-10 z M5,75 h20 v20 h-20 z M10,80 h10 v10 h-10 z"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="35"
+                                y="5"
+                                width="5"
+                                height="15"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="45"
+                                y="10"
+                                width="10"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="60"
+                                y="5"
+                                width="5"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="35"
+                                y="25"
+                                width="20"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="65"
+                                y="25"
+                                width="5"
+                                height="15"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="5"
+                                y="35"
+                                width="15"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="25"
+                                y="35"
+                                width="5"
+                                height="10"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="35"
+                                y="40"
+                                width="10"
+                                height="15"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="50"
+                                y="35"
+                                width="15"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="75"
+                                y="35"
+                                width="20"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="80"
+                                y="45"
+                                width="10"
+                                height="10"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="5"
+                                y="55"
+                                width="10"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="20"
+                                y="50"
+                                width="5"
+                                height="15"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="55"
+                                y="55"
+                                width="15"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="35"
+                                y="70"
+                                width="15"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="60"
+                                y="70"
+                                width="10"
+                                height="10"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="75"
+                                y="75"
+                                width="10"
+                                height="5"
+                                fill="currentColor"
+                              />
+                              <rect
+                                x="85"
+                                y="85"
+                                width="10"
+                                height="10"
+                                fill="currentColor"
+                              />
+                              <circle cx="50" cy="50" r="8" fill="#1A1A1A" />
+                            </svg>
+                          </div>
+                          <p className="text-[10px] text-slate-500 text-left font-light leading-relaxed">
+                            Please scan the QR code above with your mobile{" "}
+                            {orderConfirmed.paymentMethod} app to settle the
+                            amount of{" "}
+                            <strong>
+                              {formatConvertedPrice(orderConfirmed.totalAmount)}
+                            </strong>
+                            .
+                          </p>
                         </div>
-                        <p className="text-[10px] text-slate-500 text-left font-light leading-relaxed">
-                          Please scan the QR code above with your mobile{" "}
-                          {orderConfirmed.paymentMethod} app to settle the
-                          amount of{" "}
-                          <strong>
-                            {formatConvertedPrice(orderConfirmed.totalAmount)}
-                          </strong>
-                          .
-                        </p>
-                      </div>
-                    )}
+                      )}
                   </div>
                 )}
 
@@ -650,7 +650,7 @@ export default function CartDrawer({ isOpen, onClose }) {
               </div>
               <button
                 onClick={handleReset}
-                className="w-full btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer shadow-xs border-0"
+                className="w-full bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 py-4 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer shadow-xs transition-all duration-300"
               >
                 Continue Shopping
               </button>
@@ -670,7 +670,7 @@ export default function CartDrawer({ isOpen, onClose }) {
               </p>
               <button
                 onClick={onClose}
-                className="btn-teal px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer"
+                className="bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300"
               >
                 Browse Collections
               </button>
@@ -743,7 +743,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                       </div>
 
                       <div className="text-right shrink-0 flex flex-col justify-between">
-                        <span className="text-xs font-extrabold text-slate-900">
+                        <span className="text-xs font-extrabold text-black">
                           {formatPrice(item?.total)}
                         </span>
                         <span className="text-[9px] text-slate-400 font-medium">
@@ -1567,10 +1567,10 @@ export default function CartDrawer({ isOpen, onClose }) {
                       {getShippingFee() === 0
                         ? "Free"
                         : formatConvertedPrice(
-                            Math.round(
-                              getShippingFee() * (region === "AU" ? 1.5 : 1.6),
-                            ),
-                          )}
+                          Math.round(
+                            getShippingFee() * (region === "AU" ? 1.5 : 1.6),
+                          ),
+                        )}
                     </span>
                   </div>
 
@@ -1578,7 +1578,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                     <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">
                       Estimated Total
                     </span>
-                    <span className="text-base font-extrabold text-slate-900">
+                    <span className="text-base font-extrabold text-black">
                       {formatConvertedPrice(getGrandTotal())}
                     </span>
                   </div>
@@ -1595,7 +1595,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                     router.push("/checkout");
                     onClose();
                   }}
-                  className="w-full btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs border-0"
+                  className="w-full bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 py-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all duration-300"
                 >
                   <FaLock size={12} /> Proceed to Secure Checkout
                 </button>

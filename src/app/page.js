@@ -29,16 +29,16 @@ const MARQUEE_ITEMS = [
 
 function MarqueeStrip({ dark }) {
   return (
-    <div
-      className="bg-neutral-955 border-y border-gray-300 py-3.5 overflow-hidden">
+    <div className="bg-neutral-955 border-y border-gray-300 py-4 overflow-hidden">
       <div className="flex w-max animate-marquee whitespace-nowrap">
         {/* Double items for seamless infinite scroll animation */}
         <div className="flex">
           {MARQUEE_ITEMS.map((item, i) => (
             <span
               key={i}
-              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${dark ? "text-neutral-500" : "text-neutral-400"
-                }`}
+              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${
+                dark ? "text-neutral-500" : "text-neutral-400"
+              }`}
             >
               {item}{" "}
               <span className={dark ? "text-neutral-700" : "text-neutral-200"}>
@@ -51,8 +51,9 @@ function MarqueeStrip({ dark }) {
           {MARQUEE_ITEMS.map((item, i) => (
             <span
               key={`dup-${i}`}
-              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${dark ? "text-neutral-500" : "text-neutral-400"
-                }`}
+              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${
+                dark ? "text-neutral-500" : "text-neutral-400"
+              }`}
             >
               {item}{" "}
               <span className={dark ? "text-neutral-700" : "text-neutral-200"}>
@@ -112,28 +113,29 @@ function FAQSection() {
   return (
     <section
       id="faq"
-      className="py-20 px-6 sm:px-10 lg:px-16 border-t border-neutral-100"
+      className="py-14 sm:py-16 lg:py-20 border-t border-neutral-100"
     >
-      <div className="mx-auto max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-12 sm:gap-16">
+      <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16 grid grid-cols-1 md:grid-cols-12 gap-12 sm:gap-16">
         {/* Left Column */}
         <div className="md:col-span-5 space-y-6 text-left">
           <AnimateOnScroll direction="up" delay={100}>
-            <span className="text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.25em] text-neutral-500 uppercase">
+            <span className="text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
               Need Help?
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-tight font-light text-neutral-900 tracking-wide mt-2">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight font-light text-neutral-900 tracking-wide mt-2">
               Frequently Asked Questions
             </h2>
-            <p className="text-xs sm:text-sm font-light text-neutral-500 leading-relaxed max-w-sm mt-4">
+            <p className="text-xs sm:text-sm md:text-base font-light text-neutral-500 leading-relaxed max-w-sm mt-4">
               Everything you need to know about our jewellery, customisation,
               certifications, and after-sales care.
             </p>
             <div className="pt-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-2.5 border border-neutral-900 rounded-xl text-xs font-semibold uppercase tracking-wider text-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors duration-300"
+                className="inline-flex items-center gap-2 px-8 py-3.5 border border-neutral-900 bg-neutral-900 text-white hover:bg-transparent hover:text-neutral-900 text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] rounded-xl transition-all duration-300 shadow-xs cursor-pointer"
               >
-                View all questions <span className="text-sm">→</span>
+                <span>View all questions</span>
+                <span className="text-sm">→</span>
               </Link>
             </div>
           </AnimateOnScroll>
@@ -161,8 +163,9 @@ function FAQSection() {
                     </span>
                   </button>
                   <div
-                    className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
-                      }`}
+                    className={`overflow-hidden transition-all duration-500 ${
+                      isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
+                    }`}
                   >
                     <p className="text-xs sm:text-sm font-light text-neutral-500 leading-relaxed pl-1 pb-2 max-w-2xl">
                       {item.answer}
@@ -194,7 +197,7 @@ export default function Home() {
 
   const categoriesList = useMemo(
     () => (apiCategories && apiCategories.length > 0 ? apiCategories : []),
-    [apiCategories]
+    [apiCategories],
   );
 
   // Hero Slider State
@@ -250,18 +253,20 @@ export default function Home() {
             return (
               <div
                 key={idx}
-                className={`absolute inset-0 w-full h-full flex items-center justify-start transition-all duration-1000 ease-in-out ${isActive
-                  ? "opacity-100 z-10 pointer-events-auto"
-                  : "opacity-0 z-0 pointer-events-none"
-                  }`}
+                className={`absolute inset-0 w-full h-full flex items-center justify-start transition-all duration-1000 ease-in-out ${
+                  isActive
+                    ? "opacity-100 z-10 pointer-events-auto"
+                    : "opacity-0 z-0 pointer-events-none"
+                }`}
               >
                 {/* Background Photo with slow scale pan */}
                 <div className="absolute inset-0 overflow-hidden">
                   <img
                     src={slide?.image?.image}
                     alt={slide?.title || "Dndiamond Hero Image"}
-                    className={`w-full h-full object-cover select-none transition-transform duration-[5500ms] ease-out ${isActive ? "scale-100" : "scale-115"
-                      }`}
+                    className={`w-full h-full object-cover select-none transition-transform duration-[5500ms] ease-out ${
+                      isActive ? "scale-100" : "scale-115"
+                    }`}
                   />
                   {hasText && (
                     <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/35 to-transparent z-10" />
@@ -270,15 +275,16 @@ export default function Home() {
 
                 {/* Slide Content Layer */}
                 {hasText && (
-                  <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 flex items-center h-full">
+                  <div className="relative z-20 w-full max-w-[1760px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 flex items-center h-full">
                     <div className="max-w-xl md:max-w-2xl text-left space-y-6">
                       {/* Category Label */}
                       {slide.label && slide.label.trim() !== "" && (
                         <span
-                          className={`inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase transition-all duration-700 delay-300 ${isActive
-                            ? "translate-y-0 opacity-100"
-                            : "translate-y-6 opacity-0"
-                            }`}
+                          className={`inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase transition-all duration-700 delay-300 ${
+                            isActive
+                              ? "translate-y-0 opacity-100"
+                              : "translate-y-6 opacity-0"
+                          }`}
                         >
                           {slide.label}
                         </span>
@@ -287,10 +293,11 @@ export default function Home() {
                       {/* Headline */}
                       {slide.title && slide.title.trim() !== "" && (
                         <h1
-                          className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] md:leading-[1.05] transition-all duration-1000 delay-500 ${isActive
-                            ? "translate-y-0 opacity-100"
-                            : "translate-y-8 opacity-0"
-                            }`}
+                          className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] transition-all duration-1000 delay-500 ${
+                            isActive
+                              ? "translate-y-0 opacity-100"
+                              : "translate-y-8 opacity-0"
+                          }`}
                         >
                           {slide.title.split("\n").map((line, lidx) => (
                             <span key={lidx} className="block">
@@ -303,28 +310,32 @@ export default function Home() {
                       {/* Description */}
                       {slide.description && slide.description.trim() !== "" && (
                         <div
-                          className={`mt-2 text-neutral-300 transition-all duration-1000 delay-700 ${isActive
-                            ? "translate-y-0 opacity-100"
-                            : "translate-y-8 opacity-0"
-                            }`}
+                          className={`mt-2 text-neutral-300 transition-all duration-1000 delay-700 ${
+                            isActive
+                              ? "translate-y-0 opacity-100"
+                              : "translate-y-8 opacity-0"
+                          }`}
                         >
-                          {slide.description.split("\n\n").map((para, pidx) => (
-                            <p
-                              key={pidx}
-                              className="font-light text-neutral-300 text-sm sm:text-base leading-relaxed max-w-xl"
-                            >
-                              {para}
-                            </p>
-                          ))}
+                          {slide.description
+                            .split("\n\n")
+                            .map((para, pidx) => (
+                              <p
+                                key={pidx}
+                                className="font-light text-neutral-300 text-sm sm:text-base leading-relaxed max-w-xl"
+                              >
+                                {para}
+                              </p>
+                            ))}
                         </div>
                       )}
 
                       {/* Call To Action Button */}
                       <div
-                        className={`pt-4 transition-all duration-700 delay-[900ms] ${isActive
-                          ? "translate-y-0 opacity-100"
-                          : "translate-y-6 opacity-0"
-                          }`}
+                        className={`pt-4 transition-all duration-700 delay-[900ms] ${
+                          isActive
+                            ? "translate-y-0 opacity-100"
+                            : "translate-y-6 opacity-0"
+                        }`}
                       >
                         <Link
                           href="/diamonds"
@@ -431,26 +442,28 @@ export default function Home() {
           </div>
         </section>
 
-
         {/* ==================================================
             SECTION 2: CATEGORY CAROUSEL (SIMPLE SWIPER)
             ================================================== */}
         {categoriesList && categoriesList.length > 0 && (
           <section
             id="section-categories"
-            className="py-10 bg-neutral-50/30 border-y border-neutral-100/60 overflow-hidden"
+            className="py-14 sm:py-16 lg:py-20 bg-neutral-50/30 border-y border-neutral-100/60 overflow-hidden"
           >
             <CategoryCarousel categories={categoriesList} />
           </section>
         )}
 
-        {/* BEST SELLERS */}
-        <section className="py-10">
-          <div className="mx-auto px-6 sm:px-10 lg:px-16">
-            <div className="text-center space-y-2 mb-10">
+        {/* SECTION 3: BEST SELLERS */}
+        <section className="py-14 sm:py-16 lg:py-20">
+          <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
+            <div className="text-center space-y-3 mb-12 lg:mb-16">
               <AnimateOnScroll direction="up" delay={100}>
-                <h2 className="font-serif text-3xl font-medium tracking-wide text-black">
-                  Best selling product
+                <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
+                  Curated Favorites
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide text-neutral-900">
+                  Best Selling Creations
                 </h2>
               </AnimateOnScroll>
             </div>
@@ -458,13 +471,12 @@ export default function Home() {
           </div>
         </section>
 
-
+        {/* SECTION 4: MARQUEE STRIP */}
         <MarqueeStrip />
 
-
-        {/* Philosophy section */}
-        <section className="py-10 sm:py-14 bg-[#FAF9F5]/40">
-          <div className="mx-auto px-6 sm:px-10 ">
+        {/* SECTION 5: ATELIER PHILOSOPHY */}
+        <section className="py-14 sm:py-16 lg:py-20 bg-[#FAF9F5]/40">
+          <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
               {/* Left Column: Portrait Model Photo */}
               <div className="col-span-1 md:col-span-4 flex justify-center order-2 md:order-1">
@@ -473,30 +485,29 @@ export default function Home() {
                     <img
                       src="/about/glamour-beauty-jewelry-luxury-concept-close-up-beautiful-woman-with-golden-ring-diamond-earring.jpg"
                       alt="Luxury jewelry model portrait"
-                      className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105 "
+                      className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105"
                     />
                   </div>
-
                 </AnimateOnScroll>
               </div>
 
               {/* Middle Column: Central Heading & CTA */}
               <div className="col-span-2 md:col-span-4 text-center space-y-6 px-2 sm:px-4 order-1 md:order-2">
                 <AnimateOnScroll direction="up" delay={100}>
-                  <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.35em] text-neutral-400 uppercase">
+                  <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
                     Atelier Philosophy
                   </span>
-                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-tight font-light text-neutral-900 tracking-wide mt-2">
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight font-light text-neutral-900 tracking-wide mt-2">
                     Jewelry That Speaks Before You Do
                   </h2>
-                  <p className="text-neutral-500 font-sans text-xs font-light leading-relaxed max-w-xs mx-auto mt-4">
-                    Designed to carry emotion, confidence, and individuality, each
-                    piece becomes a reflection of who you are—crafted to feel
+                  <p className="text-neutral-500 font-sans text-xs sm:text-sm md:text-base font-light leading-relaxed max-w-sm mx-auto mt-4">
+                    Designed to carry emotion, confidence, and individuality,
+                    each piece becomes a reflection of who you are—crafted to feel
                     personal, powerful, and timeless.
                   </p>
                   <div className="pt-6">
                     <Link href="/diamonds" passHref>
-                      <button className="inline-flex items-center justify-center px-8 py-3.5 border border-neutral-900 bg-transparent text-neutral-900 text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] transition-all duration-300 hover:bg-neutral-900 hover:text-white cursor-pointer rounded-xl">
+                      <button className="inline-flex items-center justify-center px-8 py-3.5 border border-neutral-900 bg-neutral-900 text-white hover:bg-transparent hover:text-neutral-900 text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] transition-all duration-300 cursor-pointer rounded-xl shadow-xs">
                         Shop Collection
                       </button>
                     </Link>
@@ -511,7 +522,7 @@ export default function Home() {
                     <img
                       src="/about/luxury-white-gold-diamond-necklace-dark-background.jpg"
                       alt="Gold pendant necklace detail"
-                      className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105 "
+                      className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105"
                     />
                   </div>
                 </AnimateOnScroll>
@@ -520,15 +531,11 @@ export default function Home() {
           </div>
         </section>
 
-
-        {/* Explore Diamonds shape cut section */}
+        {/* SECTION 6: EXPLORE DIAMONDS */}
         <ExploreDiamonds />
 
-
-        {/* ==================================================
-            SECTION: MARBLE EDITORIAL BADGES (Timeless / Most Loved)
-            ================================================== */}
-        <section className="relative w-full py-32 sm:py-40 lg:py-48 overflow-hidden bg-black text-center flex items-center justify-center">
+        {/* SECTION 7: EDITORIAL CURATION BADGE */}
+        <section className="relative w-full py-20 sm:py-24 lg:py-28 overflow-hidden bg-black text-center flex items-center justify-center">
           {/* Abstract Fluid Marble Background Image */}
           <div className="absolute inset-0 z-0 select-none pointer-events-none">
             <img
@@ -540,27 +547,27 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
           </div>
 
-          <div className="relative z-10 mx-auto px-6 max-w-4xl space-y-8 select-none text-white">
+          <div className="relative z-10 mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 max-w-4xl space-y-8 select-none text-white">
             <AnimateOnScroll direction="up" delay={100}>
-              <span className="block text-[11px] font-sans font-bold tracking-[0.35em] text-neutral-400 uppercase">
+              <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
                 ✦ Atelier Curation ✦
               </span>
-              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-light tracking-wide text-white uppercase leading-tight mt-2">
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide text-white uppercase leading-tight mt-2">
                 Timeless Elegance &amp; Most Loved
               </h2>
             </AnimateOnScroll>
             <AnimateOnScroll direction="up" delay={200}>
-              <p className="text-xs sm:text-sm text-neutral-300 font-light leading-relaxed max-w-xl mx-auto tracking-wide">
+              <p className="text-xs sm:text-sm md:text-base text-neutral-300 font-light leading-relaxed max-w-xl mx-auto tracking-wide">
                 Designed to carry emotion, confidence, and individuality. Each
-                piece in our curation becomes a reflection of who you are—crafted to
-                feel personal, powerful, and enduring.
+                piece in our curation becomes a reflection of who you are—crafted
+                to feel personal, powerful, and enduring.
               </p>
             </AnimateOnScroll>
             <AnimateOnScroll direction="up" delay={300}>
               <div className="pt-4">
                 <Link
                   href="/diamonds"
-                  className="inline-flex items-center px-6 py-2.5 border border-white rounded-xl text-[11px] font-bold uppercase tracking-[0.25em] text-white transition-colors duration-300 hover:text-neutral-300 hover:border-white/60 group cursor-pointer"
+                  className="inline-flex items-center px-8 py-3.5 border border-white rounded-xl text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:bg-white hover:text-black group cursor-pointer shadow-xs"
                 >
                   <span>Explore the collections</span>
                 </Link>
@@ -569,7 +576,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FAQ Section */}
+        {/* SECTION 8: FAQ */}
         <FAQSection />
       </div>
     </Layout>

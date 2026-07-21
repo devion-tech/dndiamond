@@ -55,7 +55,7 @@ export default function EditorialBlock({ eyebrow, heading, body, cta, ctaHref, d
       )}
       <h3
         data-anim
-        className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide leading-tight opacity-0 ${
+        className={`text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide leading-tight opacity-0 ${
           dark ? "text-white" : "text-neutral-955"
         }`}
       >
@@ -77,8 +77,10 @@ export default function EditorialBlock({ eyebrow, heading, body, cta, ctaHref, d
         <div data-anim className="pt-2 opacity-0">
           <Link
             href={ctaHref}
-            className={`btn-apollonian-outline ${
-              dark ? "btn-apollonian-outline-dark" : "btn-apollonian-outline-light"
+            className={`inline-block border px-6 py-2.5 text-[10px] font-semibold uppercase tracking-[0.25em] transition-all duration-300 rounded-xl cursor-pointer ${
+              dark
+                ? "border-white text-white hover:bg-white hover:text-neutral-900"
+                : "border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white"
             }`}
           >
             {cta}

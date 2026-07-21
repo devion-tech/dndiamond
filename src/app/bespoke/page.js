@@ -13,7 +13,7 @@ function BespokeContent() {
 
     // Form steps state
     const [step, setStep] = useState(1);
-    
+
     // Inquiry configuration state
     const [formData, setFormData] = useState({
         category: "Ring",
@@ -64,7 +64,7 @@ function BespokeContent() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         // Validate form
         const { customerName, email, phone } = formData;
         if (!customerName || !email || !phone) {
@@ -102,11 +102,11 @@ function BespokeContent() {
 
     return (
         <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-10 font-sans">
-            
+
             {/* Header */}
             <div className="text-center space-y-2 mb-10">
                 <span className="text-primary text-[10px] font-bold tracking-[0.3em] uppercase block">Atelier Tailored Crafts</span>
-                <h1 className="text-2xl sm:text-4xl font-serif font-medium text-slate-900">
+                <h1 className="text-2xl sm:text-4xl font-serif font-medium text-black">
                     Bespoke Customizer <span className="font-serif italic text-accent font-light">Atelier</span>
                 </h1>
                 <p className="text-slate-400 text-xs font-light max-w-sm mx-auto">
@@ -139,12 +139,12 @@ function BespokeContent() {
 
             {/* Customizer forms container */}
             <div className="glass-card rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-xl bg-white max-w-2xl mx-auto">
-                
+
                 {inquiryResult ? (
                     // Success View
                     <div className="text-center py-6 space-y-6">
                         <FaCheckCircle className="text-primary text-6xl mx-auto animate-bounce" />
-                        
+
                         <div className="space-y-1">
                             <h2 className="text-lg font-bold text-slate-800">Inquiry Submitted Successfully!</h2>
                             <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Reference ID: {inquiryResult.id}</p>
@@ -169,9 +169,9 @@ function BespokeContent() {
                             </div>
                         </div>
 
-                        <button 
+                        <button
                             onClick={handleReset}
-                            className="btn-teal px-8 py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest cursor-pointer shadow-xs"
+                            className="bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 px-8 py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest cursor-pointer shadow-xs transition-all duration-300"
                         >
                             Design Another Piece
                         </button>
@@ -179,12 +179,12 @@ function BespokeContent() {
                 ) : (
                     // Configuration form steps
                     <div className="space-y-6">
-                        
+
                         {/* STEP 1: Select Category */}
                         {step === 1 && (
                             <div className="space-y-6">
                                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-left">Select Category & Layout Style</h3>
-                                
+
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {[
                                         { val: "Ring", label: "Custom Ring", desc: "Solitaire bands, engagement halo rings, wedding bands.", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=200" },
@@ -210,8 +210,8 @@ function BespokeContent() {
 
                                 <div className="space-y-2 text-left">
                                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Base Band Style</label>
-                                    <select 
-                                        name="style" 
+                                    <select
+                                        name="style"
                                         value={formData.style}
                                         onChange={handleInputChange}
                                         className="w-full rounded-xl border border-slate-200 bg-white text-slate-700 px-4 py-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all font-semibold"
@@ -266,7 +266,7 @@ function BespokeContent() {
                                 {/* Carat weight select */}
                                 <div className="space-y-2 text-left">
                                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Desired Carat Size</label>
-                                    <select 
+                                    <select
                                         name="caratPreference"
                                         value={formData.caratPreference}
                                         onChange={handleInputChange}
@@ -283,7 +283,7 @@ function BespokeContent() {
                                 {/* Notes detail */}
                                 <div className="space-y-2 text-left">
                                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Design Requests details</label>
-                                    <textarea 
+                                    <textarea
                                         name="notes"
                                         rows="3"
                                         value={formData.notes}
@@ -303,8 +303,8 @@ function BespokeContent() {
                                 <div className="space-y-4">
                                     <div className="space-y-1.5 text-left">
                                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
-                                        <input 
-                                            type="text" 
+                                        <input
+                                            type="text"
                                             name="customerName"
                                             required
                                             value={formData.customerName}
@@ -317,8 +317,8 @@ function BespokeContent() {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="space-y-1.5 text-left">
                                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
-                                            <input 
-                                                type="email" 
+                                            <input
+                                                type="email"
                                                 name="email"
                                                 required
                                                 value={formData.email}
@@ -329,8 +329,8 @@ function BespokeContent() {
                                         </div>
                                         <div className="space-y-1.5 text-left">
                                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Phone</label>
-                                            <input 
-                                                type="tel" 
+                                            <input
+                                                type="tel"
                                                 name="phone"
                                                 required
                                                 value={formData.phone}
@@ -347,7 +347,7 @@ function BespokeContent() {
                         {/* Navigation buttons */}
                         <div className="flex gap-4 pt-6 border-t border-slate-100">
                             {step > 1 && (
-                                <button 
+                                <button
                                     onClick={handleBack}
                                     className="flex-1 py-3.5 border border-slate-200 hover:bg-slate-50 rounded-xl text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer transition-all"
                                 >
@@ -356,16 +356,16 @@ function BespokeContent() {
                             )}
 
                             {step < 3 ? (
-                                <button 
+                                <button
                                     onClick={handleNext}
-                                    className="flex-[2] btn-teal py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer shadow-xs transition-all"
+                                    className="flex-[2] bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer shadow-xs transition-all duration-300"
                                 >
                                     Next Step
                                 </button>
                             ) : (
-                                <button 
+                                <button
                                     onClick={handleSubmit}
-                                    className="flex-[2] btn-gold py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all"
+                                    className="flex-[2] bg-white text-neutral-900 border border-neutral-900 hover:bg-neutral-900 hover:text-white py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all duration-300"
                                 >
                                     Submit Custom Inquiry
                                 </button>

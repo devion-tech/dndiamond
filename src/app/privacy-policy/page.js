@@ -62,7 +62,7 @@ export default function PrivacyPolicyPage() {
               <span className="text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
                 Legal &amp; Transparency
               </span>
-              <h1 className="font-serif text-4xl sm:text-5xl font-light tracking-wide text-neutral-950 mt-2">
+              <h1 className="text-4xl sm:text-5xl font-light tracking-wide text-neutral-950 mt-2">
                 Privacy Policy
               </h1>
               <p className="text-neutral-500 font-mono text-[9px] sm:text-[10px] tracking-widest mt-2 uppercase">
@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
               {PRIVACY_SECTIONS.map((sec, idx) => (
                 <AnimateOnScroll key={sec.id} direction="up" delay={100 + idx * 50}>
                   <div id={sec.id} className="space-y-4 scroll-mt-28">
-                    <h2 className="font-serif text-xl sm:text-2xl font-light text-neutral-950">
+                    <h2 className="text-xl sm:text-2xl font-light text-neutral-950">
                       {sec.title}
                     </h2>
                     <p className="text-neutral-500 text-xs sm:text-sm leading-relaxed font-light font-sans max-w-3xl">

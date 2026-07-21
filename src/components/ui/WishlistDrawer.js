@@ -62,7 +62,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
               </p>
               <button
                 onClick={onClose}
-                className="btn-teal px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer"
+                className="bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 px-6 py-3 rounded-xl text-xs font-medium uppercase tracking-wider cursor-pointer transition-all duration-300"
               >
                 Continue Browsing
               </button>
@@ -101,7 +101,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                         <Link
                           href={`/product/${item.id}`}
                           onClick={onClose}
-                          className="btn-gold px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                          className="bg-white text-neutral-900 border border-neutral-900 hover:bg-neutral-900 hover:text-white px-3 py-1.5 rounded-lg text-[10px] font-medium uppercase tracking-wider flex items-center gap-1.5 cursor-pointer transition-all duration-300"
                         >
                           <FaShoppingCart size={9} /> Move to Cart
                         </Link>
@@ -116,7 +116,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                       >
                         <FaTrash size={12} />
                       </button>
-                      <span className="text-xs font-extrabold text-slate-900 mt-2">
+                      <span className="text-xs font-extrabold text-black mt-2">
                         {`${prefix}${item?.display_price}`}
                       </span>
                     </div>

@@ -97,7 +97,7 @@ export default function ProfilePage() {
             <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] block">
               Atelier Member Portal
             </span>
-            <h1 className="text-3xl font-serif font-light text-neutral-900 uppercase tracking-widest text-left">
+            <h1 className="text-3xl font-medium text-neutral-900 uppercase tracking-widest text-left">
               My Profile
             </h1>
           </div>
@@ -105,7 +105,7 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Left: User Details Card (5/12 cols) */}
             <div className="lg:col-span-5 bg-white border border-neutral-100 shadow-sm rounded-2xl p-6 md:p-8 space-y-6">
-              <h2 className="font-serif text-lg text-neutral-900 tracking-wide border-b border-neutral-100 pb-3 text-left">
+              <h2 className="text-lg font-medium text-neutral-900 tracking-wide border-b border-neutral-100 pb-3 text-left">
                 Account Details
               </h2>
               
@@ -153,7 +153,7 @@ export default function ProfilePage() {
             {/* Right: Addresses section (7/12 cols) */}
             <div className="lg:col-span-7 bg-white border border-neutral-100 shadow-sm rounded-2xl p-6 md:p-8 space-y-6">
               <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
-                <h2 className="font-serif text-lg text-neutral-900 tracking-wide text-left">
+                <h2 className="text-lg font-medium text-neutral-900 tracking-wide text-left">
                   Saved Addresses
                 </h2>
                 {!showForm && (
@@ -347,7 +347,7 @@ export default function ProfilePage() {
                     ))
                   ) : (
                     <div className="text-center py-12 space-y-3">
-                      <span className="font-serif italic text-2xl text-neutral-300">✦</span>
+                      <span className="text-2xl text-neutral-300">✦</span>
                       <h4 className="text-xs font-bold text-neutral-800 uppercase tracking-widest">No Saved Addresses</h4>
                       <p className="text-[10px] text-neutral-400 max-w-xs mx-auto font-light leading-relaxed">
                         Add a shipping address to your account to facilitate quick inquiries and checkout.

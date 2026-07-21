@@ -17,15 +17,14 @@ import {
 } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import AuthModal from "../ui/AuthModal";
-
-// Fallback categories removed to make the component fully dynamic.
+import { apiRequest } from "@/utils/api";
 
 function getDBCategory(apiName) {
   const lower = apiName.toLowerCase();
   if (lower === "ring") return "Ring";
   if (lower === "earring") return "Earring";
   if (lower === "bracelets" || lower === "bracelet") return "Bracelet & Bangle";
-  if (lower === "necklace") return "Pendant"; // Default category mapping in initial data
+  if (lower === "necklace") return "Pendant";
   return apiName;
 }
 
@@ -60,160 +59,114 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
     closeModal,
   } = useStore();
 
+  const categoriesList = apiCategories || [];
+
   const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileJewelryOpen, setMobileJewelryOpen] = useState(false);
-  const [promoVisible, setPromoVisible] = useState(true);
-
-  const [isJewelryHovered, setIsJewelryHovered] = useState(false);
-  const hoverTimeoutRef = useRef(null);
-  const [isAboutHovered, setIsAboutHovered] = useState(false);
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
-  const aboutHoverTimeoutRef = useRef(null);
-
+  const [isJewelryHovered, setIsJewelryHovered] = useState(false);
+  const [isAboutHovered, setIsAboutHovered] = useState(false);
+  const [jewelryTab, setJewelryTab] = useState("labgrown");
+  const [promoVisible, setPromoVisible] = useState(true);
+  const [authMode, setAuthMode] = useState("login");
   const [recentOrder, setRecentOrder] = useState(null);
 
-  const fetchRecentOrder = () => {
+  const fetchRecentOrder = async () => {
+    if (!user) return;
     try {
-      const stored = localStorage.getItem("praya_orders");
-      if (stored) {
-        const list = JSON.parse(stored);
-        if (list && list.length > 0) {
-          setRecentOrder(list[0]);
-          return;
+      const token = localStorage.getItem("dndiamond_token");
+      if (!token) return;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/orders/my-orders`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      if (res.ok) {
+        const data = await res.json();
+        const orders = data.data || data.orders || (Array.isArray(data) ? data : []);
+        if (orders.length > 0) {
+          const latest = orders[0];
+          setRecentOrder({
+            id: latest._id || latest.id,
+            totalAmount: latest.total_amount || latest.totalAmount || 0,
+            status: latest.status || "Processing",
+            date: new Date(latest.createdAt || Date.now()).toLocaleDateString(),
+          });
         }
       }
-      setRecentOrder(null);
     } catch (e) {
       console.error(e);
-      setRecentOrder(null);
     }
   };
-
-  const handleAboutMouseEnter = () => {
-    if (aboutHoverTimeoutRef.current)
-      clearTimeout(aboutHoverTimeoutRef.current);
-    setIsAboutHovered(true);
-  };
-
-  const handleAboutMouseLeave = () => {
-    if (aboutHoverTimeoutRef.current)
-      clearTimeout(aboutHoverTimeoutRef.current);
-    aboutHoverTimeoutRef.current = setTimeout(() => {
-      setIsAboutHovered(false);
-    }, 200);
-  };
-  const [jewelryTab, setJewelryTab] = useState("labgrown"); // "labgrown" or "natural"
-
-  const handleTabClick = (tab) => {
-    setJewelryTab(tab);
-    // Developer placeholder: User mentioned they will setup login when clicked
-    // E.g., if (tab === "natural" && !user) {
-    //   setAuthMode("login");
-    //   openModal();
-    // }
-  };
-
-  // Auth states
-  const [authMode, setAuthMode] = useState("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [regName, setRegName] = useState("");
-  const [regEmail, setRegEmail] = useState("");
-  const [regPhone, setRegPhone] = useState("");
-  const [regPassword, setRegPassword] = useState("");
-
-  const [authError, setAuthError] = useState("");
-  const [authSuccess, setAuthSuccess] = useState("");
-  const [authLoading, setAuthLoading] = useState(false);
-
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    setAuthError("");
-    setAuthSuccess("");
-    setAuthLoading(true);
-    try {
-      const data = await loginUser(email, password);
-      if (data && data.success) {
-        setAuthSuccess("Vault access granted. Welcome.");
-        setTimeout(() => {
-          closeModal();
-          setAuthSuccess("");
-          setEmail("");
-          setPassword("");
-        }, 1000);
-      } else {
-        setAuthError(data?.message || "Invalid email or password.");
-      }
-    } catch (err) {
-      setAuthError("Failed to connect to authentication server.");
-    } finally {
-      setAuthLoading(false);
-    }
-  };
-
-  const handleRegisterSubmit = async (e) => {
-    e.preventDefault();
-    setAuthError("");
-    setAuthSuccess("");
-    setAuthLoading(true);
-    try {
-      const data = await registerUser(regName, regEmail, regPhone, regPassword);
-      if (data && data.success) {
-        setAuthSuccess("Profile registered successfully. Please sign in.");
-        setTimeout(() => {
-          setAuthMode("login");
-          setAuthSuccess("");
-          setRegName("");
-          setRegEmail("");
-          setRegPhone("");
-          setRegPassword("");
-        }, 1500);
-      } else {
-        setAuthError(
-          data?.message || "Registration failed. Please check inputs.",
-        );
-      }
-    } catch (err) {
-      setAuthError("Failed to connect to authentication server.");
-    } finally {
-      setAuthLoading(false);
-    }
-  };
-
-  const handleMouseEnter = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setIsJewelryHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    hoverTimeoutRef.current = setTimeout(() => {
-      setIsJewelryHovered(false);
-    }, 200); // 200ms delay to make it extremely smooth and luxury-grade
-  };
-
-  useEffect(() => {
-    return () => {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      if (aboutHoverTimeoutRef.current)
-        clearTimeout(aboutHoverTimeoutRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  const activeCategories = apiCategories || [];
+  const timeoutRef = useRef(null);
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsJewelryHovered(true);
+  };
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsJewelryHovered(false);
+    }, 150);
+  };
 
-  const filteredSearchItems =
+  const aboutTimeoutRef = useRef(null);
+  const handleAboutMouseEnter = () => {
+    if (aboutTimeoutRef.current) clearTimeout(aboutTimeoutRef.current);
+    setIsAboutHovered(true);
+  };
+  const handleAboutMouseLeave = () => {
+    aboutTimeoutRef.current = setTimeout(() => {
+      setIsAboutHovered(false);
+    }, 150);
+  };
+
+  const handleTabClick = (tab) => {
+    setJewelryTab(tab);
+  };
+
+  const activeCategories = categoriesList.length > 0 ? categoriesList : [];
+
+  const [apiSearchResults, setApiSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setApiSearchResults([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setSearchLoading(true);
+      try {
+        const data = await apiRequest("/api/product/getProduct", {
+          method: "POST",
+          body: JSON.stringify({ search: searchQuery.trim(), limit: 5, page: 1 }),
+        });
+        const items = data?.data?.products || data?.products || (Array.isArray(data?.data) ? data.data : []);
+        setApiSearchResults(items);
+      } catch (err) {
+        console.error("Live API search error:", err);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const fallbackSearchItems =
     searchQuery.trim() !== ""
       ? [
           ...jewelry.filter(
@@ -229,21 +182,27 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         ].slice(0, 5)
       : [];
 
+  const filteredSearchItems =
+    apiSearchResults.length > 0
+      ? apiSearchResults.map((p) => ({
+          id: p._id || p.id,
+          title: p.name || p.title,
+          price: p.display_price || p.price || 0,
+          category: p.category || p.category_id?.name || "Jewelry",
+          image:
+            p.images && p.images[0]
+              ? p.images[0]
+              : p.image ||
+                "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=80",
+        }))
+      : fallbackSearchItems;
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim() !== "") {
-      const query = searchQuery.trim().toLowerCase();
+    if (searchQuery.trim()) {
+      router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery("");
-      if (
-        ["round", "cushion", "princess", "emerald", "oval", "diamond"].some(
-          (w) => query.includes(w),
-        )
-      ) {
-        router.push(`/diamonds?search=${encodeURIComponent(query)}`);
-      } else {
-        router.push(`/category?search=${encodeURIComponent(query)}`);
-      }
     }
   };
 
@@ -253,7 +212,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         <div className="w-full bg-[#0E0E0E] text-white text-center py-2.5 px-4 text-[10px] sm:text-xs font-light tracking-wide relative flex items-center justify-center z-50">
           <span>
             Exclusive offer for new customers: enjoy a 20% discount on your
-            first purchasess.
+            first purchase.
           </span>
           <button
             onClick={() => setPromoVisible(false)}
@@ -270,7 +229,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1 min-[375px]:p-2 text-neutral-700 hover:text-neutral-900 md:hidden focus:outline-none"
+            className="p-1 min-[375px]:p-2 text-neutral-700 hover:text-neutral-900 md:hidden focus:outline-none cursor-pointer"
             aria-label="Toggle Menu"
           >
             {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
@@ -283,25 +242,29 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-all duration-300">
+              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-all duration-300 cursor-pointer">
                 <span>Jewelry</span>
                 <FaChevronDown
                   size={7}
-                  className={`text-neutral-400 transition-transform duration-300 ${isJewelryHovered ? "rotate-180" : ""}`}
+                  className={`text-neutral-400 transition-transform duration-300 ${
+                    isJewelryHovered ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
               {/* Mega Menu Container */}
               <div
-                className={`absolute left-4 right-4 top-full ${isJewelryHovered ? "flex" : "hidden"} flex-col bg-white border border-neutral-100 rounded-sm p-8 shadow-xl animate-fade-in z-50 text-left cursor-default`}
+                className={`absolute left-4 right-4 top-full ${
+                  isJewelryHovered ? "flex" : "hidden"
+                } flex-col bg-white border border-neutral-100 rounded-sm p-8 shadow-xl animate-fade-in z-50 text-left cursor-default`}
               >
                 {/* Tabs Selector */}
                 <div className="flex justify-center border-b border-neutral-100 pb-4 mb-6 gap-8 w-full">
                   <button
                     onClick={() => handleTabClick("labgrown")}
-                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
+                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
                       jewelryTab === "labgrown"
-                        ? "border-neutral-900 text-neutral-900"
+                        ? "border-neutral-900 text-neutral-900 font-medium"
                         : "border-transparent text-neutral-400 hover:text-neutral-600"
                     }`}
                   >
@@ -309,9 +272,9 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   </button>
                   <button
                     onClick={() => handleTabClick("natural")}
-                    className={`text-[11px] font-bold tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
+                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
                       jewelryTab === "natural"
-                        ? "border-neutral-900 text-neutral-900"
+                        ? "border-neutral-900 text-neutral-900 font-medium"
                         : "border-transparent text-neutral-400 hover:text-neutral-600"
                     }`}
                   >
@@ -323,7 +286,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 <div className="grid grid-cols-4 gap-8 w-full">
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-4">
-                      <h4 className="font-serif text-[11px] lg:text-xs xl:text-base font-bold tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
+                      <h4 className="text-[11px] lg:text-xs xl:text-base font-medium tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
                         <Link
                           href={`/category/${cat?.slug}?origin=${jewelryTab}`}
                           onClick={() => setIsJewelryHovered(false)}
@@ -333,14 +296,14 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         </Link>
                       </h4>
                       <div className="space-y-2 pt-1">
-                        <ul className="space-y-1.5 text-[10px] lg:text-[11px] xl:text-base font-light text-neutral-500 font-medium">
+                        <ul className="space-y-1.5 text-[10px] lg:text-[11px] xl:text-base text-neutral-500 font-light">
                           {cat.subcategories &&
                             cat.subcategories.slice(0, 5).map((sub) => (
                               <li key={sub.name}>
                                 <Link
                                   href={`/category/${cat?.slug}/${sub?.slug}?origin=${jewelryTab}`}
                                   onClick={() => setIsJewelryHovered(false)}
-                                  className="hover:text-neutral-955 transition-colors block py-0.5"
+                                  className="hover:text-neutral-900 transition-colors block py-0.5"
                                 >
                                   {sub.name}
                                 </Link>
@@ -356,7 +319,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             {/* Diamond */}
             <Link
               href="/diamonds"
-              className="text-[11px] sm:text-xs xl:text-xs font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-colors"
+              className="text-[11px] sm:text-xs xl:text-xs font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-colors"
             >
               Diamond
             </Link>
@@ -367,23 +330,27 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               onMouseEnter={handleAboutMouseEnter}
               onMouseLeave={handleAboutMouseLeave}
             >
-              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-semibold tracking-widest text-neutral-800 hover:text-neutral-955 uppercase transition-all duration-300 cursor-pointer">
+              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-all duration-300 cursor-pointer">
                 <span>About</span>
                 <FaChevronDown
                   size={7}
-                  className={`text-neutral-400 transition-transform duration-300 ${isAboutHovered ? "rotate-180" : ""}`}
+                  className={`text-neutral-400 transition-transform duration-300 ${
+                    isAboutHovered ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
               <div
-                className={`absolute left-1/2 -translate-x-1/2 top-full w-44 bg-white border border-neutral-100 p-3.5 shadow-lg animate-fade-in z-50 text-left rounded-sm ${isAboutHovered ? "block" : "hidden"}`}
+                className={`absolute left-1/2 -translate-x-1/2 top-full w-44 bg-white border border-neutral-100 p-3.5 shadow-lg animate-fade-in z-50 text-left rounded-sm ${
+                  isAboutHovered ? "block" : "hidden"
+                }`}
               >
-                <ul className="space-y-2.5 text-[10px] sm:text-[11px] font-semibold tracking-wider text-neutral-700 uppercase">
+                <ul className="space-y-2.5 text-[10px] sm:text-[11px] font-medium tracking-wider text-neutral-700 uppercase">
                   <li>
                     <Link
                       href="/about"
                       onClick={() => setIsAboutHovered(false)}
-                      className="hover:text-neutral-955 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
+                      className="hover:text-neutral-950 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
                     >
                       About Us
                     </Link>
@@ -392,7 +359,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     <Link
                       href="/our-story"
                       onClick={() => setIsAboutHovered(false)}
-                      className="hover:text-neutral-955 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
+                      className="hover:text-neutral-950 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
                     >
                       Our Story
                     </Link>
@@ -402,7 +369,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     <Link
                       href="/certification"
                       onClick={() => setIsAboutHovered(false)}
-                      className="hover:text-neutral-955 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
+                      className="hover:text-neutral-950 transition-colors block py-1 border-b border-transparent hover:border-neutral-200"
                     >
                       Certification
                     </Link>
@@ -412,6 +379,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             </div>
           </nav>
         </div>
+
         {/* Center: Brand Logo Text */}
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Link href="/">
@@ -420,6 +388,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             </span>
           </Link>
         </div>
+
         <div className="flex items-center gap-1.5 min-[375px]:gap-2.5 md:gap-3">
           {/* Search Bar */}
           <div className="hidden sm:flex items-center border-b border-neutral-200 py-1 mr-2">
@@ -427,12 +396,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               type="text"
               placeholder="Search"
               onClick={() => setSearchOpen(true)}
-              className="bg-transparent text-xs xl:text-sm w-20 focus:w-36 transition-all duration-300 focus:outline-none text-neutral-800 placeholder-neutral-400 font-light"
+              className="bg-transparent text-xs xl:text-sm w-36 transition-all duration-300 focus:outline-none text-neutral-800 placeholder-neutral-400 font-light"
               readOnly
             />
             <button
               onClick={() => setSearchOpen(true)}
-              className="text-neutral-500 hover:text-neutral-800"
+              className="text-neutral-500 hover:text-neutral-800 cursor-pointer"
               aria-label="Search Catalog"
             >
               <FaSearch size={12} />
@@ -441,7 +410,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
           <button
             onClick={() => setSearchOpen(true)}
-            className="sm:hidden p-2 text-neutral-700 hover:text-neutral-900"
+            className="sm:hidden p-2 text-neutral-700 hover:text-neutral-900 cursor-pointer"
             aria-label="Search Catalog"
           >
             <FaSearch size={14} />
@@ -450,12 +419,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           {/* 1. Cart */}
           <button
             onClick={onOpenCart}
-            className="relative p-2 text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer"
+            className="relative p-2.5 flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
             aria-label="View Cart"
           >
-            <FaShoppingBag size={14} />
+            <FaShoppingBag size={16} className="shrink-0" />
             {cart.length > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-neutral-800 text-[8px] font-semibold text-white">
+              <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 text-[9px] font-medium text-white shadow-xs">
                 {totalItems}
               </span>
             )}
@@ -464,12 +433,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           {/* 2. Wishlist */}
           <button
             onClick={onOpenWishlist}
-            className="relative p-2 text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer"
+            className="relative p-2.5 flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
             aria-label="View Wishlist"
           >
-            <FaHeart size={15} />
+            <FaHeart size={16} className="shrink-0" />
             {wishlistTotal > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-neutral-800 text-[8px] font-semibold text-white">
+              <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 text-[9px] font-medium text-white shadow-xs">
                 {wishlistTotal}
               </span>
             )}
@@ -492,35 +461,35 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             >
               <FaUser
                 size={14}
-                className={user ? "text-neutral-950" : "text-neutral-400"}
+                className={user ? "text-neutral-955" : "text-neutral-400"}
               />
             </button>
             <div className="absolute right-0 top-full hidden group-hover:block w-52 bg-white border border-neutral-100 rounded-sm p-3 shadow-md animate-fade-in z-50">
               {user ? (
                 <>
                   <div className="px-2 py-1.5 border-b border-neutral-100 mb-2 text-left">
-                    <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">
+                    <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-wider">
                       Welcome Back
                     </p>
-                    <p className="text-xs font-semibold text-neutral-800 truncate">
+                    <p className="text-xs font-medium text-neutral-800 truncate">
                       {user.name || user.email}
                     </p>
                   </div>
                   <Link
                     href="/profile"
-                    className="block rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-left border-b border-neutral-50"
+                    className="block rounded-sm px-2 py-1.5 text-[10px] font-medium text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-left border-b border-neutral-50"
                   >
                     My Profile
                   </Link>
                   <Link
                     href="/orders"
-                    className="block rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-left border-b border-neutral-50"
+                    className="block rounded-sm px-2 py-1.5 text-[10px] font-medium text-neutral-700 hover:bg-neutral-50 transition-all uppercase tracking-wider text-left border-b border-neutral-50"
                   >
                     My Orders
                   </Link>
                   {recentOrder && (
                     <div className="mt-2 p-2.5 bg-slate-50 border border-slate-100 rounded-md text-left text-[9px] space-y-1 font-sans">
-                      <div className="flex justify-between font-bold text-slate-800 uppercase tracking-wider">
+                      <div className="flex justify-between font-medium text-slate-800 uppercase tracking-wider">
                         <span>Recent Order</span>
                         <Link
                           href="/orders"
@@ -531,11 +500,11 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       </div>
                       <div className="flex justify-between text-slate-500 font-medium">
                         <span>ID: {recentOrder.id}</span>
-                        <span className="bg-neutral-200 text-neutral-800 px-1 py-0.2 rounded-xs uppercase text-[8px] font-bold">
+                        <span className="bg-neutral-200 text-neutral-800 px-1 py-0.2 rounded-xs uppercase text-[8px] font-medium">
                           {recentOrder.status}
                         </span>
                       </div>
-                      <div className="flex justify-between text-slate-700 font-bold pt-0.5 border-t border-slate-100">
+                      <div className="flex justify-between text-slate-700 font-medium pt-0.5 border-t border-slate-100">
                         <span>{recentOrder.date}</span>
                         <span>{formatPrice(recentOrder.totalAmount)}</span>
                       </div>
@@ -543,7 +512,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   )}
                   <button
                     onClick={logoutUser}
-                    className="w-full text-center mt-2.5 rounded-sm px-2 py-1.5 text-[10px] font-bold text-red-500 hover:bg-red-50 transition-all uppercase tracking-wider cursor-pointer"
+                    className="w-full text-center mt-2.5 rounded-sm px-2 py-1.5 text-[10px] font-medium text-red-500 hover:bg-red-50 transition-all uppercase tracking-wider cursor-pointer"
                   >
                     Logout
                   </button>
@@ -551,10 +520,10 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               ) : (
                 <>
                   <div className="px-2 py-1.5 border-b border-neutral-100 mb-2 text-left">
-                    <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">
+                    <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-wider">
                       Welcome
                     </p>
-                    <p className="text-xs font-semibold text-neutral-500">
+                    <p className="text-xs font-medium text-neutral-500">
                       Bespoke Diamond Luxury
                     </p>
                   </div>
@@ -563,19 +532,10 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       setAuthMode("login");
                       openModal();
                     }}
-                    className="w-full text-left rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-800 hover:bg-neutral-50 transition-all uppercase tracking-widest cursor-pointer"
+                    className="w-full text-left rounded-sm px-2 py-1.5 text-[10px] font-medium text-neutral-800 hover:bg-neutral-50 transition-all uppercase tracking-widest cursor-pointer"
                   >
                     Sign In
                   </button>
-                  {/* <button
-                    onClick={() => {
-                      setAuthMode("register");
-                      openModal();
-                    }}
-                    className="w-full text-left mt-1 rounded-sm px-2 py-1.5 text-[10px] font-bold text-neutral-500 hover:bg-neutral-50 transition-all uppercase tracking-widest cursor-pointer"
-                  >
-                    Create Account
-                  </button> */}
                 </>
               )}
             </div>
@@ -585,7 +545,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           {mounted && (
             <div className="relative group hidden md:block">
               <button
-                className="flex items-center gap-0.5 p-2 text-neutral-700 hover:text-neutral-900 transition-colors text-[10px] lg:text-xs xl:text-sm font-bold tracking-wider uppercase cursor-pointer"
+                className="flex items-center gap-0.5 p-2 text-neutral-700 hover:text-neutral-900 transition-colors text-[10px] lg:text-xs xl:text-sm font-medium tracking-wider uppercase cursor-pointer"
                 aria-label="Country Selector"
               >
                 <FaMapMarkerAlt size={11} className="text-neutral-500 mr-0.5" />
@@ -596,7 +556,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 />
               </button>
               <div className="absolute right-0 top-full hidden group-hover:block w-44 bg-white border border-neutral-100 rounded-sm p-1.5 shadow-md animate-fade-in z-50">
-                <div className="px-3 py-1 border-b border-neutral-100 mb-1 text-[8px] lg:text-[9px] xl:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+                <div className="px-3 py-1 border-b border-neutral-100 mb-1 text-[8px] lg:text-[9px] xl:text-[10px] text-neutral-400 font-medium uppercase tracking-wider">
                   Country Selector
                 </div>
                 {[
@@ -607,7 +567,11 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <button
                     key={reg.code}
                     onClick={() => saveRegion(reg.code)}
-                    className={`w-full text-left px-3 py-1.5 text-[9px] lg:text-[10px] xl:text-[11px] font-bold tracking-wider uppercase transition-all rounded-sm block cursor-pointer ${region === reg.code ? "bg-neutral-50 text-neutral-900" : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"}`}
+                    className={`w-full text-left px-3 py-1.5 text-[9px] lg:text-[10px] xl:text-[11px] font-medium tracking-wider uppercase transition-all rounded-sm block cursor-pointer ${
+                      region === reg.code
+                        ? "bg-neutral-50 text-neutral-900 font-medium"
+                        : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
+                    }`}
                   >
                     {reg.label}
                   </button>
@@ -623,11 +587,13 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             <div>
               <button
                 onClick={() => setMobileJewelryOpen(!mobileJewelryOpen)}
-                className="w-full flex items-center justify-between text-[11px] font-bold text-neutral-800 uppercase tracking-widest py-1 focus:outline-none"
+                className="w-full flex items-center justify-between text-[11px] font-medium text-neutral-800 uppercase tracking-widest py-1 focus:outline-none cursor-pointer"
               >
                 <span>Jewelry</span>
                 <FaChevronDown
-                  className={`transform transition-transform duration-300 ${mobileJewelryOpen ? "rotate-180" : ""}`}
+                  className={`transform transition-transform duration-300 ${
+                    mobileJewelryOpen ? "rotate-180" : ""
+                  }`}
                   size={8}
                 />
               </button>
@@ -637,7 +603,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <div className="flex border-b border-neutral-100 pb-2 mb-2 gap-4">
                     <button
                       onClick={() => handleTabClick("labgrown")}
-                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
+                      className={`text-[10px] font-medium tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
                         jewelryTab === "labgrown"
                           ? "border-neutral-900 text-neutral-900"
                           : "border-transparent text-neutral-400"
@@ -647,7 +613,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     </button>
                     <button
                       onClick={() => handleTabClick("natural")}
-                      className={`text-[10px] font-bold tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
+                      className={`text-[10px] font-medium tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
                         jewelryTab === "natural"
                           ? "border-neutral-900 text-neutral-900"
                           : "border-transparent text-neutral-400"
@@ -662,7 +628,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       setMobileJewelryOpen(false);
                     }}
                     href={`/category?origin=${jewelryTab}`}
-                    className="block text-[11px] font-bold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest"
+                    className="block text-[11px] font-medium text-neutral-600 hover:text-neutral-900 uppercase tracking-widest"
                   >
                     Shop All{" "}
                     {jewelryTab === "labgrown" ? "Lab Grown" : "Natural"}{" "}
@@ -670,7 +636,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   </Link>
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-1.5">
-                      <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">
+                      <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-widest">
                         {getDisplayCategoryName(cat.name)}
                       </p>
                       <div className="grid grid-cols-2 gap-2 pl-2">
@@ -680,7 +646,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                             setMobileJewelryOpen(false);
                           }}
                           href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&origin=${jewelryTab}`}
-                          className="text-[10px] font-semibold text-neutral-700 hover:text-neutral-950 py-0.5"
+                          className="text-[10px] font-medium text-neutral-700 hover:text-neutral-950 py-0.5"
                         >
                           All {getDisplayCategoryName(cat.name)}
                         </Link>
@@ -693,7 +659,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                                 setMobileJewelryOpen(false);
                               }}
                               href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&style=${encodeURIComponent(sub.name.toLowerCase())}&origin=${jewelryTab}${sub._id ? `&subcategory_id=${sub._id}` : ""}`}
-                              className="text-[10px] font-semibold text-neutral-700 hover:text-neutral-955 py-0.5"
+                              className="text-[10px] font-medium text-neutral-700 hover:text-neutral-955 py-0.5"
                             >
                               {sub.name}
                             </Link>
@@ -708,7 +674,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               <Link
                 onClick={() => setMobileMenuOpen(false)}
                 href="/diamonds"
-                className="text-[11px] font-bold text-neutral-800 uppercase tracking-widest"
+                className="text-[11px] font-medium text-neutral-800 uppercase tracking-widest"
               >
                 Loose Diamonds
               </Link>
@@ -716,12 +682,14 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               <div>
                 <button
                   onClick={() => setMobileAboutOpen(!mobileAboutOpen)}
-                  className="w-full flex items-center justify-between text-[11px] font-bold text-neutral-800 uppercase tracking-widest py-1 cursor-pointer focus:outline-none"
+                  className="w-full flex items-center justify-between text-[11px] font-medium text-neutral-800 uppercase tracking-widest py-1 cursor-pointer focus:outline-none"
                 >
                   <span>About</span>
                   <FaChevronDown
                     size={8}
-                    className={`text-neutral-400 transition-transform duration-300 ${mobileAboutOpen ? "rotate-180" : ""}`}
+                    className={`text-neutral-400 transition-transform duration-300 ${
+                      mobileAboutOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
                 {mobileAboutOpen && (
@@ -732,7 +700,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         setMobileAboutOpen(false);
                       }}
                       href="/about"
-                      className="text-[10px] font-semibold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
+                      className="text-[10px] font-medium text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
                     >
                       About Us
                     </Link>
@@ -742,7 +710,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         setMobileAboutOpen(false);
                       }}
                       href="/our-story"
-                      className="text-[10px] font-semibold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
+                      className="text-[10px] font-medium text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
                     >
                       Our Story
                     </Link>
@@ -753,7 +721,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         setMobileAboutOpen(false);
                       }}
                       href="/about#certification"
-                      className="text-[10px] font-semibold text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
+                      className="text-[10px] font-medium text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
                     >
                       Certification
                     </Link>
@@ -763,7 +731,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               <Link
                 onClick={() => setMobileMenuOpen(false)}
                 href="/contact"
-                className="text-[11px] font-bold text-neutral-800 uppercase tracking-widest"
+                className="text-[11px] font-medium text-neutral-800 uppercase tracking-widest"
               >
                 Contact Us
               </Link>
@@ -773,14 +741,14 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             <div className="border-t border-neutral-100 pt-4 mt-2 space-y-4">
               {/* Account/Profile */}
               <div className="space-y-2">
-                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">
+                <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-widest">
                   Account
                 </p>
                 {user ? (
                   <div className="space-y-2 pl-2">
-                    <p className="text-[10px] font-semibold text-neutral-700">
+                    <p className="text-[10px] font-medium text-neutral-700">
                       Welcome,{" "}
-                      <span className="text-neutral-900 font-bold">
+                      <span className="text-neutral-900 font-medium">
                         {user.name || user.email}
                       </span>
                     </p>
@@ -789,7 +757,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         logoutUser();
                         setMobileMenuOpen(false);
                       }}
-                      className="text-[10px] font-bold text-red-500 uppercase tracking-wider block cursor-pointer"
+                      className="text-[10px] font-medium text-red-500 uppercase tracking-wider block cursor-pointer"
                     >
                       Logout
                     </button>
@@ -802,20 +770,10 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         openModal();
                         setMobileMenuOpen(false);
                       }}
-                      className="text-[10px] font-bold text-neutral-800 uppercase tracking-widest cursor-pointer"
+                      className="text-[10px] font-medium text-neutral-800 uppercase tracking-widest cursor-pointer"
                     >
                       Sign In
                     </button>
-                    {/* <button
-                      onClick={() => {
-                        setAuthMode("register");
-                        openModal();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest cursor-pointer"
-                    >
-                      Create Account
-                    </button> */}
                   </div>
                 )}
               </div>
@@ -823,7 +781,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               {/* Region Selector */}
               {mounted && (
                 <div className="space-y-2 pb-2">
-                  <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">
+                  <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-widest">
                     Region
                   </p>
                   <div className="flex gap-2 pl-2 flex-wrap">
@@ -838,7 +796,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                           saveRegion(reg.code);
                           setMobileMenuOpen(false);
                         }}
-                        className={`px-2 py-1 text-[9px] font-bold tracking-wider rounded-sm uppercase transition-all border cursor-pointer ${
+                        className={`px-2 py-1 text-[9px] font-medium tracking-wider rounded-sm uppercase transition-all border cursor-pointer ${
                           region === reg.code
                             ? "bg-neutral-900 text-white border-neutral-900"
                             : "text-neutral-500 bg-neutral-50 border-neutral-200"
@@ -873,7 +831,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             </div>
             <button
               type="submit"
-              className="btn-apollonian-solid px-6 py-3 text-xs font-semibold cursor-pointer"
+              className="btn-apollonian-solid px-6 py-3 text-xs font-medium cursor-pointer"
             >
               Search
             </button>
@@ -883,7 +841,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 setSearchOpen(false);
                 setSearchQuery("");
               }}
-              className="p-3 text-neutral-400 hover:text-neutral-600"
+              className="p-3 text-neutral-400 hover:text-neutral-600 cursor-pointer"
             >
               <FaTimes size={16} />
             </button>
@@ -907,7 +865,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     className="flex items-center gap-4 px-4 py-3 hover:bg-neutral-50 transition-colors"
                   >
                     {item.image && !item.image.includes("http") ? (
-                      <div className="h-10 w-10 bg-neutral-50 rounded-sm border border-neutral-100 flex items-center justify-center text-primary font-bold text-xs uppercase">
+                      <div className="h-10 w-10 bg-neutral-50 rounded-sm border border-neutral-100 flex items-center justify-center text-primary font-medium text-xs uppercase">
                         {item.category.charAt(0)}
                       </div>
                     ) : (
@@ -921,14 +879,14 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       />
                     )}
                     <div className="text-left">
-                      <p className="text-xs font-bold text-neutral-800">
+                      <p className="text-xs font-medium text-neutral-800">
                         {item.title}
                       </p>
-                      <p className="text-[9px] text-neutral-400 font-semibold uppercase tracking-wider">
+                      <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-wider">
                         {item.category || item.shape + " Cut Diamond"}
                       </p>
                     </div>
-                    <div className="ml-auto text-xs font-bold text-neutral-900">
+                    <div className="ml-auto text-xs font-medium text-neutral-900">
                       {formatPrice(item.price)}
                     </div>
                   </Link>

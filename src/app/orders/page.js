@@ -256,7 +256,7 @@ export default function OrdersPage() {
               <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-[0.25em]">
                 My Orders
               </span>
-              <h1 className="text-2xl sm:text-3xl font-serif font-light text-neutral-900 uppercase tracking-wider mt-1">
+              <h1 className="text-2xl sm:text-3xl font-medium text-neutral-900 uppercase tracking-wider mt-1">
                 Order History
               </h1>
             </div>
@@ -297,7 +297,7 @@ export default function OrdersPage() {
               <div className="h-14 w-14 bg-neutral-50 rounded-full flex items-center justify-center text-neutral-400 mx-auto border border-neutral-200">
                 <FaInbox size={18} />
               </div>
-              <h3 className="font-serif text-lg text-neutral-900">
+              <h3 className="text-lg font-medium text-neutral-900">
                 No Orders Yet
               </h3>
               <p className="text-xs text-neutral-500 font-light">

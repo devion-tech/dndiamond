@@ -307,7 +307,6 @@ export default function AboutPage() {
     return (
         <Layout>
             <div className="w-full font-sans  overflow-x-hidden">
-
                 {/* ==================================================
                     SECTION 1: EDITORIAL MINIMALIST HERO (Discover World's Best Jewelry)
                     ================================================== */}
@@ -316,7 +315,7 @@ export default function AboutPage() {
 
                         {/* Title Header with inline oval image */}
                         <div className="w-full text-center space-y-4 js-about-hero-content">
-                            <h1 className="text-3xl sm:text-6xl lg:text-[80px] font-serif font-light text-neutral-900 tracking-[0.05em] leading-none uppercase flex flex-wrap justify-center items-center">
+                            <h1 className="text-3xl sm:text-6xl lg:text-[80px]  font-light text-neutral-900 tracking-[0.05em] leading-none uppercase flex flex-wrap justify-center items-center">
                                 <span>DISC</span>
                                 <span className="inline-flex w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden align-middle border border-neutral-300 mx-2  transform translate-y-[-2px] sm:translate-y-[2px]">
                                     <img
@@ -327,10 +326,10 @@ export default function AboutPage() {
                                 </span>
                                 <span>VER</span>
                             </h1>
-                            <h1 className="text-4xl sm:text-7xl lg:text-[90px] font-serif font-light text-neutral-900 tracking-[0.05em] leading-none uppercase">
+                            <h1 className="text-4xl sm:text-7xl lg:text-[90px] font-light text-neutral-900 tracking-[0.05em] leading-none uppercase">
                                 WORLD&apos;S BEST
                             </h1>
-                            <h1 className="text-4xl sm:text-7xl lg:text-[90px] font-serif font-light text-neutral-900 tracking-[0.05em] leading-none uppercase">
+                            <h1 className="text-4xl sm:text-7xl lg:text-[90px] font-light text-neutral-900 tracking-[0.05em] leading-none uppercase">
                                 JEWELRY*
                             </h1>
                         </div>
@@ -397,7 +396,7 @@ export default function AboutPage() {
 
                         {/* About Us section content */}
                         <div className="w-full max-w-2xl text-center mt-20 sm:mt-28 space-y-6">
-                            <h2 className="text-xl sm:text-2xl font-serif tracking-[0.25em] text-neutral-800 uppercase">
+                            <h2 className="text-xl sm:text-2xl  tracking-[0.25em] text-neutral-800 uppercase">
                                 About Us
                             </h2>
                             <p className="text-neutral-600 font-sans font-light text-sm sm:text-base leading-relaxed max-w-xl mx-auto">

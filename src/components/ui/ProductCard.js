@@ -153,7 +153,7 @@ export default function ProductCard({ item }) {
         </div>
 
         <div className="pt-5 text-center flex flex-col items-center space-y-1.5 flex-1 justify-end p-4">
-          <h3 className="font-serif text-sm font-medium text-black tracking-wide  transition-colors line-clamp-1">
+          <h3 className="text-sm font-medium text-black tracking-wide transition-colors line-clamp-1">
             {product?.title}
           </h3>
 

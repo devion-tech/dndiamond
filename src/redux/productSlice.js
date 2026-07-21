@@ -21,6 +21,9 @@ export const fetchProducts = createAsyncThunk(
     if (params.category_slug) {
       body.category_slug = params.category_slug;
     }
+    if (params.search) {
+      body.search = params.search;
+    }
     if (params.sort_by) {
       body.sort_by = params.sort_by;
     }

@@ -44,7 +44,7 @@ export default function SuccessPage() {
           <div className="bg-neutral-900 text-white p-8 md:p-12 text-center space-y-4 print:bg-white print:text-black print:p-0">
             <FaCheckCircle className="text-lime-400 text-6xl mx-auto animate-bounce print:hidden" />
             <div className="space-y-2">
-              <h1 className="font-serif text-2xl md:text-3xl tracking-wide">
+              <h1 className="text-2xl md:text-3xl font-medium tracking-wide">
                 Your Order is Placed Successfully!
               </h1>
               <p className="text-xs text-neutral-400 font-bold uppercase tracking-widest print:text-neutral-500">
@@ -80,7 +80,7 @@ export default function SuccessPage() {
                     <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                       Grand Total Amount
                     </span>
-                    <span className="text-sm font-extrabold text-slate-900">
+                    <span className="text-sm font-extrabold text-black">
                       {currentOrder.totalAmount}
                     </span>
                   </div>

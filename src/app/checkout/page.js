@@ -318,7 +318,7 @@ export default function CheckoutPage() {
               <FaLock size={20} />
             </div>
             <div className="space-y-2">
-              <h2 className="font-serif text-xl tracking-wide text-slate-800">
+              <h2 className="text-xl font-medium tracking-wide text-slate-800">
                 Your Bag is Empty
               </h2>
               <p className="text-xs text-slate-400 leading-relaxed font-light max-w-xs mx-auto">
@@ -328,7 +328,7 @@ export default function CheckoutPage() {
             </div>
             <button
               onClick={() => router.push("/")}
-              className="w-full btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer"
+              className="w-full bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 py-4 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300"
             >
               Browse Collections
             </button>
@@ -366,7 +366,7 @@ export default function CheckoutPage() {
                       <span className="h-6 w-6 rounded-full bg-neutral-900 text-white font-bold text-[10px] flex items-center justify-center">
                         1
                       </span>
-                      <h2 className="font-serif text-lg tracking-wide text-slate-800">
+                      <h2 className="text-lg font-medium tracking-wide text-slate-800">
                         Shipping Address
                       </h2>
                     </div>
@@ -771,7 +771,7 @@ export default function CheckoutPage() {
               {/* Right Side: Order Summary Panel */}
               <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-28">
                 <div className="bg-white border border-slate-100 shadow-md rounded-3xl p-6 space-y-6">
-                  <h3 className="font-serif text-lg tracking-wide text-slate-800 pb-4 border-b border-slate-100 text-left">
+                  <h3 className="text-lg font-medium tracking-wide text-slate-800 pb-4 border-b border-slate-100 text-left">
                     Atelier Bag Summary
                   </h3>
 
@@ -789,7 +789,7 @@ export default function CheckoutPage() {
                             className="h-16 w-16 object-cover rounded-xl border border-slate-100 shrink-0"
                           />
                         ) : (
-                          <div className="h-16 w-16 bg-slate-50 border border-slate-100 rounded-xl shrink-0 flex items-center justify-center text-neutral-800 font-serif font-black text-lg">
+                          <div className="h-16 w-16 bg-slate-50 border border-slate-100 rounded-xl shrink-0 flex items-center justify-center text-neutral-800 font-bold text-lg">
                             {item.category ? item.category.charAt(0) : "✦"}
                           </div>
                         )}
@@ -811,7 +811,7 @@ export default function CheckoutPage() {
                         </div>
 
                         <div className="text-right shrink-0 flex flex-col justify-between">
-                          <span className="text-xs font-extrabold text-slate-900">
+                          <span className="text-xs font-extrabold text-black">
                             {formatPrice(item.total)}
                           </span>
                           <span className="text-[9px] text-slate-400 font-medium">
@@ -913,7 +913,7 @@ export default function CheckoutPage() {
                       <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">
                         Total Invoice Value
                       </span>
-                      <span className="text-base font-extrabold text-slate-900">
+                      <span className="text-base font-extrabold text-black">
                         {formatConvertedPrice(getGrandTotal())}
                       </span>
                     </div>

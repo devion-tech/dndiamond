@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,7 +10,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 export default function CategoryCarousel({ categories: customCategories }) {
-  const { items: apiCategories, loading } = useSelector((state) => state.categories);
+  const { items: apiCategories, loading } = useSelector(
+    (state) => state.categories,
+  );
 
   const categories = customCategories || apiCategories;
 
@@ -22,14 +24,14 @@ export default function CategoryCarousel({ categories: customCategories }) {
   if (loading || !categories || categories.length === 0) return null;
 
   return (
-    <div className="w-full relative px-6 sm:px-10 lg:px-16 mx-auto ">
+    <div className="w-full relative mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
       {/* Category Section Header with Navigation Arrows on the right */}
       <div className="flex items-end justify-between border-b border-neutral-100 pb-6 mb-10">
         <div className="text-left space-y-2">
           <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
             Explore Collections
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-wide text-neutral-900">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide text-neutral-900">
             Shop by Category
           </h2>
         </div>
@@ -38,7 +40,7 @@ export default function CategoryCarousel({ categories: customCategories }) {
         <div className="flex items-center space-x-3">
           <button
             ref={prevRef}
-            className="w-10 h-10 rounded-full border border-neutral-900/10 hover:border-neutral-900/30 bg-white text-neutral-900 flex items-center justify-center transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-neutral-50 active:scale-95"
+            className="w-10 h-10 rounded-full border border-neutral-900/10 hover:border-neutral-900/30 bg-white text-neutral-900 flex items-center justify-center transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-neutral-50 active:scale-95 shadow-2xs"
             aria-label="Previous category"
           >
             <svg
@@ -57,7 +59,7 @@ export default function CategoryCarousel({ categories: customCategories }) {
           </button>
           <button
             ref={nextRef}
-            className="w-10 h-10 rounded-full border border-neutral-900/10 hover:border-neutral-900/30 bg-white text-neutral-900 flex items-center justify-center transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-neutral-50 active:scale-95"
+            className="w-10 h-10 rounded-full border border-neutral-900/10 hover:border-neutral-900/30 bg-white text-neutral-900 flex items-center justify-center transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-neutral-50 active:scale-95 shadow-2xs"
             aria-label="Next category"
           >
             <svg
@@ -90,7 +92,7 @@ export default function CategoryCarousel({ categories: customCategories }) {
             swiper.params.navigation.nextEl = nextRef.current;
             swiper.navigation.init();
             swiper.navigation.update();
-            setSwiperInitialized(swiperInitialized => true);
+            setSwiperInitialized(true);
           }}
           spaceBetween={24}
           breakpoints={{
@@ -137,7 +139,7 @@ export default function CategoryCarousel({ categories: customCategories }) {
                   <span className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase text-neutral-300 font-medium">
                     Collection
                   </span>
-                  <h3 className="font-serif text-sm sm:text-base md:text-lg font-light text-white tracking-wider mt-1 uppercase">
+                  <h3 className="text-sm sm:text-base md:text-lg font-light text-white tracking-wider mt-1 uppercase">
                     {cat.name}
                   </h3>
                 </div>

@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -15,7 +14,7 @@
   
   /* GLOBAL FONT VARIABLES WITH HONG KONG / TRADITIONAL CHINESE FALLBACKS */
   --font-family-sans: var(--font-lexend), var(--font-instrument-sans), var(--font-manrope), var(--font-mulish), "PingFang HK", "PingFang TC", "Noto Sans HK", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
-  --font-family-serif: var(--font-playfair), var(--font-cormorant-garamond), var(--font-instrument-serif), "Noto Serif HK", "Songti TC", serif;
+  --font-family-serif: var(--font-family-sans);
   --font-family-display: var(--font-quicksand), "PingFang HK", "PingFang TC", "Noto Sans HK", sans-serif;
 }
 
@@ -28,7 +27,7 @@
   --color-dark-bg: var(--brand-dark-background);
   
   --font-sans: var(--font-family-sans);
-  --font-serif: var(--font-family-serif);
+  --font-serif: var(--font-family-sans);
   --font-display: var(--font-family-display);
   
   --font-lexend: var(--font-lexend), sans-serif;
@@ -134,149 +133,6 @@ body {
   background: rgba(18, 18, 18, 0.35);
 }
 
-/* Premium luxury styling overrides */
-.btn-gold {
-  position: relative;
-  background: #FFFFFF;
-  color: var(--brand-primary);
-  border: 1px solid var(--brand-primary);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.btn-gold:hover {
-  background: var(--brand-primary);
-  color: #FFFFFF;
-  border-color: var(--brand-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(18, 18, 18, 0.1);
-}
-
-.btn-teal {
-  position: relative;
-  background: var(--brand-primary);
-  color: #FFFFFF;
-  border: 1px solid var(--brand-primary);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.btn-teal:hover {
-  background: #FFFFFF;
-  color: var(--brand-primary);
-  border-color: var(--brand-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(18, 18, 18, 0.05);
-}
-
-/* Luxury Interactive Hologram styling */
-.hologram-glow {
-  position: relative;
-}
-.hologram-glow::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary), var(--brand-accent), var(--brand-primary));
-  background-size: 300% 100%;
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0.2;
-  filter: blur(12px);
-  animation: hologramBorder 8s linear infinite;
-  transition: opacity 0.5s ease;
-}
-.hologram-glow:hover::before {
-  opacity: 0.55;
-  filter: blur(18px);
-}
-
-@keyframes hologramBorder {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 300% 50%; }
-}
-
-/* Premium neon trace border hover */
-.neo-border-container {
-  position: relative;
-  transition: all 0.4s ease;
-}
-.neo-border-line {
-  position: absolute;
-  background: linear-gradient(to right, transparent, var(--brand-primary), var(--brand-accent), transparent);
-  transition: all 0.6s ease;
-  opacity: 0;
-}
-.neo-border-top { top: 0; left: 0; width: 100%; height: 1px; transform: scaleX(0); transform-origin: left; }
-.neo-border-right { right: 0; top: 0; width: 1px; height: 100%; transform: scaleY(0); transform-origin: top; }
-.neo-border-bottom { bottom: 0; right: 0; width: 100%; height: 1px; transform: scaleX(0); transform-origin: right; }
-.neo-border-left { left: 0; bottom: 0; width: 1px; height: 100%; transform: scaleY(0); transform-origin: bottom; }
-
-.neo-border-container:hover .neo-border-top { transform: scaleX(1); opacity: 1; }
-.neo-border-container:hover .neo-border-right { transform: scaleY(1); opacity: 1; transition-delay: 0.1s; }
-.neo-border-container:hover .neo-border-bottom { transform: scaleX(1); opacity: 1; transition-delay: 0.2s; }
-.neo-border-container:hover .neo-border-left { transform: scaleY(1); opacity: 1; transition-delay: 0.3s; }
-
-/* Custom letter spacing for fine typography */
-.tracking-ultra-wide {
-  letter-spacing: 0.35em;
-}
-.tracking-luxury {
-  letter-spacing: 0.2em;
-}
-
-/* Apollonian Specific Luxury Classes */
-.btn-apollonian-outline {
-  display: inline-block;
-  border: 1px solid currentColor;
-  padding: 10px 24px;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  transition: all 0.3s ease;
-  background-color: transparent;
-  cursor: pointer;
-  border-radius: 12px; /* 12px rounded corners */
-}
-
-.btn-apollonian-outline-dark {
-  border-color: #FFFFFF;
-  color: #FFFFFF;
-}
-.btn-apollonian-outline-dark:hover {
-  background-color: #FFFFFF;
-  color: #0E0E0E;
-}
-
-.btn-apollonian-outline-light {
-  border-color: #1A1A1A;
-  color: #1A1A1A;
-}
-.btn-apollonian-outline-light:hover {
-  background-color: #1A1A1A;
-  color: #FFFFFF;
-}
-
-.btn-apollonian-solid {
-  display: inline-block;
-  padding: 12px 28px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  transition: all 0.3s ease;
-  background-color: #1A1A1A;
-  color: #FFFFFF;
-  border: 1px solid #1A1A1A;
-  cursor: pointer;
-  border-radius: 12px;
-}
-.btn-apollonian-solid:hover {
-  background-color: transparent;
-  color: #1A1A1A;
-}
-
-.font-cursive {
-  font-family: 'Pinyon Script', cursive;
-}
-
 /* 3D Carousel Utilities */
 .perspective-3d {
   perspective: 1200px;
@@ -290,4 +146,3 @@ body {
 .backface-hidden {
   backface-visibility: hidden;
 }
-

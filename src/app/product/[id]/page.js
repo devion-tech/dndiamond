@@ -7,11 +7,17 @@ import { useRouter } from "next/navigation";
 import {
   FaHeart,
   FaRegHeart,
-  FaShoppingCart,
   FaShieldAlt,
   FaTruck,
   FaUndo,
+  FaGem,
+  FaStar,
+  FaChevronDown,
+  FaChevronUp,
+  FaChevronLeft,
+  FaChevronRight,
   FaCheck,
+  FaShoppingBag,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail, clearSelectedProduct } from "@/redux/productSlice";
@@ -19,6 +25,15 @@ import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
 import { colors as colorOptions } from "@/data/initialData";
 import ProductCard from "@/components/ui/ProductCard";
+
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Thumbs, FreeMode, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/thumbs";
+import "swiper/css/free-mode";
 
 const colorMap = Object.fromEntries(
   colorOptions.map((c) => [c.name.toLowerCase(), c.hex]),
@@ -80,16 +95,6 @@ const getHex = (v) => {
   return colorMap[name] || "#EDD680";
 };
 
-const getStableInscription = (id) => {
-  if (!id) return "5398271842";
-  let hash = 0;
-  const str = String(id);
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return String((Math.abs(hash) % 9000000000) + 1000000000);
-};
-
 export default function ProductDetail({ params }) {
   const router = useRouter();
   const resolvedParams = use(params);
@@ -110,7 +115,23 @@ export default function ProductDetail({ params }) {
   const [currentPrice, setCurrentPrice] = useState(0);
   const [successAdded, setSuccessAdded] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
+
+  // Swiper thumbs instance
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [mainSwiper, setMainSwiper] = useState(null);
+
+  // Accordion state
+  const [openAccordions, setOpenAccordions] = useState({
+    details: true,
+    specs: false,
+    diamonds: false,
+    shipping: false,
+    warranty: false,
+  });
+
+  const toggleAccordion = (key) => {
+    setOpenAccordions((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   // Fetch product details on mount/param change
   useEffect(() => {
@@ -139,7 +160,7 @@ export default function ProductDetail({ params }) {
         images: p.images || [],
         description:
           p.description ||
-          "Ethically sourced certified diamond luxury masterpiece.",
+          "Individually hand-crafted by master jewelers using ethically sourced, GIA-certified diamonds.",
         discount: p.discount || 0,
         goldWeight: p.weight || 2.5,
         price: p.price || 0,
@@ -148,7 +169,6 @@ export default function ProductDetail({ params }) {
         isFromApi: true,
       };
 
-      // Define static options configuration
       const staticOptionsList = [
         {
           name: "color",
@@ -220,13 +240,13 @@ export default function ProductDetail({ params }) {
   // Handle option change
   const handleOptionChange = (optionName, value) => {
     setSelectedOptions((prev) => ({ ...prev, [optionName]: value }));
-    // Reset to first image when color changes
     if (optionName === "color" || optionName === "colors") {
       setSelectedImage(0);
+      if (mainSwiper) mainSwiper.slideTo(0);
     }
   };
 
-  // Build gallery images: color image first (if color option exists) + product images
+  // Build gallery images
   const galleryImages = useMemo(() => {
     const colorOpt = productOptions.find(
       (o) => o.name === "color" || o.name === "colors",
@@ -246,26 +266,22 @@ export default function ProductDetail({ params }) {
     return images.length > 0 ? images : [fallback];
   }, [selectedOptions, productOptions, product]);
 
-  // Current displayed image
-  const currentImage = galleryImages[selectedImage] || galleryImages[0];
-
   if (loadingError) {
     return (
       <Layout>
-        <div className="flex-1 flex flex-col justify-center items-center py-40 px-4 bg-white text-center space-y-6">
-          <span className="font-serif italic text-4xl text-neutral-300">✦</span>
-          <h2 className="font-serif text-lg md:text-xl uppercase tracking-widest text-neutral-800">
-            Creations Atelier
+        <div className="flex-1 flex flex-col justify-center items-center py-32 px-4 bg-[#FFFFFF] text-center space-y-5">
+          <span className="text-4xl text-[#C9A227]">✦</span>
+          <h2 className="text-xl font-medium uppercase tracking-widest text-[#111111]">
+            Vault Creation
           </h2>
-          <p className="text-[10px] md:text-xs text-neutral-400 max-w-sm uppercase tracking-wider leading-relaxed">
-            This item could not be retrieved from our vaults. It may have been
-            sold or does not exist.
+          <p className="text-xs text-[#666666] max-w-sm uppercase tracking-wider leading-relaxed">
+            This piece is currently unavailable in our active catalog.
           </p>
           <Link
             href="/category"
-            className="px-6 py-3 bg-neutral-950 hover:bg-neutral-900 text-white text-[10px] font-bold uppercase tracking-widest transition-colors cursor-pointer"
+            className="px-8 py-3.5 bg-[#111111] hover:bg-[#333333] text-white text-xs font-medium uppercase tracking-widest transition-colors rounded-full cursor-pointer"
           >
-            Return to Catalog
+            Return to Fine Jewelry
           </Link>
         </div>
       </Layout>
@@ -275,10 +291,10 @@ export default function ProductDetail({ params }) {
   if (!product) {
     return (
       <Layout>
-        <div className="flex-1 flex flex-col justify-center items-center py-40 space-y-4 font-sans bg-white">
-          <div className="h-8 w-8 border-2 border-neutral-900 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-[0.2em]">
-            Loading Atelier Piece...
+        <div className="flex-1 flex flex-col justify-center items-center py-40 space-y-4 font-sans bg-[#FFFFFF]">
+          <div className="h-7 w-7 border-2 border-[#111111] border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-[10px] text-[#666666] font-medium uppercase tracking-[0.2em]">
+            Loading Creation...
           </span>
         </div>
       </Layout>
@@ -288,39 +304,58 @@ export default function ProductDetail({ params }) {
   const handleAddToCart = async () => {
     try {
       await addToCart(product, selectedOptions, currentPrice);
-
       setSuccessAdded(true);
-      setTimeout(() => setSuccessAdded(false), 3000);
+      setTimeout(() => setSuccessAdded(false), 3500);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // Render option selector based on option name
-  const renderOption = (option, index) => {
+  const handleBuyNow = async () => {
+    try {
+      await addToCart(product, selectedOptions, currentPrice);
+      router.push("/checkout");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Render option selector with minimal luxury styling
+  const renderOption = (option) => {
     const { name, values } = option;
     const isColor = name === "color" || name === "colors";
     const isGoldType = name === "gold_type";
     const isSize = name === "size" || name === "sizes";
     const selectedVal = selectedOptions[name];
-    const stepNum = index + 1;
 
     const labelMap = {
-      color: "Select Color",
-      colors: "Select Color",
-      gold_type: "Select Gold Type",
-      size: "Select Size",
-      sizes: "Select Size",
+      color: "Metal Color",
+      colors: "Metal Color",
+      gold_type: "Gold Purity",
+      size: "Ring Size",
+      sizes: "Ring Size",
     };
+
+    const displayName = labelMap[name] || name.replace("_", " ");
 
     return (
       <div key={name} className="space-y-2">
-        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-          {stepNum}. {labelMap[name] || name}
-        </label>
+        <div className="flex justify-between items-center text-xs">
+          <span className="font-sans font-medium text-[#111111] text-xs">
+            {displayName}: <span className="text-[#666666]">{selectedVal}</span>
+          </span>
+          {isSize && (
+            <button
+              onClick={() => alert("Standard US Ring Size Guide: Sizes 5 to 10 available.")}
+              className="text-[11px] text-[#666666] hover:text-[#111111] underline cursor-pointer font-normal"
+            >
+              Size Guide
+            </button>
+          )}
+        </div>
 
         {isColor ? (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 pt-1">
             {values.map((val, i) => {
               const hex = getHex(val.value);
               const isSelected = selectedVal === val.value;
@@ -331,20 +366,24 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`w-8 h-8 rounded-full border transition-all duration-200 cursor-pointer ${
+                  className={`w-7 h-7 rounded-full border transition-all duration-300 cursor-pointer relative flex items-center justify-center p-0.5 ${
                     isSelected
-                      ? "border-slate-800 scale-110 "
-                      : "border-slate-200 hover:border-slate-400"
+                      ? "border-[#111111] ring-1 ring-[#111111] scale-105"
+                      : "border-[#ECECEC] hover:border-[#999999]"
                   } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
-                  style={{ backgroundColor: hex }}
                   title={val.value}
                   aria-label={val.value}
-                />
+                >
+                  <span
+                    className="w-full h-full rounded-full border border-black/10"
+                    style={{ backgroundColor: hex }}
+                  />
+                </button>
               );
             })}
           </div>
-        ) : isGoldType ? (
-          <div className="flex flex-wrap gap-2.5">
+        ) : isSize ? (
+          <div className="flex flex-wrap gap-2 pt-1">
             {values.map((val, i) => {
               const isSelected = selectedVal === val.value;
               return (
@@ -354,10 +393,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                  className={`w-9 h-9 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 flex items-center justify-center ${
                     isSelected
-                      ? "bg-[#0e0e0e] text-white border-slate-800"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                      ? "bg-[#111111] text-white border-[#111111]"
+                      : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
                   } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
@@ -365,8 +404,8 @@ export default function ProductDetail({ params }) {
               );
             })}
           </div>
-        ) : isSize ? (
-          <div className="flex flex-wrap gap-2.5">
+        ) : isGoldType ? (
+          <div className="flex flex-wrap gap-2 pt-1">
             {values.map((val, i) => {
               const isSelected = selectedVal === val.value;
               return (
@@ -376,10 +415,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold tracking-wider cursor-pointer transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 ${
                     isSelected
-                      ? "bg-primary text-white border-primary"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                      ? "bg-[#111111] text-white border-[#111111]"
+                      : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
                   } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
@@ -388,7 +427,7 @@ export default function ProductDetail({ params }) {
             })}
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2 pt-1">
             {values.map((val, i) => {
               const isSelected = selectedVal === val.value;
               return (
@@ -398,10 +437,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-5 py-3 rounded-xl border text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 ${
                     isSelected
-                      ? "bg-[#0e0e0e] text-white border-slate-800"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                      ? "bg-[#111111] text-white border-[#111111]"
+                      : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
                   } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
@@ -410,460 +449,414 @@ export default function ProductDetail({ params }) {
             })}
           </div>
         )}
-
-        {isColor && selectedVal && (
-          <span className="text-[10px] text-slate-400 font-semibold tracking-wider">
-            {selectedVal}
-          </span>
-        )}
       </div>
     );
   };
 
   return (
     <Layout>
-      <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 font-sans">
-        {/* Breadcrumb Navigation */}
-        <div className="flex flex-wrap items-center gap-1.5 text-[13px] font-medium text-[#7A9FAE] tracking-wide mb-8">
-          <Link href="/" className="hover:text-[#567482] transition-colors">
-            Home
-          </Link>
-          <span className="text-[#7A9FAE]/60">/</span>
-          <Link
-            href="/category"
-            className="hover:text-[#567482] transition-colors"
-          >
-            Shop
-          </Link>
-          <span className="text-[#7A9FAE]/60">/</span>
-          <Link
-            href={`/category/${resolveCategorySlug(rawProduct?.category_id, rawProduct?.subcategory_id)}`}
-            className="hover:text-[#567482] transition-colors"
-          >
-            {product.category || "Ring"}
-          </Link>
-          <span className="text-[#7A9FAE]/60">/</span>
-          <span className="text-slate-600 font-normal">{product.title}</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left Column: Product Gallery */}
-          <div className="space-y-4">
-            <div className="aspect-square w-full rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-xs relative">
-              <img
-                src={currentImage}
-                alt={product.title}
-                className="h-full w-full object-cover"
-              />
-              {product.discount > 0 && (
-                <span className="absolute top-5 left-5 px-3 py-1.5 bg-accent/90 backdrop-blur-xs text-[10px] font-extrabold text-white rounded-md tracking-wider uppercase">
-                  Special Offer: {product.discount}% Off
-                </span>
-              )}
-            </div>
-
-            {/* Thumbnails */}
-            {galleryImages.length > 1 && (
-              <div className="grid grid-cols-3 gap-4">
-                {galleryImages.map((img, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => setSelectedImage(idx)}
-                    className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all ${
-                      selectedImage === idx
-                        ? "border-slate-800 ring-2 ring-slate-800/20"
-                        : "border-slate-100 hover:border-primary/50"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`View ${idx + 1}`}
-                      className="h-full w-full object-cover opacity-75 hover:opacity-100 transition-opacity"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Custom Configuration */}
-          <div className="text-left space-y-6 lg:pl-4">
-            <div className="space-y-3 border-b border-slate-100 pb-5">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-primary font-bold uppercase tracking-[0.25em]">
-                  {product.category}
-                </span>
-                <span className="text-[10px] bg-neutral-100 text-neutral-800 font-extrabold border border-neutral-200/50 rounded-full px-3 py-0.5 uppercase tracking-wider">
-                  Hallmarked & Certified
-                </span>
-              </div>
-              <div className="flex justify-between items-start gap-4">
-                <h1 className="text-2xl sm:text-3xl font-serif font-medium text-slate-900 tracking-wide">
-                  {product.title}
-                </h1>
-                <button
-                  onClick={async () => {
-                    await toggleWishlist({
-                      product_id: product?.id,
-                    });
-                  }}
-                  className="p-2.5 rounded-full border border-slate-100 hover:border-slate-200 bg-white hover:bg-slate-50 active:scale-95 transition-all duration-200 shadow-xs flex items-center justify-center cursor-pointer group shrink-0"
-                  aria-label={
-                    isWishlisted(product?.id)
-                      ? "Remove from wishlist"
-                      : "Add to wishlist"
-                  }
-                >
-                  {isWishlisted(product?.id) ? (
-                    <FaHeart
-                      className="text-rose-500 scale-110 transition-transform duration-200"
-                      size={20}
-                    />
-                  ) : (
-                    <FaRegHeart
-                      className="text-slate-400 group-hover:text-rose-500 transition-colors duration-200"
-                      size={20}
-                    />
-                  )}
-                </button>
-              </div>
-
-              {/* Configured Price below Title */}
-              <div className="flex items-baseline gap-3 mt-1">
-                <span className="text-3xl font-extrabold text-slate-900">
-                  {formatPrice(currentPrice)}
-                </span>
-                {product.discount > 0 && (
-                  <span className="text-sm text-slate-400 line-through">
-                    {formatPrice(product.display_price || product.price)}
-                  </span>
-                )}
-                {product.discount > 0 && (
-                  <span className="text-[10px] bg-amber-500 text-white font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
-                    {product.discount}% Off
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Dynamic Options from product.options */}
-            <div className="space-y-5">
-              {productOptions.map((option, index) =>
-                renderOption(option, index),
-              )}
-            </div>
-
-            {/* Main CTA buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-slate-100">
-              <button
-                onClick={handleAddToCart}
-                className="w-full btn-teal py-4 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all"
-              >
-                <FaShoppingCart /> Add Custom Spec to Bag
-              </button>
-            </div>
-
-            {/* Success Message Banner */}
-            {successAdded && (
-              <div className="bg-neutral-50 border border-neutral-200 text-neutral-800 rounded-xl p-3.5 text-xs font-semibold flex items-center gap-2 animate-fade-in">
-                <FaCheck className="text-neutral-800" /> Specs added
-                successfully. View in bag at checkout!
-              </div>
-            )}
-
-            {/* Trust assurances lists */}
-            <div className="grid grid-cols-3 gap-4 border-t border-slate-100 pt-6">
-              {[
-                {
-                  text: "Lifetime Warranty",
-                  icon: <FaShieldAlt className="text-accent text-base" />,
-                },
-                {
-                  text: "FedEx Free Shipping",
-                  icon: <FaTruck className="text-accent text-base" />,
-                },
-                {
-                  text: "Easy Returns",
-                  icon: <FaUndo className="text-accent text-base" />,
-                },
-              ].map((trust, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col items-center text-center space-y-1"
-                >
-                  {trust.icon}
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                    {trust.text}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Elegant Tabbed Details & Specifications */}
-            <div className="border-t border-slate-100 pt-6 space-y-4">
-              <div className="flex border-b border-slate-100 gap-6">
-                <button
-                  onClick={() => setActiveTab("overview")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-                    activeTab === "overview"
-                      ? "border-slate-900 text-slate-900"
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
-                >
-                  Overview
-                </button>
-                <button
-                  onClick={() => setActiveTab("specifications")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-                    activeTab === "specifications"
-                      ? "border-slate-900 text-slate-900"
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
-                >
-                  Specifications
-                </button>
-                <button
-                  onClick={() => setActiveTab("shipping")}
-                  className={`pb-2.5 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-                    activeTab === "shipping"
-                      ? "border-slate-900 text-slate-900"
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
-                >
-                  Shipping & Warranty
-                </button>
-              </div>
-
-              {activeTab === "overview" && (
-                <div className="space-y-4 transition-opacity duration-300">
-                  <p className="text-xs text-slate-500 leading-relaxed font-light">
-                    {product.description}
-                  </p>
-                  <div className="grid grid-cols-3 gap-4 border border-slate-100 bg-slate-50/50 p-4 rounded-xl text-xs font-light text-slate-500">
-                    <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">
-                        Stock ID
-                      </span>
-                      <span className="text-slate-800 font-bold">
-                        {product.id}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">
-                        Collection Style
-                      </span>
-                      <span className="text-slate-800 font-bold">
-                        {product.style || "Atelier Custom"}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">
-                        Metal Weight
-                      </span>
-                      <span className="text-slate-800 font-bold">
-                        {product.goldWeight || 2.5}g (approx.)
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-500 leading-relaxed font-light">
-                    Individually hand-set by master jewelers, this masterpiece
-                    exemplifies the DN Diamond commitment to exceptional fire,
-                    light performance, and bespoke craftsmanship.
-                  </p>
-                </div>
-              )}
-
-              {activeTab === "specifications" && (
-                <div className="space-y-6 transition-opacity duration-300">
-                  <div className="space-y-3">
-                    <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">
-                      Metal Details
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5 text-xs">
-                      <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
-                        <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                          Stock ID / SKU
-                        </span>
-                        <span className="text-slate-800 font-bold">
-                          {product.id}
-                        </span>
-                      </div>
-                      <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
-                        <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                          Metal Weight
-                        </span>
-                        <span className="text-slate-800 font-bold">
-                          {product.goldWeight || 2.5}g (approx.)
-                        </span>
-                      </div>
-                      <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
-                        <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                          Composition
-                        </span>
-                        <span className="text-slate-800 font-bold">
-                          {selectedOptions.gold_type || "18K Solid Gold"}
-                        </span>
-                      </div>
-                      <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
-                        <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                          Selected Color
-                        </span>
-                        <span className="text-slate-800 font-bold">
-                          {selectedOptions.color ||
-                            selectedOptions.colors ||
-                            "Yellow Gold"}
-                        </span>
-                      </div>
-                      <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
-                        <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                          Category & Style
-                        </span>
-                        <span className="text-slate-800 font-bold">
-                          {product.category} •{" "}
-                          {product.style || "Atelier Style"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">
-                      Diamond & Gemstone Specifications
-                    </h4>
-                    {rawProduct?.diamonds && rawProduct.diamonds.length > 0 ? (
-                      rawProduct.diamonds.map((diamond, idx) => (
-                        <div
-                          key={idx}
-                          className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-3 relative overflow-hidden group"
-                        >
-                          <div className="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-colors pointer-events-none" />
-                          <div className="flex justify-between items-center">
-                            <span className="text-[9px] bg-neutral-900 text-white font-extrabold px-2.5 py-0.5 rounded-sm tracking-wider uppercase">
-                              Stone #{idx + 1} ({diamond.type || "Natural"})
-                            </span>
-                            <span className="text-xs font-bold text-slate-800">
-                              {diamond.quantity || 1} x {diamond.weight || 0.5}{" "}
-                              Carat
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs pt-1">
-                            <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
-                                Shape
-                              </span>
-                              <span className="text-slate-800 font-bold">
-                                {diamond.shape || "Round"}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
-                                Color
-                              </span>
-                              <span className="text-slate-800 font-bold">
-                                {diamond.color || "D"}{" "}
-                                {diamond.fancyColor
-                                  ? `(Fancy ${diamond.fancyColor})`
-                                  : ""}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
-                                Clarity
-                              </span>
-                              <span className="text-slate-800 font-bold">
-                                {diamond.clarity || "VS1"}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-slate-400 uppercase tracking-wider text-[9px] block">
-                                Cut Grade
-                              </span>
-                              <span className="text-slate-800 font-bold">
-                                {diamond.cut || "Excellent"}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5 text-xs">
-                        <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
-                          <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                            Diamond Selection
-                          </span>
-                          <span className="text-slate-800 font-bold">
-                            {rawProduct?.pricing?.diamond_cost > 0
-                              ? `Atelier Select (${formatPrice(rawProduct.pricing.diamond_cost)})`
-                              : "GIA Certified Brilliant Cut"}
-                          </span>
-                        </div>
-                        <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center">
-                          <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                            Diamond weight
-                          </span>
-                          <span className="text-slate-800 font-bold">
-                            {rawProduct?.diamondWeight
-                              ? `${rawProduct.diamondWeight.join(", ")} Carat`
-                              : "0.50 Carat (approx.)"}
-                          </span>
-                        </div>
-                        <div className="border-b border-slate-100 pb-1.5 flex justify-between items-center col-span-2">
-                          <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                            Specifications
-                          </span>
-                          <span className="text-slate-800 font-bold">
-                            Clarity: VS+ | Color: F-G | Cut: Excellent/Ideal
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "shipping" && (
-                <div className="space-y-2 text-xs text-slate-500 leading-relaxed font-light transition-opacity duration-300">
-                  <p>
-                    <strong>FedEx Priority Shipping:</strong> Every shipment is
-                    fully insured, securely double-boxed, and requires a
-                    signature upon delivery.
-                  </p>
-                  <p>
-                    <strong>Lifetime Warranty:</strong> We guarantee the quality
-                    of our craftsmanship for a lifetime. Annual polishing and
-                    stone inspections are complimentary at our Hong Kong studio.
-                  </p>
-                  <p>
-                    <strong>30-Day Returns:</strong> If you are not fully
-                    satisfied, returns or resizing requests are accepted within
-                    30 days of receipt.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Similar Products Section */}
-        <div className="border-t border-slate-100 mt-20 pt-16">
-          <div className="text-center space-y-2 mb-12">
-            <span className="text-[9px] text-neutral-400 font-extrabold tracking-[0.3em] uppercase">
-              Curated Selection
+      <div className="bg-[#FFFFFF] min-h-screen font-sans">
+        <div className="mx-auto w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16 py-4 sm:py-6">
+          {/* Breadcrumbs */}
+          <div className="flex flex-wrap items-center gap-2 text-xs font-normal text-[#666666] tracking-wide mb-4">
+            <Link href="/" className="hover:text-[#111111] transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <Link
+              href="/category"
+              className="hover:text-[#111111] transition-colors"
+            >
+              Jewelry
+            </Link>
+            <span>/</span>
+            <Link
+              href={`/category/${resolveCategorySlug(rawProduct?.category_id, rawProduct?.subcategory_id)}`}
+              className="hover:text-[#111111] transition-colors"
+            >
+              {product.category || "Ring"}
+            </Link>
+            <span>/</span>
+            <span className="text-[#111111] truncate max-w-[180px] sm:max-w-none">
+              {product.title}
             </span>
-            <h2 className="text-2xl lg:text-3xl font-serif font-light text-neutral-900 uppercase tracking-widest">
-              You May Also{" "}
-              <span className="font-serif italic font-light lowercase">
-                Like
-              </span>
-            </h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-12">
-            {(rawProduct?.related_products?.length > 0
-              ? rawProduct?.related_products
-              : []
-            ).map((item) => (
-              <ProductCard key={item?._id} item={item} />
-            ))}
+
+          {/* MAIN 2-COLUMN VIEWPORT (Fits Desktop Screen 100vh) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-start">
+            {/* LEFT COLUMN: SWIPER GALLERY CAROUSEL */}
+            <div className="lg:col-span-7 flex flex-col gap-4">
+              {/* Main Swiper Slider */}
+              <div className="relative w-full h-[450px] sm:h-[550px] lg:h-[620px] rounded-[24px] overflow-hidden bg-[#FAFAFA] border border-[#ECECEC] group flex items-center justify-center">
+                <Swiper
+                  onSwiper={setMainSwiper}
+                  thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                  navigation={{
+                    nextEl: ".swiper-button-next-custom",
+                    prevEl: ".swiper-button-prev-custom",
+                  }}
+                  modules={[Navigation, Thumbs, FreeMode]}
+                  className="w-full h-full"
+                  onSlideChange={(swiper) => setSelectedImage(swiper.activeIndex)}
+                >
+                  {galleryImages.map((img, idx) => (
+                    <SwiperSlide
+                      key={idx}
+                      className="flex items-center justify-center p-8 h-full"
+                    >
+                      <img
+                        src={img}
+                        alt={`${product.title} - View ${idx + 1}`}
+                        className="w-full h-full object-contain select-none max-h-[580px] transition-transform duration-500 hover:scale-105"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+
+                {/* Offer Tag */}
+                {product.discount > 0 && (
+                  <span className="absolute top-5 left-5 z-20 px-3 py-1 bg-[#111111] text-[10px] font-medium text-white rounded-full tracking-wider uppercase">
+                    {product.discount}% OFF
+                  </span>
+                )}
+
+                {/* Swiper Prev / Next Chevrons */}
+                {galleryImages.length > 1 && (
+                  <>
+                    <button
+                      className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-[#111111] shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer"
+                      aria-label="Previous Slide"
+                    >
+                      <FaChevronLeft size={12} />
+                    </button>
+                    <button
+                      className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-[#111111] shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer"
+                      aria-label="Next Slide"
+                    >
+                      <FaChevronRight size={12} />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Thumbnails Swiper */}
+              {galleryImages.length > 1 && (
+                <div className="w-full">
+                  <Swiper
+                    onSwiper={setThumbsSwiper}
+                    slidesPerView={5}
+                    spaceBetween={12}
+                    freeMode={true}
+                    watchSlidesProgress={true}
+                    modules={[FreeMode, Navigation, Thumbs]}
+                    className="thumbs-swiper cursor-pointer"
+                  >
+                    {galleryImages.map((img, idx) => (
+                      <SwiperSlide key={idx}>
+                        <div
+                          className={`h-20 sm:h-22 rounded-2xl overflow-hidden border bg-[#FAFAFA] p-1 transition-all duration-300 ${
+                            selectedImage === idx
+                              ? "border-[#111111] ring-1 ring-[#111111]"
+                              : "border-[#ECECEC] hover:border-[#999999] opacity-70"
+                          }`}
+                        >
+                          <img
+                            src={img}
+                            alt={`Thumbnail ${idx + 1}`}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              )}
+            </div>
+
+            {/* RIGHT COLUMN: STICKY PURCHASING PANE */}
+            <div className="lg:col-span-5 text-left sticky top-[90px] space-y-5">
+              {/* Product Header & Rating */}
+              <div className="space-y-2 border-b border-[#ECECEC] pb-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-medium uppercase tracking-widest text-[#666666]">
+                    {product.category}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex text-[#C9A227] text-xs">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} size={11} />
+                      ))}
+                    </div>
+                    <span className="text-xs text-[#666666] font-normal">
+                      5.0 (48 Reviews)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-start gap-4 pt-1">
+                  <h1 className="text-2xl sm:text-3xl font-medium text-[#111111] leading-tight">
+                    {product.title}
+                  </h1>
+                  <button
+                    onClick={async () => {
+                      await toggleWishlist({
+                        product_id: product?.id,
+                      });
+                    }}
+                    className="p-3 rounded-full border border-[#ECECEC] hover:border-[#111111] bg-white transition-all duration-300 flex items-center justify-center cursor-pointer shrink-0"
+                    aria-label="Wishlist"
+                  >
+                    {isWishlisted(product?.id) ? (
+                      <FaHeart className="text-rose-500" size={16} />
+                    ) : (
+                      <FaRegHeart className="text-[#666666] hover:text-rose-500" size={16} />
+                    )}
+                  </button>
+                </div>
+
+                {/* Price */}
+                <div className="flex items-baseline gap-3 pt-1">
+                  <span className="text-2xl sm:text-3xl font-semibold text-[#111111]">
+                    {formatPrice(currentPrice)}
+                  </span>
+                  {product.discount > 0 && (
+                    <span className="text-sm text-[#999999] line-through font-normal">
+                      {formatPrice(product.display_price || product.price)}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Product Options (Metal Color, Gold Type, Ring Size) */}
+              <div className="space-y-4">
+                {productOptions.map((option) => renderOption(option))}
+              </div>
+
+              {/* Action Buttons: Add to Bag & Buy Now */}
+              <div className="space-y-2.5 pt-2">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={handleAddToCart}
+                    className="flex-1 h-[54px] rounded-full bg-[#111111] hover:bg-[#333333] text-white text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-sm"
+                  >
+                    <FaShoppingBag size={13} /> Add to Bag
+                  </button>
+                  <button
+                    onClick={handleBuyNow}
+                    className="flex-1 h-[54px] rounded-full border border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white text-xs font-medium uppercase tracking-wider flex items-center justify-center cursor-pointer transition-all duration-300"
+                  >
+                    Buy Now
+                  </button>
+                </div>
+
+                {successAdded && (
+                  <div className="bg-[#FAFAFA] border border-[#ECECEC] text-[#111111] rounded-2xl p-3 text-xs font-medium flex items-center justify-center gap-2 animate-fade-in">
+                    <FaCheck className="text-[#C9A227]" /> Item added to your shopping bag
+                  </div>
+                )}
+              </div>
+
+              {/* TRUST CARDS (4 Clean Tiles) */}
+              <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-[#ECECEC]">
+                <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
+                  <FaShieldAlt className="text-[#C9A227] text-base shrink-0" />
+                  <div className="text-left">
+                    <p className="text-[11px] font-medium text-[#111111]">Lifetime Warranty</p>
+                    <p className="text-[9px] text-[#666666]">Guaranteed Craftsmanship</p>
+                  </div>
+                </div>
+                <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
+                  <FaTruck className="text-[#C9A227] text-base shrink-0" />
+                  <div className="text-left">
+                    <p className="text-[11px] font-medium text-[#111111]">Free Express Shipping</p>
+                    <p className="text-[9px] text-[#666666]">Insured FedEx Delivery</p>
+                  </div>
+                </div>
+                <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
+                  <FaGem className="text-[#C9A227] text-base shrink-0" />
+                  <div className="text-left">
+                    <p className="text-[11px] font-medium text-[#111111]">Certified Diamonds</p>
+                    <p className="text-[9px] text-[#666666]">GIA Hallmarked Quality</p>
+                  </div>
+                </div>
+                <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
+                  <FaUndo className="text-[#C9A227] text-base shrink-0" />
+                  <div className="text-left">
+                    <p className="text-[11px] font-medium text-[#111111]">30-Day Returns</p>
+                    <p className="text-[9px] text-[#666666]">Hassle-free Exchange</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ACCORDION DETAILS SECTION (Below First Viewport) */}
+          <div className="mt-16 pt-12 border-t border-[#ECECEC] max-w-4xl mx-auto space-y-4 text-left">
+            <h3 className="text-2xl font-medium text-[#111111] text-center mb-8">
+              Creation Details &amp; Specifications
+            </h3>
+
+            {/* Accordion 1: Product Details */}
+            <div className="border border-[#ECECEC] rounded-2xl overflow-hidden bg-[#FFFFFF]">
+              <button
+                onClick={() => toggleAccordion("details")}
+                className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
+              >
+                <span>Product Details</span>
+                {openAccordions.details ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+              </button>
+              {openAccordions.details && (
+                <div className="px-6 pb-6 pt-2 text-xs text-[#666666] leading-relaxed font-normal border-t border-[#ECECEC]/50 space-y-3">
+                  <p>{product.description}</p>
+                  <p>
+                    Hand-crafted with meticulous precision, this piece represents the pinnacle of fine diamond setting and luxury metal craftsmanship.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Accordion 2: Specifications */}
+            <div className="border border-[#ECECEC] rounded-2xl overflow-hidden bg-[#FFFFFF]">
+              <button
+                onClick={() => toggleAccordion("specs")}
+                className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
+              >
+                <span>Specifications</span>
+                {openAccordions.specs ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+              </button>
+              {openAccordions.specs && (
+                <div className="px-6 pb-6 pt-3 text-xs text-[#666666] border-t border-[#ECECEC]/50 space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
+                      <span className="text-[#111111] font-medium">Stock ID / SKU</span>
+                      <span>{product.id}</span>
+                    </div>
+                    <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
+                      <span className="text-[#111111] font-medium">Metal Weight</span>
+                      <span>{product.goldWeight || 2.5}g (approx.)</span>
+                    </div>
+                    <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
+                      <span className="text-[#111111] font-medium">Metal Purity</span>
+                      <span>{selectedOptions.gold_type || "18K Solid Gold"}</span>
+                    </div>
+                    <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
+                      <span className="text-[#111111] font-medium">Metal Color</span>
+                      <span>{selectedOptions.color || selectedOptions.colors || "Yellow Gold"}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Accordion 3: Diamond Details */}
+            <div className="border border-[#ECECEC] rounded-2xl overflow-hidden bg-[#FFFFFF]">
+              <button
+                onClick={() => toggleAccordion("diamonds")}
+                className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
+              >
+                <span>Diamond &amp; Gemstone Details</span>
+                {openAccordions.diamonds ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+              </button>
+              {openAccordions.diamonds && (
+                <div className="px-6 pb-6 pt-3 text-xs text-[#666666] border-t border-[#ECECEC]/50 space-y-3">
+                  {rawProduct?.diamonds && rawProduct.diamonds.length > 0 ? (
+                    rawProduct.diamonds.map((d, i) => (
+                      <div key={i} className="bg-[#FAFAFA] p-4 rounded-xl border border-[#ECECEC] space-y-2">
+                        <div className="flex justify-between font-medium text-[#111111]">
+                          <span>Stone #{i + 1} ({d.type || "Natural"})</span>
+                          <span>{d.quantity || 1} x {d.weight || 0.5} Carat</span>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px] pt-1">
+                          <div><span className="text-[#999999] block">Shape</span>{d.shape || "Round"}</div>
+                          <div><span className="text-[#999999] block">Color</span>{d.color || "D"}</div>
+                          <div><span className="text-[#999999] block">Clarity</span>{d.clarity || "VS1"}</div>
+                          <div><span className="text-[#999999] block">Cut</span>{d.cut || "Excellent"}</div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="font-normal">
+                      Featuring GIA-certified ideal brilliant cut diamonds selected for maximum fire, brilliance, and scintillation.
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Accordion 4: Shipping & Returns */}
+            <div className="border border-[#ECECEC] rounded-2xl overflow-hidden bg-[#FFFFFF]">
+              <button
+                onClick={() => toggleAccordion("shipping")}
+                className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
+              >
+                <span>Shipping &amp; Returns</span>
+                {openAccordions.shipping ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+              </button>
+              {openAccordions.shipping && (
+                <div className="px-6 pb-6 pt-3 text-xs text-[#666666] leading-relaxed border-t border-[#ECECEC]/50 space-y-2">
+                  <p>
+                    <strong className="text-[#111111] font-medium">Complimentary FedEx Shipping:</strong> All orders are shipped via insured express courier, packaged in discreet luxury boxes, requiring signature on delivery.
+                  </p>
+                  <p>
+                    <strong className="text-[#111111] font-medium">30-Day Return Policy:</strong> Returns and complimentary ring resizing are welcomed within 30 days of delivery.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Accordion 5: Lifetime Warranty */}
+            <div className="border border-[#ECECEC] rounded-2xl overflow-hidden bg-[#FFFFFF]">
+              <button
+                onClick={() => toggleAccordion("warranty")}
+                className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
+              >
+                <span>Lifetime Warranty</span>
+                {openAccordions.warranty ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+              </button>
+              {openAccordions.warranty && (
+                <div className="px-6 pb-6 pt-3 text-xs text-[#666666] leading-relaxed border-t border-[#ECECEC]/50 space-y-2">
+                  <p>
+                    Every piece is backed by our lifetime warranty against manufacturing defects, including complimentary annual ultrasonic cleaning, prong inspections, and polishing services.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* RELATED PRODUCTS SWIPER CAROUSEL */}
+          <div className="mt-20 pt-12 border-t border-[#ECECEC]">
+            <div className="text-center space-y-2 mb-10">
+              <span className="text-[10px] font-medium tracking-widest uppercase text-[#666666]">
+                Curated Selection
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif font-medium text-[#111111]">
+                You May Also Like
+              </h2>
+            </div>
+
+            {rawProduct?.related_products && rawProduct.related_products.length > 0 ? (
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={24}
+                slidesPerView={1}
+                autoplay={{ delay: 5000, disableOnInteraction: false }}
+                breakpoints={{
+                  640: { slidesPerView: 2 },
+                  1024: { slidesPerView: 4 },
+                }}
+                className="related-swiper py-4"
+              >
+                {rawProduct.related_products.map((item) => (
+                  <SwiperSlide key={item?._id}>
+                    <ProductCard item={item} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <p className="text-xs text-[#666666] text-center font-normal">
+                Explore our full catalog for complementary creations.
+              </p>
+            )}
           </div>
         </div>
       </div>

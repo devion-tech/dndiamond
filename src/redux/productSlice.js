@@ -12,14 +12,14 @@ export const fetchProducts = createAsyncThunk(
     if (params.product_type) {
       body.product_type = params.product_type;
     }
-    if (params.subcategory_id) {
-      body.subcategory_id = params.subcategory_id;
-    }
     if (params.subcategory_slug) {
       body.subcategory_slug = params.subcategory_slug;
     }
     if (params.category_slug) {
       body.category_slug = params.category_slug;
+    }
+    if (params.diamond_type) {
+      body.diamond_type = params.diamond_type;
     }
     if (params.search) {
       body.search = params.search;

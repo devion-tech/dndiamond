@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  FaSearch,
-  FaTimes,
-  FaChevronDown,
-  FaChevronUp,
-} from "react-icons/fa";
+import { FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export default function FilterDrawer({
   isOpen,

@@ -10,22 +10,30 @@ export default function FilterDrawer({
   setSearch,
   selectedCategory,
   setSelectedCategory,
-  selectedMetal,
-  setSelectedMetal,
   maxPrice,
   setMaxPrice,
-  selectedCaratRange,
-  setSelectedCaratRange,
   selectedOrigin,
   setSelectedOrigin,
+  selectedFilters,
+  setSelectedFilters,
   accordions,
   toggleAccordion,
   resetFilters,
+  onApplyFilters,
   productCount,
   formatPrice,
   hideCategory = false,
+  attributes = null,
+  categories = [],
 }) {
   if (!isOpen) return null;
+
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key] === value ? "" : value,
+    }));
+  };
 
   return (
     <>
@@ -81,7 +89,7 @@ export default function FilterDrawer({
           </div>
 
           {/* 2. Category Accordion */}
-          {!hideCategory && (
+          {!hideCategory && categories.length > 0 && (
             <div className="border-b border-neutral-100 pb-4">
               <button
                 onClick={() => toggleAccordion("category")}
@@ -96,23 +104,19 @@ export default function FilterDrawer({
               </button>
               {accordions.category && (
                 <div className="space-y-1 mt-2">
-                  {[
-                    { label: "All Categories", value: "" },
-                    { label: "Rings", value: "Ring" },
-                    { label: "Earrings", value: "Earring" },
-                    { label: "Pendants", value: "Pendant" },
-                    {
-                      label: "Bracelets & Bangles",
-                      value: "Bracelet & Bangle",
-                    },
-                    { label: "Necklaces", value: "Necklace" },
-                  ].map((opt) => (
+                  <button
+                    onClick={() => setSelectedCategory("")}
+                    className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedCategory === "" ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
+                  >
+                    All Categories
+                  </button>
+                  {categories.map((cat) => (
                     <button
-                      key={opt.value}
-                      onClick={() => setSelectedCategory(opt.value)}
-                      className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedCategory === opt.value ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
+                      key={cat.slug || cat._id}
+                      onClick={() => setSelectedCategory(cat.slug)}
+                      className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedCategory === cat.slug ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
                     >
-                      {opt.label}
+                      {cat.name}
                     </button>
                   ))}
                 </div>
@@ -120,41 +124,8 @@ export default function FilterDrawer({
             </div>
           )}
 
-          {/* 3. Metal Setting Accordion */}
-          <div className="border-b border-neutral-100 pb-4">
-            <button
-              onClick={() => toggleAccordion("metal")}
-              className="w-full flex justify-between items-center text-[10px] font-bold tracking-widest text-neutral-700 uppercase mb-3"
-            >
-              <span>Main Material</span>
-              {accordions.metal ? (
-                <FaChevronUp size={8} />
-              ) : (
-                <FaChevronDown size={8} />
-              )}
-            </button>
-            {accordions.metal && (
-              <div className="space-y-1 mt-2">
-                {[
-                  { label: "All Metals", value: "" },
-                  { label: "14K Gold", value: "14K Gold" },
-                  { label: "18K Gold", value: "18K Gold" },
-                  { label: "Platinum", value: "Platinum" },
-                ].map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setSelectedMetal(opt.value)}
-                    className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedMetal === opt.value ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* 4. Price Slider Accordion */}
-          <div className="border-b border-neutral-100 pb-4">
+          {/* 3. Price Slider Accordion */}
+          {/* <div className="border-b border-neutral-100 pb-4">
             <button
               onClick={() => toggleAccordion("price")}
               className="w-full flex justify-between items-center text-[10px] font-bold tracking-widest text-neutral-700 uppercase mb-3"
@@ -191,9 +162,9 @@ export default function FilterDrawer({
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
-          {/* 5. Origin Accordion */}
+          {/* 4. Stones Origin Accordion */}
           <div className="border-b border-neutral-100 pb-4">
             <button
               onClick={() => toggleAccordion("origin")}
@@ -208,55 +179,68 @@ export default function FilterDrawer({
             </button>
             {accordions.origin && (
               <div className="space-y-1 mt-2">
-                {[
-                  { label: "All Stones", value: "" },
-                  { label: "Natural Diamonds", value: "natural" },
-                  { label: "Lab-Grown Diamonds", value: "labgrown" },
-                ].map((opt) => (
+                <button
+                  onClick={() => setSelectedOrigin("")}
+                  className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedOrigin === "" ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
+                >
+                  All Stones
+                </button>
+                {(attributes?.diamondTypes || []).map((opt) => (
                   <button
                     key={opt.value}
                     onClick={() => setSelectedOrigin(opt.value)}
                     className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedOrigin === opt.value ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
                   >
-                    {opt.label}
+                    {opt.value === "natural"
+                      ? "Natural Diamonds"
+                      : opt.value === "labgrown"
+                        ? "Lab-Grown Diamonds"
+                        : opt.value}
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* 6. Carat Weight Accordion */}
-          <div className="border-b border-neutral-100 pb-4">
-            <button
-              onClick={() => toggleAccordion("carat")}
-              className="w-full flex justify-between items-center text-[10px] font-bold tracking-widest text-neutral-700 uppercase mb-3"
-            >
-              <span>Center Stone Size</span>
-              {accordions.carat ? (
-                <FaChevronUp size={8} />
-              ) : (
-                <FaChevronDown size={8} />
-              )}
-            </button>
-            {accordions.carat && (
-              <div className="space-y-1 mt-2">
-                {[
-                  { label: "All Sizes", value: "" },
-                  { label: "Delicate (≤ 0.5 ct)", value: "low" },
-                  { label: "Classic (0.5 - 1.0 ct)", value: "mid" },
-                  { label: "Brilliant (1.0 ct+)", value: "high" },
-                ].map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setSelectedCaratRange(opt.value)}
-                    className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedCaratRange === opt.value ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
+          {/* 5. Dynamic Attribute Filters */}
+          {attributes?.dynamicAttributes &&
+            Object.entries(attributes.dynamicAttributes).map(
+              ([key, options]) =>
+                options.length > 0 && (
+                  <div key={key} className="border-b border-neutral-100 pb-4">
+                    <button
+                      onClick={() => toggleAccordion(key)}
+                      className="w-full flex justify-between items-center text-[10px] font-bold tracking-widest text-neutral-700 uppercase mb-3"
+                    >
+                      <span>{key.replace(/_/g, " ")}</span>
+                      {accordions[key] ? (
+                        <FaChevronUp size={8} />
+                      ) : (
+                        <FaChevronDown size={8} />
+                      )}
+                    </button>
+                    {accordions[key] && (
+                      <div className="space-y-1 mt-2">
+                        <button
+                          onClick={() => handleFilterSelect(key, "")}
+                          className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${!selectedFilters[key] ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
+                        >
+                          All {key.replace(/_/g, " ")}
+                        </button>
+                        {options.map((opt) => (
+                          <button
+                            key={opt.value}
+                            onClick={() => handleFilterSelect(key, opt.value)}
+                            className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedFilters[key] === opt.value ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
+                          >
+                            {opt.value}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ),
             )}
-          </div>
 
           {/* Reset Option button */}
           <button
@@ -270,10 +254,13 @@ export default function FilterDrawer({
         {/* Sticky Bottom Drawer Button */}
         <div className="p-4 border-t border-neutral-100 bg-white">
           <button
-            onClick={onClose}
+            onClick={() => {
+              if (onApplyFilters) onApplyFilters();
+              onClose();
+            }}
             className="w-full py-4 bg-neutral-950 hover:bg-neutral-900 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-colors shadow-sm flex items-center justify-center cursor-pointer"
           >
-            View Products ({productCount})
+            View Products
           </button>
         </div>
       </div>

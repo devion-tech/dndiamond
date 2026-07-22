@@ -12,9 +12,11 @@ import { FaFilter, FaSearch, FaTimes } from "react-icons/fa";
 import FilterDrawer from "@/components/ui/FilterDrawer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, clearProducts } from "@/redux/productSlice";
+import { fetchCategories } from "@/redux/categorySlice";
 import Layout from "@/components/layout/Layout";
 import ProductCard from "@/components/ui/ProductCard";
 import { useStore } from "@/context/StoreContext";
+import { apiRequest } from "@/utils/api";
 
 function ShopContent() {
   const router = useRouter();
@@ -29,15 +31,15 @@ function ShopContent() {
   // Local filter states
   const [search, setSearch] = useState(searchQueryParam);
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
-  const [selectedMetal, setSelectedMetal] = useState("");
   const [maxPrice, setMaxPrice] = useState(25000);
-  const [selectedCaratRange, setSelectedCaratRange] = useState("");
   const [selectedOrigin, setSelectedOrigin] = useState(originParam);
+  const [selectedFilters, setSelectedFilters] = useState({});
   const [subcategorySlug, setSubcategorySlug] = useState(subcategoryParam);
   const [sortOrder, setSortOrder] = useState("latest");
 
   const [page, setPage] = useState(1);
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [attributes, setAttributes] = useState(null);
 
   const [accordions, setAccordions] = useState({
     search: true,
@@ -45,12 +47,34 @@ function ShopContent() {
     metal: true,
     price: true,
     origin: true,
-    carat: true,
+    color: true,
   });
 
   const toggleAccordion = (key) => {
     setAccordions((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
+  // Fetch attributes from API
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      try {
+        const res = await apiRequest("/api/attribute?type=jewellery");
+        if (res.data && res.data.length > 0) {
+          const attr = res.data[0];
+          setAttributes({
+            diamondTypes: attr.diamond?.types || [],
+            dynamicAttributes: {
+              gold_type: attr.attributes?.gold_type || [],
+              colors: attr.attributes?.colors || [],
+            },
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch attributes:", err);
+      }
+    };
+    fetchAttributes();
+  }, []);
 
   const dispatch = useDispatch();
   const {
@@ -59,6 +83,11 @@ function ShopContent() {
     loadingMore,
     pagination,
   } = useSelector((state) => state.products);
+  const { items: categories } = useSelector((state) => state.categories);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const totalPages = pagination?.total_pages || 1;
   const currentPage = pagination?.page || 1;
@@ -85,8 +114,8 @@ function ShopContent() {
         limit: 16,
       };
 
-      if (searchQueryParam) {
-        paramsObj.search = searchQueryParam;
+      if (search) {
+        paramsObj.search = search;
       }
       if (selectedCategory) {
         paramsObj.category_slug = selectedCategory;
@@ -101,15 +130,12 @@ function ShopContent() {
       paramsObj.sort_by = sortOrder;
 
       const filters = {};
-      if (selectedMetal) {
-        filters.color = selectedMetal;
-      }
       if (maxPrice && maxPrice < 25000) {
         filters.max_price = maxPrice;
       }
-      if (selectedCaratRange) {
-        filters.carat = selectedCaratRange;
-      }
+      Object.entries(selectedFilters).forEach(([key, value]) => {
+        if (value) filters[key] = value;
+      });
       if (Object.keys(filters).length > 0) {
         paramsObj.filters = filters;
       }
@@ -117,19 +143,28 @@ function ShopContent() {
       return paramsObj;
     },
     [
-      searchQueryParam,
+      search,
       selectedCategory,
       subcategorySlug,
       selectedOrigin,
       sortOrder,
-      selectedMetal,
       maxPrice,
-      selectedCaratRange,
+      selectedFilters,
     ],
   );
 
-  // Fetch products from Redux on mount & when params change
+  // Initial load only
+  const hasLoaded = useRef(false);
   useEffect(() => {
+    if (!hasLoaded.current) {
+      hasLoaded.current = true;
+      dispatch(clearProducts());
+      dispatch(fetchProducts(buildParams(1)));
+    }
+  }, [dispatch, buildParams]);
+
+  // Apply filters (called on View Products click)
+  const applyFilters = useCallback(() => {
     setPage(1);
     dispatch(clearProducts());
     dispatch(fetchProducts(buildParams(1)));
@@ -165,9 +200,8 @@ function ShopContent() {
   const resetFilters = () => {
     setSearch("");
     setSelectedCategory("");
-    setSelectedMetal("");
     setMaxPrice(25000);
-    setSelectedCaratRange("");
+    setSelectedFilters({});
     setSelectedOrigin("");
     setSubcategorySlug("");
     setSortOrder("latest");
@@ -177,8 +211,8 @@ function ShopContent() {
   const activeFilterCount =
     (search ? 1 : 0) +
     (selectedCategory ? 1 : 0) +
-    (selectedMetal ? 1 : 0) +
-    (selectedOrigin ? 1 : 0);
+    (selectedOrigin ? 1 : 0) +
+    Object.values(selectedFilters).filter(Boolean).length;
 
   return (
     <div className="mx-auto w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12 relative font-sans bg-[#FFFFFF] min-h-screen">
@@ -336,20 +370,21 @@ function ShopContent() {
         setSearch={setSearch}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
-        selectedMetal={selectedMetal}
-        setSelectedMetal={setSelectedMetal}
         maxPrice={maxPrice}
         setMaxPrice={setMaxPrice}
-        selectedCaratRange={selectedCaratRange}
-        setSelectedCaratRange={setSelectedCaratRange}
         selectedOrigin={selectedOrigin}
         setSelectedOrigin={setSelectedOrigin}
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
         accordions={accordions}
         toggleAccordion={toggleAccordion}
         resetFilters={resetFilters}
+        onApplyFilters={applyFilters}
         productCount={totalProducts}
         formatPrice={formatPrice}
         hideCategory={true}
+        attributes={attributes}
+        categories={categories}
       />
 
       {/* Products Grid */}

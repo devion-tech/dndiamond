@@ -13,9 +13,11 @@ import { FaFilter } from "react-icons/fa";
 import FilterDrawer from "@/components/ui/FilterDrawer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, clearProducts } from "@/redux/productSlice";
+import { fetchCategories } from "@/redux/categorySlice";
 import Layout from "@/components/layout/Layout";
 import ProductCard from "@/components/ui/ProductCard";
 import { useStore } from "@/context/StoreContext";
+import { apiRequest } from "@/utils/api";
 
 const resolveCategoryName = (categoryField, subcategoryField) => {
   if (
@@ -51,10 +53,9 @@ function CatalogContent() {
   // Filters state
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedMetal, setSelectedMetal] = useState("");
   const [maxPrice, setMaxPrice] = useState(15000);
-  const [selectedCaratRange, setSelectedCaratRange] = useState("");
   const [selectedOrigin, setSelectedOrigin] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState({});
   const [selectedStyle, setSelectedStyle] = useState("");
   const [sortOrder, setSortOrder] = useState("DESC");
 
@@ -63,6 +64,7 @@ function CatalogContent() {
   // API fetching states
   const [subcategoryId, setSubcategoryId] = useState("");
   const [page, setPage] = useState(1);
+  const [attributes, setAttributes] = useState(null);
 
   // Filter drawer and accordion states
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
@@ -72,12 +74,34 @@ function CatalogContent() {
     metal: true,
     price: true,
     origin: true,
-    carat: true,
+    color: true,
   });
 
   const toggleAccordion = (key) => {
     setAccordions((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
+  // Fetch attributes from API
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      try {
+        const res = await apiRequest("/api/attribute?type=jewellery");
+        if (res.data && res.data.length > 0) {
+          const attr = res.data[0];
+          setAttributes({
+            diamondTypes: attr.diamond?.types || [],
+            dynamicAttributes: {
+              gold_type: attr.attributes?.gold_type || [],
+              colors: attr.attributes?.colors || [],
+            },
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch attributes:", err);
+      }
+    };
+    fetchAttributes();
+  }, []);
 
   const dispatch = useDispatch();
   const {
@@ -86,32 +110,55 @@ function CatalogContent() {
     loadingMore,
     pagination,
   } = useSelector((state) => state.products);
+  const { items: categories } = useSelector((state) => state.categories);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const totalPages = pagination?.total_pages || 1;
   const currentPage = pagination?.page || 1;
 
-  // Fetch products dynamically from Redux
+  // Build params helper
+  const buildParams = useCallback(
+    (pageNum = 1) => {
+      const params = { page: pageNum, limit: 10, category_slug: selectedCategory || categoryslug };
+      if (search) params.search = search;
+      const filters = {};
+      if (maxPrice && maxPrice < 15000) filters.max_price = maxPrice;
+      Object.entries(selectedFilters).forEach(([key, value]) => {
+        if (value) filters[key] = value;
+      });
+      if (Object.keys(filters).length > 0) params.filters = filters;
+      return params;
+    },
+    [categoryslug, selectedCategory, search, maxPrice, selectedFilters],
+  );
+
+  // Initial load only
+  const hasLoaded = useRef(false);
   useEffect(() => {
+    if (!hasLoaded.current) {
+      hasLoaded.current = true;
+      dispatch(clearProducts());
+      dispatch(fetchProducts(buildParams(1)));
+    }
+  }, [dispatch, buildParams]);
+
+  // Apply filters (called on View Products click)
+  const applyFilters = useCallback(() => {
     setPage(1);
     dispatch(clearProducts());
-    dispatch(
-      fetchProducts({ page: 1, limit: 10, category_slug: categoryslug }),
-    );
-  }, [dispatch, categoryslug]);
+    dispatch(fetchProducts(buildParams(1)));
+  }, [dispatch, buildParams]);
 
   // Fetch next page
   const loadMore = useCallback(() => {
     if (loadingMore || currentPage >= totalPages) return;
     const nextPage = currentPage + 1;
     setPage(nextPage);
-    dispatch(
-      fetchProducts({
-        page: nextPage,
-        limit: 10,
-        category_slug: categoryslug,
-      }),
-    );
-  }, [dispatch, loadingMore, currentPage, totalPages, categoryslug]);
+    dispatch(fetchProducts(buildParams(nextPage)));
+  }, [dispatch, loadingMore, currentPage, totalPages, buildParams]);
 
   // IntersectionObserver for infinite scroll
   const sentinelRef = useRef(null);
@@ -139,9 +186,8 @@ function CatalogContent() {
   const resetFilters = () => {
     setSearch("");
     setSelectedCategory("");
-    setSelectedMetal("");
     setMaxPrice(15000);
-    setSelectedCaratRange("");
+    setSelectedFilters({});
     setSelectedOrigin("");
     setSelectedStyle("");
     setSubcategoryId("");
@@ -203,20 +249,21 @@ function CatalogContent() {
         setSearch={setSearch}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
-        selectedMetal={selectedMetal}
-        setSelectedMetal={setSelectedMetal}
         maxPrice={maxPrice}
         setMaxPrice={setMaxPrice}
-        selectedCaratRange={selectedCaratRange}
-        setSelectedCaratRange={setSelectedCaratRange}
         selectedOrigin={selectedOrigin}
         setSelectedOrigin={setSelectedOrigin}
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
         accordions={accordions}
         toggleAccordion={toggleAccordion}
         resetFilters={resetFilters}
+        onApplyFilters={applyFilters}
         productCount={data?.length}
         formatPrice={formatPrice}
-        hideCategory={true}
+        hideCategory={false}
+        attributes={attributes}
+        categories={categories}
       />
 
       {/* Main Products Grid Layout */}

@@ -103,10 +103,13 @@ export default function ProductCard({ item }) {
       const response = await toggleWishlist({
         product_id: product?.id,
       });
+      console.log("response :>> ", response);
       if (response?.payload?.success) {
         toast.success(response?.payload?.message);
       } else {
-        toast.error(response?.payload?.message);
+        if (response?.payload?.message) {
+          toast.error(response?.payload?.message);
+        }
       }
     } catch (error) {
       toast.error(error.message || "Failed to update wishlist.");
@@ -182,10 +185,11 @@ export default function ProductCard({ item }) {
                     key={index}
                     onClick={(e) => handleColorSelect(e, color)}
                     disabled={isDisabled}
-                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${isSelected
-                      ? "border-neutral-900 scale-110"
-                      : "border-neutral-300 hover:border-neutral-500"
-                      } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                    className={`w-5 h-5 rounded-full border transition-all duration-200 cursor-pointer ${
+                      isSelected
+                        ? "border-neutral-900 scale-110"
+                        : "border-neutral-300 hover:border-neutral-500"
+                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
                     style={{ backgroundColor: hex }}
                     title={val}
                     aria-label={val}

@@ -127,7 +127,9 @@ function CatalogContent() {
       const filters = {};
       if (maxPrice && maxPrice < 15000) filters.max_price = maxPrice;
       Object.entries(selectedFilters).forEach(([key, value]) => {
-        if (value) filters[key] = value;
+        if (Array.isArray(value) && value.length > 0) {
+          filters[key] = value;
+        }
       });
       if (Object.keys(filters).length > 0) params.filters = filters;
       return params;

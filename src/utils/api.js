@@ -1,6 +1,7 @@
 "use client";
 
 import { getAuthHeaders } from "@/common/token";
+import toast from "react-hot-toast";
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
@@ -36,7 +37,7 @@ export const apiRequest = async (url, options = {}) => {
   if (res.status === 401) {
     const { store } = await import("@/redux/store");
     const { openModal } = await import("@/redux/authSlice");
-
+    toast.error(data?.message);
     store.dispatch(openModal());
     throw new Error("Unauthorized");
   }

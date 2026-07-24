@@ -134,7 +134,9 @@ function ShopContent() {
         filters.max_price = maxPrice;
       }
       Object.entries(selectedFilters).forEach(([key, value]) => {
-        if (value) filters[key] = value;
+        if (Array.isArray(value) && value.length > 0) {
+          filters[key] = value;
+        }
       });
       if (Object.keys(filters).length > 0) {
         paramsObj.filters = filters;
@@ -212,7 +214,10 @@ function ShopContent() {
     (search ? 1 : 0) +
     (selectedCategory ? 1 : 0) +
     (selectedOrigin ? 1 : 0) +
-    Object.values(selectedFilters).filter(Boolean).length;
+    Object.values(selectedFilters).reduce((count, val) => {
+      if (Array.isArray(val)) return count + val.length;
+      return count + (val ? 1 : 0);
+    }, 0);
 
   return (
     <div className="mx-auto w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12 relative font-sans bg-[#FFFFFF] min-h-screen">
@@ -335,6 +340,31 @@ function ShopContent() {
                   <FaTimes size={10} />
                 </button>
               </span>
+            )}
+            {Object.entries(selectedFilters).map(([key, values]) =>
+              Array.isArray(values) && values.length > 0
+                ? values.map((val) => (
+                    <span
+                      key={`${key}-${val}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAFAFA] border border-[#ECECEC] rounded-full text-[11px] text-[#111111] font-normal"
+                    >
+                      {val}
+                      <button
+                        onClick={() => {
+                          setSelectedFilters((prev) => ({
+                            ...prev,
+                            [key]: Array.isArray(prev[key])
+                              ? prev[key].filter((v) => v !== val)
+                              : [],
+                          }));
+                        }}
+                        className="hover:text-red-500"
+                      >
+                        <FaTimes size={10} />
+                      </button>
+                    </span>
+                  ))
+                : null
             )}
             <button
               onClick={resetFilters}

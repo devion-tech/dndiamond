@@ -21,20 +21,12 @@ export default function SuccessPage() {
     });
   }, []);
 
-  useEffect(() => {
-    if (!token || !currentOrder) {
-      router.push("/");
-    }
-  }, [token, currentOrder, router]);
-
-  if (!currentOrder) return null;
-
-  const addr = currentOrder.address;
+  const addr = currentOrder?.address;
   const addressStr =
     typeof addr === "string"
       ? addr
       : addr
-        ? `${addr.address_line_1}${addr.address_line_2 ? ", " + addr.address_line_2 : ""}${addr.landmark ? ", " + addr.landmark : ""}, ${addr.city}, ${addr.state}, ${addr.country} - ${addr.postal_code}`
+        ? `${addr?.address_line_1}${addr?.address_line_2 ? ", " + addr?.address_line_2 : ""}${addr?.landmark ? ", " + addr?.landmark : ""}, ${addr?.city}, ${addr?.state}, ${addr?.country} - ${addr?.postal_code}`
         : "";
 
   return (
@@ -48,7 +40,8 @@ export default function SuccessPage() {
                 Your Order is Placed Successfully!
               </h1>
               <p className="text-xs text-neutral-400 font-bold uppercase tracking-widest print:text-neutral-500">
-                Transaction Reference ID: {currentOrder._id || currentOrder.id}
+                Transaction Reference ID:{" "}
+                {currentOrder?._id || currentOrder?.id}
               </p>
             </div>
           </div>
@@ -75,13 +68,13 @@ export default function SuccessPage() {
                     </span>
                   </div>
                 )}
-                {currentOrder.totalAmount != null && (
+                {currentOrder?.totalAmount != null && (
                   <div className="border-t border-slate-200/80 pt-3 flex justify-between">
                     <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                       Grand Total Amount
                     </span>
                     <span className="text-sm font-extrabold text-black">
-                      {currentOrder.totalAmount}
+                      {currentOrder?.totalAmount}
                     </span>
                   </div>
                 )}

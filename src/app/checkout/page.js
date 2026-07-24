@@ -296,9 +296,9 @@ export default function CheckoutPage() {
     );
 
     if (createOrder.fulfilled.match(result)) {
-      router.push("/success");
+      router.push("/order/success");
     } else {
-      toast.error(result.payload || "Failed to place order");
+      router.push("/order/failed");
     }
   };
 

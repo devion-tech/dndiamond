@@ -29,10 +29,21 @@ export default function FilterDrawer({
   if (!isOpen) return null;
 
   const handleFilterSelect = (key, value) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [key]: prev[key] === value ? "" : value,
-    }));
+    const options = attributes?.dynamicAttributes?.[key] || [];
+    if (!value) {
+      setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+      return;
+    }
+    setSelectedFilters((prev) => {
+      const current = Array.isArray(prev[key]) ? prev[key] : [];
+      const next = current.includes(value)
+        ? current.filter((v) => v !== value)
+        : [...current, value];
+      if (options.length > 0 && next.length === options.length) {
+        return { ...prev, [key]: [] };
+      }
+      return { ...prev, [key]: next };
+    });
   };
 
   return (
@@ -221,21 +232,38 @@ export default function FilterDrawer({
                     </button>
                     {accordions[key] && (
                       <div className="space-y-1 mt-2">
-                        <button
-                          onClick={() => handleFilterSelect(key, "")}
-                          className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${!selectedFilters[key] ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
-                        >
-                          All {key.replace(/_/g, " ")}
-                        </button>
-                        {options.map((opt) => (
-                          <button
-                            key={opt.value}
-                            onClick={() => handleFilterSelect(key, opt.value)}
-                            className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedFilters[key] === opt.value ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
-                          >
-                            {opt.value}
-                          </button>
-                        ))}
+                        <label className="w-full flex items-center gap-2 py-1 text-[11px] font-medium tracking-wide uppercase transition-colors cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={!selectedFilters[key] || (Array.isArray(selectedFilters[key]) && selectedFilters[key].length === 0)}
+                            onChange={() => handleFilterSelect(key, "")}
+                            className="w-3.5 h-3.5 accent-neutral-900 rounded-sm cursor-pointer"
+                          />
+                          <span className={!selectedFilters[key] || (Array.isArray(selectedFilters[key]) && selectedFilters[key].length === 0) ? "text-neutral-900 font-bold" : "text-neutral-400"}>
+                            All {key.replace(/_/g, " ")}
+                          </span>
+                        </label>
+                        {options.map((opt) => {
+                          const isSelected = Array.isArray(selectedFilters[key])
+                            ? selectedFilters[key].includes(opt.value)
+                            : false;
+                          return (
+                            <label
+                              key={opt.value}
+                              className="w-full flex items-center gap-2 py-1 text-[11px] font-medium tracking-wide uppercase transition-colors cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => handleFilterSelect(key, opt.value)}
+                                className="w-3.5 h-3.5 accent-neutral-900 rounded-sm cursor-pointer"
+                              />
+                              <span className={isSelected ? "text-neutral-900 font-bold" : "text-neutral-400"}>
+                                {opt.value}
+                              </span>
+                            </label>
+                          );
+                        })}
                       </div>
                     )}
                   </div>

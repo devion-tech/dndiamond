@@ -198,6 +198,7 @@ function AuthModal() {
                   <input
                     type="email"
                     name="email"
+                    placeholder="Enter your email address"
                     value={fields.email}
                     onChange={handleChange}
                     onBlur={() => validateField("email", loginSchema)}
@@ -216,6 +217,7 @@ function AuthModal() {
                   <input
                     type="password"
                     name="password"
+                    placeholder="Enter your password"
                     value={fields.password}
                     onChange={handleChange}
                     onBlur={() => validateField("password", loginSchema)}
@@ -260,6 +262,7 @@ function AuthModal() {
                   <input
                     type="text"
                     name="name"
+                    placeholder="Enter your Full Name"
                     value={fields.name}
                     onChange={handleChange}
                     onBlur={() => validateField("name", registerSchema)}
@@ -278,6 +281,7 @@ function AuthModal() {
                   <input
                     type="email"
                     name="email"
+                    placeholder="Enter your Email Address"
                     value={fields.email}
                     onChange={handleChange}
                     onBlur={() => validateField("email", registerSchema)}
@@ -296,6 +300,7 @@ function AuthModal() {
                   <input
                     type="text"
                     name="phone"
+                    placeholder="Enter your Phone Number"
                     value={fields.phone}
                     onChange={handleChange}
                     onBlur={() => validateField("phone", registerSchema)}
@@ -314,6 +319,7 @@ function AuthModal() {
                   <input
                     type="password"
                     name="password"
+                    placeholder="Enter your password"
                     value={fields.password}
                     onChange={handleChange}
                     onBlur={() => validateField("password", registerSchema)}

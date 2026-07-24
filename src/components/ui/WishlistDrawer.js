@@ -103,7 +103,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                           onClick={onClose}
                           className="bg-white text-neutral-900 border border-neutral-900 hover:bg-neutral-900 hover:text-white px-3 py-1.5 rounded-lg text-[10px] font-medium uppercase tracking-wider flex items-center gap-1.5 cursor-pointer transition-all duration-300"
                         >
-                          <FaShoppingCart size={9} /> Move to Cart
+                          <FaShoppingCart size={9} /> View Product
                         </Link>
                       </div>
                     </div>

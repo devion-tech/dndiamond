@@ -111,7 +111,7 @@ function ShopContent() {
     (pageNum = 1) => {
       const paramsObj = {
         page: pageNum,
-        limit: 16,
+        limit: 10,
       };
 
       if (search) {
@@ -364,7 +364,7 @@ function ShopContent() {
                       </button>
                     </span>
                   ))
-                : null
+                : null,
             )}
             <button
               onClick={resetFilters}

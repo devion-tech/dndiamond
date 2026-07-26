@@ -36,9 +36,8 @@ function MarqueeStrip({ dark }) {
           {MARQUEE_ITEMS.map((item, i) => (
             <span
               key={i}
-              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${
-                dark ? "text-neutral-500" : "text-neutral-400"
-              }`}
+              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${dark ? "text-neutral-500" : "text-neutral-400"
+                }`}
             >
               {item}{" "}
               <span className={dark ? "text-neutral-700" : "text-neutral-200"}>
@@ -51,9 +50,8 @@ function MarqueeStrip({ dark }) {
           {MARQUEE_ITEMS.map((item, i) => (
             <span
               key={`dup-${i}`}
-              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${
-                dark ? "text-neutral-500" : "text-neutral-400"
-              }`}
+              className={`inline-flex items-center gap-4 px-6 font-serif text-[10px] lg:text-[11px] xl:text-xs tracking-[0.3em] uppercase ${dark ? "text-neutral-500" : "text-neutral-400"
+                }`}
             >
               {item}{" "}
               <span className={dark ? "text-neutral-700" : "text-neutral-200"}>
@@ -163,9 +161,8 @@ function FAQSection() {
                     </span>
                   </button>
                   <div
-                    className={`overflow-hidden transition-all duration-500 ${
-                      isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
-                    }`}
+                    className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
+                      }`}
                   >
                     <p className="text-xs sm:text-sm font-light text-neutral-500 leading-relaxed pl-1 pb-2 max-w-2xl">
                       {item.answer}
@@ -244,7 +241,7 @@ export default function Home() {
         {/* ==================================================
             SECTION 1: FULLSCREEN HERO CAROUSEL (100dvh)
             ================================================== */}
-        <section className="relative h-[100dvh] min-h-[600px] w-full bg-[#0F0F0F] overflow-hidden select-none">
+        <section className="relative h-[100dvh]  w-full bg-[#0F0F0F] overflow-hidden select-none">
           {/* Background Images & Content Layer */}
           {items?.map((slide, idx) => {
             const hasText = hasSlideText(slide);
@@ -253,20 +250,18 @@ export default function Home() {
             return (
               <div
                 key={idx}
-                className={`absolute inset-0 w-full h-full flex items-center justify-start transition-all duration-1000 ease-in-out ${
-                  isActive
+                className={`absolute inset-0 w-full h-sfull flex items-center justify-start transition-all duration-1000 ease-in-out ${isActive
                     ? "opacity-100 z-10 pointer-events-auto"
                     : "opacity-0 z-0 pointer-events-none"
-                }`}
+                  }`}
               >
                 {/* Background Photo with slow scale pan */}
                 <div className="absolute inset-0 overflow-hidden">
                   <img
                     src={slide?.image?.image}
                     alt={slide?.title || "Dndiamond Hero Image"}
-                    className={`w-full h-full object-cover select-none transition-transform duration-[5500ms] ease-out ${
-                      isActive ? "scale-100" : "scale-115"
-                    }`}
+                    className={`w-full h-full object-cover select-none transition-transform duration-[5500ms] ease-out ${isActive ? "scale-100" : "scale-115"
+                      }`}
                   />
                   {hasText && (
                     <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/35 to-transparent z-10" />
@@ -280,11 +275,10 @@ export default function Home() {
                       {/* Category Label */}
                       {slide.label && slide.label.trim() !== "" && (
                         <span
-                          className={`inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase transition-all duration-700 delay-300 ${
-                            isActive
+                          className={`inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase transition-all duration-700 delay-300 ${isActive
                               ? "translate-y-0 opacity-100"
                               : "translate-y-6 opacity-0"
-                          }`}
+                            }`}
                         >
                           {slide.label}
                         </span>
@@ -293,11 +287,10 @@ export default function Home() {
                       {/* Headline */}
                       {slide.title && slide.title.trim() !== "" && (
                         <h1
-                          className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] transition-all duration-1000 delay-500 ${
-                            isActive
+                          className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] transition-all duration-1000 delay-500 ${isActive
                               ? "translate-y-0 opacity-100"
                               : "translate-y-8 opacity-0"
-                          }`}
+                            }`}
                         >
                           {slide.title.split("\n").map((line, lidx) => (
                             <span key={lidx} className="block">
@@ -310,11 +303,10 @@ export default function Home() {
                       {/* Description */}
                       {slide.description && slide.description.trim() !== "" && (
                         <div
-                          className={`mt-2 text-neutral-300 transition-all duration-1000 delay-700 ${
-                            isActive
+                          className={`mt-2 text-neutral-300 transition-all duration-1000 delay-700 ${isActive
                               ? "translate-y-0 opacity-100"
                               : "translate-y-8 opacity-0"
-                          }`}
+                            }`}
                         >
                           {slide.description
                             .split("\n\n")
@@ -331,11 +323,10 @@ export default function Home() {
 
                       {/* Call To Action Button */}
                       <div
-                        className={`pt-4 transition-all duration-700 delay-[900ms] ${
-                          isActive
+                        className={`pt-4 transition-all duration-700 delay-[900ms] ${isActive
                             ? "translate-y-0 opacity-100"
                             : "translate-y-6 opacity-0"
-                        }`}
+                          }`}
                       >
                         <Link
                           href="/diamonds"

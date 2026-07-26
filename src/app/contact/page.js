@@ -537,56 +537,58 @@ export default function ContactPage() {
                                     </form>
                                 )}
                             </div>
-                            {/* RIGHT COLUMN: INTERACTIVE MAP FOR SELECTED SHOWROOM */}
-                            <div ref={contactInfoRef} className="lg:col-span-5 w-full space-y-8 text-left">
-                                <div className="space-y-4">
-                                    <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
-                                        {selectedRoom.label}
-                                    </span>
-                                    <h3 className="font-serif text-3xl font-light text-neutral-900 leading-tight">
-                                        {selectedRoom.name}
-                                    </h3>
-                                    <p className="text-neutral-600 font-sans text-xs sm:text-sm leading-relaxed">
-                                        {selectedRoom.description}
-                                    </p>
-                                </div>
+                        </div>
 
-                                {/* Luxury Map Container */}
-                                <div className="w-full aspect-[4/3] rounded-xs bg-neutral-100 border border-neutral-200 relative overflow-hidden shadow-inner">
-                                    <iframe
-                                        src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedRoom.mapQuery)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-                                        className="w-full h-full border-0 grayscale-[20%] contrast-[110%] opacity-90 transition-opacity duration-300"
-                                        allowFullScreen=""
-                                        loading="lazy"
-                                        title={`Map of ${selectedRoom.name}`}
-                                    ></iframe>
+                        {/* RIGHT COLUMN: INTERACTIVE MAP FOR SELECTED SHOWROOM */}
+                        <div ref={contactInfoRef} className="lg:col-span-5 w-full space-y-8 text-left">
+                            <div className="space-y-4">
+                                <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
+                                    {selectedRoom.label}
+                                </span>
+                                <h3 className="font-serif text-3xl font-light text-neutral-900 leading-tight">
+                                    {selectedRoom.name}
+                                </h3>
+                                <p className="text-neutral-600 font-sans text-xs sm:text-sm leading-relaxed">
+                                    {selectedRoom.description}
+                                </p>
+                            </div>
 
-                                    {/* Custom Coordinate Badge */}
-                                    <div className="absolute bottom-4 left-4 bg-neutral-900 text-white text-[8px] font-mono tracking-widest px-2.5 py-1 rounded-sm select-none border border-white/10 z-10 shadow-sm">
-                                        {selectedRoom.id.toUpperCase()}: {selectedRoom.coords}
-                                    </div>
-                                </div>
+                            {/* Luxury Map Container */}
+                            <div className="w-full aspect-[4/3] rounded-xs bg-neutral-100 border border-neutral-200 relative overflow-hidden shadow-inner">
+                                <iframe
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedRoom.mapQuery)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                                    className="w-full h-full border-0 grayscale-[20%] contrast-[110%] opacity-90 transition-opacity duration-300"
+                                    allowFullScreen=""
+                                    loading="lazy"
+                                    title={`Map of ${selectedRoom.name}`}
+                                ></iframe>
 
-                                <div className="space-y-4 pt-4 border-t border-neutral-100">
-                                    <h4 className="font-serif text-base font-semibold text-neutral-900">
-                                        Direct Showroom Contact
-                                    </h4>
-                                    <ul className="space-y-3 text-neutral-500 text-xs font-sans">
-                                        <li className="flex items-center gap-3">
-                                            <FaEnvelope className="text-neutral-400 text-sm" />
-                                            <span>Concierge Email: <a href={`mailto:${selectedRoom.email}`} className="text-neutral-900 font-bold hover:underline">{selectedRoom.email}</a></span>
-                                        </li>
-                                        <li className="flex items-center gap-3">
-                                            <FaPhoneAlt className="text-neutral-400 text-sm" />
-                                            <span>Direct Hotline: <span className="text-neutral-900 font-bold">{selectedRoom.phone}</span></span>
-                                        </li>
-                                        <li className="flex items-center gap-3">
-                                            <FaClock className="text-neutral-400 text-sm" />
-                                            <span>Hours: <span className="text-neutral-800">{selectedRoom.hours}</span></span>
-                                        </li>
-                                    </ul>
+                                {/* Custom Coordinate Badge */}
+                                <div className="absolute bottom-4 left-4 bg-neutral-900 text-white text-[8px] font-mono tracking-widest px-2.5 py-1 rounded-sm select-none border border-white/10 z-10 shadow-sm">
+                                    {selectedRoom.id.toUpperCase()}: {selectedRoom.coords}
                                 </div>
-                            </div>        </div>
+                            </div>
+
+                            <div className="space-y-4 pt-4 border-t border-neutral-100">
+                                <h4 className="font-serif text-base font-semibold text-neutral-900">
+                                    Direct Showroom Contact
+                                </h4>
+                                <ul className="space-y-3 text-neutral-500 text-xs font-sans">
+                                    <li className="flex items-center gap-3">
+                                        <FaEnvelope className="text-neutral-400 text-sm" />
+                                        <span>Concierge Email: <a href={`mailto:${selectedRoom.email}`} className="text-neutral-900 font-bold hover:underline">{selectedRoom.email}</a></span>
+                                    </li>
+                                    <li className="flex items-center gap-3">
+                                        <FaPhoneAlt className="text-neutral-400 text-sm" />
+                                        <span>Direct Hotline: <span className="text-neutral-900 font-bold">{selectedRoom.phone}</span></span>
+                                    </li>
+                                    <li className="flex items-center gap-3">
+                                        <FaClock className="text-neutral-400 text-sm" />
+                                        <span>Hours: <span className="text-neutral-800">{selectedRoom.hours}</span></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
                     </div>
                 </section>

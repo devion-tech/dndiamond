@@ -14,8 +14,9 @@
   
   /* GLOBAL FONT VARIABLES WITH HONG KONG / TRADITIONAL CHINESE FALLBACKS */
   --font-family-sans: var(--font-lexend), var(--font-instrument-sans), var(--font-manrope), var(--font-mulish), "PingFang HK", "PingFang TC", "Noto Sans HK", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
-  --font-family-serif: var(--font-family-sans);
+  --font-family-serif: var(--font-tenor-sans), var(--font-cormorant-garamond), serif;
   --font-family-display: var(--font-quicksand), "PingFang HK", "PingFang TC", "Noto Sans HK", sans-serif;
+  --font-family-secondary: var(--font-karla), "PingFang HK", "PingFang TC", "Noto Sans HK", sans-serif;
 }
 
 @theme {
@@ -27,8 +28,9 @@
   --color-dark-bg: var(--brand-dark-background);
   
   --font-sans: var(--font-family-sans);
-  --font-serif: var(--font-family-sans);
+  --font-serif: var(--font-family-serif);
   --font-display: var(--font-family-display);
+  --font-secondary: var(--font-family-secondary);
   
   --font-lexend: var(--font-lexend), sans-serif;
   --font-instrument-sans: var(--font-instrument-sans), sans-serif;
@@ -38,6 +40,8 @@
   --font-quicksand: var(--font-quicksand), sans-serif;
   --font-cormorant-garamond: var(--font-cormorant-garamond), serif;
   --font-playfair: var(--font-playfair), serif;
+  --font-tenor-sans: var(--font-tenor-sans), sans-serif;
+  --font-karla: var(--font-karla), sans-serif;
   
   --radius-xs: 12px;
   --radius-sm: 12px;
@@ -114,6 +118,10 @@ body {
   flex-direction: column;
   font-family: var(--font-family-sans);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-serif);
 }
 
 /* Smooth custom scrollbars */

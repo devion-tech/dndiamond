@@ -169,32 +169,32 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const fallbackSearchItems =
     searchQuery.trim() !== ""
       ? [
-          ...jewelry.filter(
-            (j) =>
-              j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              j.category.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-          ...diamonds.filter(
-            (d) =>
-              d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-        ].slice(0, 5)
+        ...jewelry.filter(
+          (j) =>
+            j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            j.category.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+        ...diamonds.filter(
+          (d) =>
+            d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            d.shape.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+      ].slice(0, 5)
       : [];
 
   const filteredSearchItems =
     apiSearchResults.length > 0
       ? apiSearchResults.map((p) => ({
-          id: p._id || p.id,
-          title: p.name || p.title,
-          price: p.display_price || p.price || 0,
-          category: p.category || p.category_id?.name || "Jewelry",
-          image:
-            p.images && p.images[0]
-              ? p.images[0]
-              : p.image ||
-                "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=80",
-        }))
+        id: p._id || p.id,
+        title: p.name || p.title,
+        price: p.display_price || p.price || 0,
+        category: p.category || p.category_id?.name || "Jewelry",
+        image:
+          p.images && p.images[0]
+            ? p.images[0]
+            : p.image ||
+            "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=80",
+      }))
       : fallbackSearchItems;
 
   const handleSearchSubmit = (e) => {
@@ -207,7 +207,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   };
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 w-full bg-white border-b border-neutral-100 font-sans">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-neutral-100 font-sans">
       {promoVisible && (
         <div className="w-full bg-[#0E0E0E] text-white text-center py-2.5 px-4 text-[10px] sm:text-xs font-light tracking-wide relative flex items-center justify-center z-50">
           <span>
@@ -246,37 +246,33 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 <span>Jewelry</span>
                 <FaChevronDown
                   size={7}
-                  className={`text-neutral-400 transition-transform duration-300 ${
-                    isJewelryHovered ? "rotate-180" : ""
-                  }`}
+                  className={`text-neutral-400 transition-transform duration-300 ${isJewelryHovered ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
               {/* Mega Menu Container */}
               <div
-                className={`absolute left-4 right-4 top-full ${
-                  isJewelryHovered ? "flex" : "hidden"
-                } flex-col bg-white border border-neutral-100 rounded-sm p-8 shadow-xl animate-fade-in z-50 text-left cursor-default`}
+                className={`absolute left-4 right-4 top-full ${isJewelryHovered ? "flex" : "hidden"
+                  } flex-col bg-white border border-neutral-100 rounded-sm p-8 shadow-xl animate-fade-in z-50 text-left cursor-default`}
               >
                 {/* Tabs Selector */}
                 <div className="flex justify-center border-b border-neutral-100 pb-4 mb-6 gap-8 w-full">
                   <button
                     onClick={() => handleTabClick("labgrown")}
-                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
-                      jewelryTab === "labgrown"
-                        ? "border-neutral-900 text-neutral-900 font-medium"
-                        : "border-transparent text-neutral-400 hover:text-neutral-600"
-                    }`}
+                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${jewelryTab === "labgrown"
+                      ? "border-neutral-900 text-neutral-900 font-medium"
+                      : "border-transparent text-neutral-400 hover:text-neutral-600"
+                      }`}
                   >
                     Lab Grown
                   </button>
                   <button
                     onClick={() => handleTabClick("natural")}
-                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
-                      jewelryTab === "natural"
-                        ? "border-neutral-900 text-neutral-900 font-medium"
-                        : "border-transparent text-neutral-400 hover:text-neutral-600"
-                    }`}
+                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${jewelryTab === "natural"
+                      ? "border-neutral-900 text-neutral-900 font-medium"
+                      : "border-transparent text-neutral-400 hover:text-neutral-600"
+                      }`}
                   >
                     Natural
                   </button>
@@ -334,16 +330,14 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 <span>About</span>
                 <FaChevronDown
                   size={7}
-                  className={`text-neutral-400 transition-transform duration-300 ${
-                    isAboutHovered ? "rotate-180" : ""
-                  }`}
+                  className={`text-neutral-400 transition-transform duration-300 ${isAboutHovered ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
               <div
-                className={`absolute left-1/2 -translate-x-1/2 top-full w-44 bg-white border border-neutral-100 p-3.5 shadow-lg animate-fade-in z-50 text-left rounded-sm ${
-                  isAboutHovered ? "block" : "hidden"
-                }`}
+                className={`absolute left-1/2 -translate-x-1/2 top-full w-44 bg-white border border-neutral-100 p-3.5 shadow-lg animate-fade-in z-50 text-left rounded-sm ${isAboutHovered ? "block" : "hidden"
+                  }`}
               >
                 <ul className="space-y-2.5 text-[10px] sm:text-[11px] font-medium tracking-wider text-neutral-700 uppercase">
                   <li>
@@ -567,11 +561,10 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <button
                     key={reg.code}
                     onClick={() => saveRegion(reg.code)}
-                    className={`w-full text-left px-3 py-1.5 text-[9px] lg:text-[10px] xl:text-[11px] font-medium tracking-wider uppercase transition-all rounded-sm block cursor-pointer ${
-                      region === reg.code
-                        ? "bg-neutral-50 text-neutral-900 font-medium"
-                        : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
-                    }`}
+                    className={`w-full text-left px-3 py-1.5 text-[9px] lg:text-[10px] xl:text-[11px] font-medium tracking-wider uppercase transition-all rounded-sm block cursor-pointer ${region === reg.code
+                      ? "bg-neutral-50 text-neutral-900 font-medium"
+                      : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
+                      }`}
                   >
                     {reg.label}
                   </button>
@@ -591,9 +584,8 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               >
                 <span>Jewelry</span>
                 <FaChevronDown
-                  className={`transform transition-transform duration-300 ${
-                    mobileJewelryOpen ? "rotate-180" : ""
-                  }`}
+                  className={`transform transition-transform duration-300 ${mobileJewelryOpen ? "rotate-180" : ""
+                    }`}
                   size={8}
                 />
               </button>
@@ -603,21 +595,19 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <div className="flex border-b border-neutral-100 pb-2 mb-2 gap-4">
                     <button
                       onClick={() => handleTabClick("labgrown")}
-                      className={`text-[10px] font-medium tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
-                        jewelryTab === "labgrown"
-                          ? "border-neutral-900 text-neutral-900"
-                          : "border-transparent text-neutral-400"
-                      }`}
+                      className={`text-[10px] font-medium tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${jewelryTab === "labgrown"
+                        ? "border-neutral-900 text-neutral-900"
+                        : "border-transparent text-neutral-400"
+                        }`}
                     >
                       Lab Grown
                     </button>
                     <button
                       onClick={() => handleTabClick("natural")}
-                      className={`text-[10px] font-medium tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${
-                        jewelryTab === "natural"
-                          ? "border-neutral-900 text-neutral-900"
-                          : "border-transparent text-neutral-400"
-                      }`}
+                      className={`text-[10px] font-medium tracking-wider uppercase pb-1 border-b-2 cursor-pointer ${jewelryTab === "natural"
+                        ? "border-neutral-900 text-neutral-900"
+                        : "border-transparent text-neutral-400"
+                        }`}
                     >
                       Natural
                     </button>
@@ -687,9 +677,8 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   <span>About</span>
                   <FaChevronDown
                     size={8}
-                    className={`text-neutral-400 transition-transform duration-300 ${
-                      mobileAboutOpen ? "rotate-180" : ""
-                    }`}
+                    className={`text-neutral-400 transition-transform duration-300 ${mobileAboutOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 {mobileAboutOpen && (
@@ -796,11 +785,10 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                           saveRegion(reg.code);
                           setMobileMenuOpen(false);
                         }}
-                        className={`px-2 py-1 text-[9px] font-medium tracking-wider rounded-sm uppercase transition-all border cursor-pointer ${
-                          region === reg.code
-                            ? "bg-neutral-900 text-white border-neutral-900"
-                            : "text-neutral-500 bg-neutral-50 border-neutral-200"
-                        }`}
+                        className={`px-2 py-1 text-[9px] font-medium tracking-wider rounded-sm uppercase transition-all border cursor-pointer ${region === reg.code
+                          ? "bg-neutral-900 text-white border-neutral-900"
+                          : "text-neutral-500 bg-neutral-50 border-neutral-200"
+                          }`}
                       >
                         {reg.label}
                       </button>

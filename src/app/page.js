@@ -241,7 +241,7 @@ export default function Home() {
         {/* ==================================================
             SECTION 1: FULLSCREEN HERO CAROUSEL (100dvh)
             ================================================== */}
-        <section className="relative h-[100dvh]  w-full bg-[#0F0F0F] overflow-hidden select-none">
+        <section className="relative h-[50dvh] sm:h-[60dvh] lg:h-[100dvh] w-full bg-[#0F0F0F] overflow-hidden select-none">
           {/* Background Images & Content Layer */}
           {items?.map((slide, idx) => {
             const hasText = hasSlideText(slide);
@@ -250,7 +250,7 @@ export default function Home() {
             return (
               <div
                 key={idx}
-                className={`absolute inset-0 w-full h-sfull flex items-center justify-start transition-all duration-1000 ease-in-out ${isActive
+                className={`absolute inset-0 w-full h-full flex items-center justify-start transition-all duration-1000 ease-in-out ${isActive
                     ? "opacity-100 z-10 pointer-events-auto"
                     : "opacity-0 z-0 pointer-events-none"
                   }`}
@@ -468,11 +468,11 @@ export default function Home() {
         {/* SECTION 5: ATELIER PHILOSOPHY */}
         <section className="py-14 sm:py-16 lg:py-20 bg-[#FAF9F5]/40">
           <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-12 items-center">
               {/* Left Column: Portrait Model Photo */}
               <div className="col-span-1 md:col-span-4 flex justify-center order-2 md:order-1">
                 <AnimateOnScroll direction="left" delay={150}>
-                  <div className="relative aspect-[3/4] w-full overflow-hidden border border-neutral-100 shadow-xs select-none rounded-xl">
+                  <div className="relative aspect-[3/4] w-full max-w-[280px] md:max-w-none mx-auto overflow-hidden border border-neutral-100 shadow-xs select-none rounded-xl">
                     <img
                       src="/about/glamour-beauty-jewelry-luxury-concept-close-up-beautiful-woman-with-golden-ring-diamond-earring.jpg"
                       alt="Luxury jewelry model portrait"
@@ -483,7 +483,7 @@ export default function Home() {
               </div>
 
               {/* Middle Column: Central Heading & CTA */}
-              <div className="col-span-2 md:col-span-4 text-center space-y-6 px-2 sm:px-4 order-1 md:order-2">
+              <div className="col-span-1 md:col-span-4 text-center space-y-6 px-2 sm:px-4 order-1 md:order-2">
                 <AnimateOnScroll direction="up" delay={100}>
                   <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
                     Atelier Philosophy
@@ -509,7 +509,7 @@ export default function Home() {
               {/* Right Column: Close-up Jewelry Detail Photo */}
               <div className="col-span-1 md:col-span-4 flex justify-center order-3">
                 <AnimateOnScroll direction="right" delay={150}>
-                  <div className="relative aspect-[3/4] w-full overflow-hidden border border-neutral-100 shadow-xs select-none rounded-xl">
+                  <div className="relative aspect-[3/4] w-full max-w-[280px] md:max-w-none mx-auto overflow-hidden border border-neutral-100 shadow-xs select-none rounded-xl">
                     <img
                       src="/about/luxury-white-gold-diamond-necklace-dark-background.jpg"
                       alt="Gold pendant necklace detail"

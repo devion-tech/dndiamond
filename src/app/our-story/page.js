@@ -14,10 +14,10 @@ export default function OurStoryPage() {
         {/* ==================================================
             SECTION 1: THE ATELIER HERO (Spacious & Refined)
             ================================================== */}
-        <section className="relative py-20 sm:py-28 lg:py-36 px-6 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <section className="relative py-12 sm:py-20 md:py-28 lg:py-36 px-4 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
             {/* Left Column - Typography */}
-            <div className="lg:col-span-6 space-y-6 text-left">
+            <div className="lg:col-span-6 space-y-4 sm:space-y-6 text-left">
               <AnimateOnScroll direction="up" delay={100}>
                 <div className="flex items-center gap-3">
                   <span className="w-8 h-[1px] bg-neutral-900/30" />
@@ -25,15 +25,15 @@ export default function OurStoryPage() {
                     Our Heritage &amp; Ethos
                   </span>
                 </div>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light text-[#121212] tracking-wide leading-[1.15] mt-4">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#121212] tracking-wide leading-[1.15] mt-4">
                   A Quest for <br />
                   <span className="italic font-normal">the Perfect Fire</span>
                 </h1>
-                <div className="w-16 h-[1px] bg-neutral-900/10 my-8" />
+                <div className="w-16 h-[1px] bg-neutral-900/10 my-6 sm:my-8" />
                 <p className="text-neutral-600 font-secondary font-light text-sm sm:text-base leading-relaxed max-w-xl">
                   dn Diamonds was founded upon a singular obsession: to unleash the absolute maximum light performance hidden within raw gemstone structures. By rejecting commercial mass-cutting standards that favor weight over refraction, we ensure every diamond is cut to unleash its true brilliance.
                 </p>
-                <p className="text-neutral-600 font-secondary font-light text-sm sm:text-base leading-relaxed max-w-xl pt-2">
+                <p className="text-neutral-600 font-secondary font-light text-sm sm:text-base leading-relaxed max-w-xl pt-1 sm:pt-2">
                   From our private consulting salon in Central, Hong Kong, we translate classical design proportions into modern heirlooms that endure for generations.
                 </p>
               </AnimateOnScroll>

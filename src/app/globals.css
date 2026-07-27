@@ -2,16 +2,22 @@
 
 :root {
   /* CLIENT CONFIGURABLE VARIABLES - LUXURY BLACK & WHITE THEME */
-  --brand-primary: #121212;         /* Rich Off-Black */
+  --brand-primary: #121212;
+  /* Rich Off-Black */
   --brand-primary-rgb: 18, 18, 18;
-  --brand-secondary: #1A1A1A;       /* Soft Charcoal Black */
+  --brand-secondary: #1A1A1A;
+  /* Soft Charcoal Black */
   --brand-secondary-rgb: 26, 26, 26;
-  
-  --brand-accent: #262626;          /* Medium Charcoal */
-  --brand-accent-light: #F8F9FA;    /* Minimalist Light Gray background */
-  --brand-slate-background: #FAFAFA;/* Body Background - Soft Off-White */
-  --brand-dark-background: #121212; /* Rich Off-Black background */
-  
+
+  --brand-accent: #262626;
+  /* Medium Charcoal */
+  --brand-accent-light: #F8F9FA;
+  /* Minimalist Light Gray background */
+  --brand-slate-background: #FAFAFA;
+  /* Body Background - Soft Off-White */
+  --brand-dark-background: #121212;
+  /* Rich Off-Black background */
+
   /* GLOBAL FONT VARIABLES WITH HONG KONG / TRADITIONAL CHINESE FALLBACKS */
   --font-family-sans: var(--font-lexend), var(--font-instrument-sans), var(--font-manrope), var(--font-mulish), "PingFang HK", "PingFang TC", "Noto Sans HK", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
   --font-family-serif: var(--font-tenor-sans), var(--font-cormorant-garamond), serif;
@@ -26,12 +32,12 @@
   --color-accent-light: var(--brand-accent-light);
   --color-slate-background: var(--brand-slate-background);
   --color-dark-bg: var(--brand-dark-background);
-  
+
   --font-sans: var(--font-family-sans);
   --font-serif: var(--font-family-serif);
   --font-display: var(--font-family-display);
   --font-secondary: var(--font-family-secondary);
-  
+
   --font-lexend: var(--font-lexend), sans-serif;
   --font-instrument-sans: var(--font-instrument-sans), sans-serif;
   --font-instrument-serif: var(--font-instrument-serif), serif;
@@ -42,7 +48,7 @@
   --font-playfair: var(--font-playfair), serif;
   --font-tenor-sans: var(--font-tenor-sans), sans-serif;
   --font-karla: var(--font-karla), sans-serif;
-  
+
   --radius-xs: 12px;
   --radius-sm: 12px;
   --radius-md: 12px;
@@ -50,24 +56,44 @@
   --radius-xl: 12px;
   --radius-2xl: 12px;
   --radius-3xl: 12px;
-  
   --animate-marquee: marquee 25s linear infinite;
   --animate-fade-in: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-slide-up: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-spin-slow: spin 30s linear infinite;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  
+
   @keyframes marquee {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-50%); }
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
   }
+
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
+
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -120,7 +146,12 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-family-serif);
 }
 
@@ -129,14 +160,17 @@ h1, h2, h3, h4, h5, h6 {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--brand-accent-light);
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(18, 18, 18, 0.15);
   border-radius: 4px;
   border: 1px solid rgba(18, 18, 18, 0.03);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(18, 18, 18, 0.35);
 }

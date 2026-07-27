@@ -215,7 +215,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b border-neutral-100 font-sans">
+    <header className="sticky top-0 left-0 right-0 z-50 w-full bg-white border-b border-neutral-100 font-sans">
       {promoVisible && (
         <div className="w-full bg-[#0E0E0E] text-white text-center py-2.5 px-4 text-[10px] sm:text-xs font-light tracking-wide relative flex items-center justify-center z-50">
           <span>

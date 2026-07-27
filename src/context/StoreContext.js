@@ -267,7 +267,7 @@ export function StoreProvider({ children }) {
       const authState = result.payload;
       // Trigger cart merge and fetches
       await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080"}/api/cart/merge`,
+        "/api/cart/merge",
         {
           method: "POST",
           headers: {
@@ -293,7 +293,7 @@ export function StoreProvider({ children }) {
       const authState = result.payload;
       // Trigger cart merge and fetches
       await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080"}/api/cart/merge`,
+        "/api/cart/merge",
         {
           method: "POST",
           headers: {

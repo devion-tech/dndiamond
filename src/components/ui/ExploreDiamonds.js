@@ -22,7 +22,7 @@ export default function ExploreDiamonds() {
       <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* Left Column: Loose Diamond Art Image */}
-          <div className="lg:col-span-5 flex justify-center w-full">
+          <div className="lg:col-span-5 flex justify-center w-full order-2 lg:order-1">
             <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-neutral-50 border border-neutral-100 shadow-sm group">
               <img
                 src="/about/about-diamond.png"
@@ -35,7 +35,7 @@ export default function ExploreDiamonds() {
           </div>
 
           {/* Right Column: Title, Shape Grid & CTA Button */}
-          <div className="lg:col-span-7 text-center lg:text-left flex flex-col justify-between items-center lg:items-start w-full space-y-6 lg:space-y-8 pt-1">
+          <div className="lg:col-span-7 text-center lg:text-left flex flex-col justify-between items-center lg:items-start w-full space-y-6 lg:space-y-8 pt-1 order-1 lg:order-2">
             {/* Header Info */}
             <div className="space-y-3 w-full">
               <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
@@ -52,7 +52,7 @@ export default function ExploreDiamonds() {
             </div>
 
             {/* Shape Icons Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-y-6 gap-x-4 sm:gap-x-6 w-full pt-2">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-y-6 gap-x-4 sm:gap-x-6 w-full pt-2">
               {SHAPES.map((shape) => (
                 <Link
                   key={shape.name}
@@ -60,11 +60,11 @@ export default function ExploreDiamonds() {
                   className="group flex flex-col items-center justify-center space-y-2.5"
                 >
                   {/* Icon Container */}
-                  <div className="relative h-18 w-18 sm:h-20 sm:w-20 rounded-full bg-white border border-neutral-200/80 shadow-2xs flex items-center justify-center transition-all duration-300 overflow-hidden group-hover:border-neutral-900 group-hover:shadow-md">
+                  <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-white border border-neutral-200/80 shadow-2xs flex items-center justify-center transition-all duration-300 overflow-hidden group-hover:border-neutral-900 group-hover:shadow-md">
                     <img
                       src={`/diamonds/${shape.file}`}
                       alt={`${shape.val} Cut Diamond`}
-                      className="h-10 w-10 sm:h-12 sm:w-12 object-contain transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-[12deg] will-change-transform"
+                      className="h-9 w-9 sm:h-12 sm:w-12 object-contain transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-[12deg] will-change-transform"
                     />
                   </div>
                   {/* Label */}

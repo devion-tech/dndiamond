@@ -3,7 +3,9 @@
 import { getAuthHeaders } from "@/common/token";
 import toast from "react-hot-toast";
 
-const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+const baseUrl = typeof window !== "undefined"
+  ? ""
+  : (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080");
 
 const getCurrency = () => {
   if (typeof window === "undefined") return "HKD";

@@ -28,7 +28,13 @@ import ProductCard from "@/components/ui/ProductCard";
 
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Thumbs, FreeMode, Autoplay } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Thumbs,
+  FreeMode,
+  Autoplay,
+} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -152,6 +158,7 @@ export default function ProductDetail({ params }) {
         id: p._id,
         title: p.name,
         slug: p.slug,
+        in_stock: p.in_stock,
         category: resolveCategoryName(p.category_id, p.subcategory_id),
         image:
           p.images && p.images[0]
@@ -169,38 +176,7 @@ export default function ProductDetail({ params }) {
         isFromApi: true,
       };
 
-      const staticOptionsList = [
-        {
-          name: "color",
-          values: [
-            { value: "Yellow Gold" },
-            { value: "White Gold" },
-            { value: "Rose Gold" },
-            { value: "Platinum" },
-          ],
-        },
-        {
-          name: "gold_type",
-          values: [
-            { value: "18K Solid Gold" },
-            { value: "14K Solid Gold" },
-            { value: "Platinum 950" },
-          ],
-        },
-        {
-          name: "size",
-          values: [
-            { value: "6" },
-            { value: "7" },
-            { value: "8" },
-            { value: "9" },
-            { value: "10" },
-          ],
-        },
-      ];
-
-      const optionsList =
-        p.options && p.options.length > 0 ? p.options : staticOptionsList;
+      const optionsList = p.options && p.options.length > 0 ? p.options : [];
       const defaults = {};
       optionsList.forEach((opt) => {
         const firstVal =
@@ -301,7 +277,10 @@ export default function ProductDetail({ params }) {
     );
   }
 
+  const isOutOfStock = product?.in_stock === 0;
+
   const handleAddToCart = async () => {
+    if (isOutOfStock) return;
     try {
       await addToCart(product, selectedOptions, currentPrice);
       setSuccessAdded(true);
@@ -312,6 +291,7 @@ export default function ProductDetail({ params }) {
   };
 
   const handleBuyNow = async () => {
+    if (isOutOfStock) return;
     try {
       await addToCart(product, selectedOptions, currentPrice);
       router.push("/checkout");
@@ -346,7 +326,9 @@ export default function ProductDetail({ params }) {
           </span>
           {isSize && (
             <button
-              onClick={() => alert("Standard US Ring Size Guide: Sizes 5 to 10 available.")}
+              onClick={() =>
+                alert("Standard US Ring Size Guide: Sizes 5 to 10 available.")
+              }
               className="text-[11px] text-[#666666] hover:text-[#111111] underline cursor-pointer font-normal"
             >
               Size Guide
@@ -490,14 +472,21 @@ export default function ProductDetail({ params }) {
               <div className="relative w-full h-[450px] sm:h-[550px] lg:h-[620px] rounded-[24px] overflow-hidden bg-[#FAFAFA] border border-[#ECECEC] group flex items-center justify-center">
                 <Swiper
                   onSwiper={setMainSwiper}
-                  thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                  thumbs={{
+                    swiper:
+                      thumbsSwiper && !thumbsSwiper.destroyed
+                        ? thumbsSwiper
+                        : null,
+                  }}
                   navigation={{
                     nextEl: ".swiper-button-next-custom",
                     prevEl: ".swiper-button-prev-custom",
                   }}
                   modules={[Navigation, Thumbs, FreeMode]}
                   className="w-full h-full"
-                  onSlideChange={(swiper) => setSelectedImage(swiper.activeIndex)}
+                  onSlideChange={(swiper) =>
+                    setSelectedImage(swiper.activeIndex)
+                  }
                 >
                   {galleryImages.map((img, idx) => (
                     <SwiperSlide
@@ -609,7 +598,10 @@ export default function ProductDetail({ params }) {
                     {isWishlisted(product?.id) ? (
                       <FaHeart className="text-rose-500" size={16} />
                     ) : (
-                      <FaRegHeart className="text-[#666666] hover:text-rose-500" size={16} />
+                      <FaRegHeart
+                        className="text-[#666666] hover:text-rose-500"
+                        size={16}
+                      />
                     )}
                   </button>
                 </div>
@@ -625,6 +617,19 @@ export default function ProductDetail({ params }) {
                     </span>
                   )}
                 </div>
+
+                {/* Stock Status */}
+                <div className="pt-1">
+                  {product.in_stock === 0 ? (
+                    <span className="text-xs font-medium text-red-500 uppercase tracking-wider">
+                      Out of Stock
+                    </span>
+                  ) : (
+                    <span className="text-xs font-medium text-green-600 uppercase tracking-wider">
+                      In Stock
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Product Options (Metal Color, Gold Type, Ring Size) */}
@@ -637,13 +642,23 @@ export default function ProductDetail({ params }) {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={handleAddToCart}
-                    className="flex-1 h-[54px] rounded-full bg-[#111111] hover:bg-[#333333] text-white text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-sm"
+                    disabled={isOutOfStock}
+                    className={`flex-1 h-[54px] rounded-full text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-sm ${
+                      isOutOfStock
+                        ? "bg-[#CCCCCC] text-[#888888] cursor-not-allowed"
+                        : "bg-[#111111] hover:bg-[#333333] text-white cursor-pointer"
+                    }`}
                   >
-                    <FaShoppingBag size={13} /> Add to Bag
+                    <FaShoppingBag size={13} /> {isOutOfStock ? "Out of Stock" : "Add to Bag"}
                   </button>
                   <button
                     onClick={handleBuyNow}
-                    className="flex-1 h-[54px] rounded-full border border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white text-xs font-medium uppercase tracking-wider flex items-center justify-center cursor-pointer transition-all duration-300"
+                    disabled={isOutOfStock}
+                    className={`flex-1 h-[54px] rounded-full border text-xs font-medium uppercase tracking-wider flex items-center justify-center transition-all duration-300 ${
+                      isOutOfStock
+                        ? "border-[#CCCCCC] text-[#888888] cursor-not-allowed"
+                        : "border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white cursor-pointer"
+                    }`}
                   >
                     Buy Now
                   </button>
@@ -651,7 +666,8 @@ export default function ProductDetail({ params }) {
 
                 {successAdded && (
                   <div className="bg-[#FAFAFA] border border-[#ECECEC] text-[#111111] rounded-2xl p-3 text-xs font-medium flex items-center justify-center gap-2 animate-fade-in">
-                    <FaCheck className="text-[#C9A227]" /> Item added to your shopping bag
+                    <FaCheck className="text-[#C9A227]" /> Item added to your
+                    shopping bag
                   </div>
                 )}
               </div>
@@ -661,29 +677,45 @@ export default function ProductDetail({ params }) {
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
                   <FaShieldAlt className="text-[#C9A227] text-base shrink-0" />
                   <div className="text-left">
-                    <p className="text-[11px] font-medium text-[#111111]">Lifetime Warranty</p>
-                    <p className="text-[9px] text-[#666666]">Guaranteed Craftsmanship</p>
+                    <p className="text-[11px] font-medium text-[#111111]">
+                      Lifetime Warranty
+                    </p>
+                    <p className="text-[9px] text-[#666666]">
+                      Guaranteed Craftsmanship
+                    </p>
                   </div>
                 </div>
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
                   <FaTruck className="text-[#C9A227] text-base shrink-0" />
                   <div className="text-left">
-                    <p className="text-[11px] font-medium text-[#111111]">Free Express Shipping</p>
-                    <p className="text-[9px] text-[#666666]">Insured FedEx Delivery</p>
+                    <p className="text-[11px] font-medium text-[#111111]">
+                      Free Express Shipping
+                    </p>
+                    <p className="text-[9px] text-[#666666]">
+                      Insured FedEx Delivery
+                    </p>
                   </div>
                 </div>
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
                   <FaGem className="text-[#C9A227] text-base shrink-0" />
                   <div className="text-left">
-                    <p className="text-[11px] font-medium text-[#111111]">Certified Diamonds</p>
-                    <p className="text-[9px] text-[#666666]">GIA Hallmarked Quality</p>
+                    <p className="text-[11px] font-medium text-[#111111]">
+                      Certified Diamonds
+                    </p>
+                    <p className="text-[9px] text-[#666666]">
+                      GIA Hallmarked Quality
+                    </p>
                   </div>
                 </div>
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
                   <FaUndo className="text-[#C9A227] text-base shrink-0" />
                   <div className="text-left">
-                    <p className="text-[11px] font-medium text-[#111111]">30-Day Returns</p>
-                    <p className="text-[9px] text-[#666666]">Hassle-free Exchange</p>
+                    <p className="text-[11px] font-medium text-[#111111]">
+                      30-Day Returns
+                    </p>
+                    <p className="text-[9px] text-[#666666]">
+                      Hassle-free Exchange
+                    </p>
                   </div>
                 </div>
               </div>
@@ -703,13 +735,19 @@ export default function ProductDetail({ params }) {
                 className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
               >
                 <span>Product Details</span>
-                {openAccordions.details ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                {openAccordions.details ? (
+                  <FaChevronUp size={11} />
+                ) : (
+                  <FaChevronDown size={11} />
+                )}
               </button>
               {openAccordions.details && (
                 <div className="px-6 pb-6 pt-2 text-xs text-[#666666] leading-relaxed font-normal border-t border-[#ECECEC]/50 space-y-3">
                   <p>{product.description}</p>
                   <p>
-                    Hand-crafted with meticulous precision, this piece represents the pinnacle of fine diamond setting and luxury metal craftsmanship.
+                    Hand-crafted with meticulous precision, this piece
+                    represents the pinnacle of fine diamond setting and luxury
+                    metal craftsmanship.
                   </p>
                 </div>
               )}
@@ -722,26 +760,44 @@ export default function ProductDetail({ params }) {
                 className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
               >
                 <span>Specifications</span>
-                {openAccordions.specs ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                {openAccordions.specs ? (
+                  <FaChevronUp size={11} />
+                ) : (
+                  <FaChevronDown size={11} />
+                )}
               </button>
               {openAccordions.specs && (
                 <div className="px-6 pb-6 pt-3 text-xs text-[#666666] border-t border-[#ECECEC]/50 space-y-2">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
-                      <span className="text-[#111111] font-medium">Stock ID / SKU</span>
+                      <span className="text-[#111111] font-medium">
+                        Stock ID / SKU
+                      </span>
                       <span>{product.id}</span>
                     </div>
                     <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
-                      <span className="text-[#111111] font-medium">Metal Weight</span>
+                      <span className="text-[#111111] font-medium">
+                        Metal Weight
+                      </span>
                       <span>{product.goldWeight || 2.5}g (approx.)</span>
                     </div>
                     <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
-                      <span className="text-[#111111] font-medium">Metal Purity</span>
-                      <span>{selectedOptions.gold_type || "18K Solid Gold"}</span>
+                      <span className="text-[#111111] font-medium">
+                        Metal Purity
+                      </span>
+                      <span>
+                        {selectedOptions.gold_type || "18K Solid Gold"}
+                      </span>
                     </div>
                     <div className="flex justify-between py-1.5 border-b border-[#ECECEC]">
-                      <span className="text-[#111111] font-medium">Metal Color</span>
-                      <span>{selectedOptions.color || selectedOptions.colors || "Yellow Gold"}</span>
+                      <span className="text-[#111111] font-medium">
+                        Metal Color
+                      </span>
+                      <span>
+                        {selectedOptions.color ||
+                          selectedOptions.colors ||
+                          "Yellow Gold"}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -755,28 +811,54 @@ export default function ProductDetail({ params }) {
                 className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
               >
                 <span>Diamond &amp; Gemstone Details</span>
-                {openAccordions.diamonds ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                {openAccordions.diamonds ? (
+                  <FaChevronUp size={11} />
+                ) : (
+                  <FaChevronDown size={11} />
+                )}
               </button>
               {openAccordions.diamonds && (
                 <div className="px-6 pb-6 pt-3 text-xs text-[#666666] border-t border-[#ECECEC]/50 space-y-3">
                   {rawProduct?.diamonds && rawProduct.diamonds.length > 0 ? (
                     rawProduct.diamonds.map((d, i) => (
-                      <div key={i} className="bg-[#FAFAFA] p-4 rounded-xl border border-[#ECECEC] space-y-2">
+                      <div
+                        key={i}
+                        className="bg-[#FAFAFA] p-4 rounded-xl border border-[#ECECEC] space-y-2"
+                      >
                         <div className="flex justify-between font-medium text-[#111111]">
-                          <span>Stone #{i + 1} ({d.type || "Natural"})</span>
-                          <span>{d.quantity || 1} x {d.weight || 0.5} Carat</span>
+                          <span>
+                            Stone #{i + 1} ({d.type || "Natural"})
+                          </span>
+                          <span>
+                            {d.quantity || 1} x {d.weight || 0.5} Carat
+                          </span>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px] pt-1">
-                          <div><span className="text-[#999999] block">Shape</span>{d.shape || "Round"}</div>
-                          <div><span className="text-[#999999] block">Color</span>{d.color || "D"}</div>
-                          <div><span className="text-[#999999] block">Clarity</span>{d.clarity || "VS1"}</div>
-                          <div><span className="text-[#999999] block">Cut</span>{d.cut || "Excellent"}</div>
+                          <div>
+                            <span className="text-[#999999] block">Shape</span>
+                            {d.shape || "Round"}
+                          </div>
+                          <div>
+                            <span className="text-[#999999] block">Color</span>
+                            {d.color || "D"}
+                          </div>
+                          <div>
+                            <span className="text-[#999999] block">
+                              Clarity
+                            </span>
+                            {d.clarity || "VS1"}
+                          </div>
+                          <div>
+                            <span className="text-[#999999] block">Cut</span>
+                            {d.cut || "Excellent"}
+                          </div>
                         </div>
                       </div>
                     ))
                   ) : (
                     <p className="font-normal">
-                      Featuring GIA-certified ideal brilliant cut diamonds selected for maximum fire, brilliance, and scintillation.
+                      Featuring GIA-certified ideal brilliant cut diamonds
+                      selected for maximum fire, brilliance, and scintillation.
                     </p>
                   )}
                 </div>
@@ -790,15 +872,27 @@ export default function ProductDetail({ params }) {
                 className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
               >
                 <span>Shipping &amp; Returns</span>
-                {openAccordions.shipping ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                {openAccordions.shipping ? (
+                  <FaChevronUp size={11} />
+                ) : (
+                  <FaChevronDown size={11} />
+                )}
               </button>
               {openAccordions.shipping && (
                 <div className="px-6 pb-6 pt-3 text-xs text-[#666666] leading-relaxed border-t border-[#ECECEC]/50 space-y-2">
                   <p>
-                    <strong className="text-[#111111] font-medium">Complimentary FedEx Shipping:</strong> All orders are shipped via insured express courier, packaged in discreet luxury boxes, requiring signature on delivery.
+                    <strong className="text-[#111111] font-medium">
+                      Complimentary FedEx Shipping:
+                    </strong>{" "}
+                    All orders are shipped via insured express courier, packaged
+                    in discreet luxury boxes, requiring signature on delivery.
                   </p>
                   <p>
-                    <strong className="text-[#111111] font-medium">30-Day Return Policy:</strong> Returns and complimentary ring resizing are welcomed within 30 days of delivery.
+                    <strong className="text-[#111111] font-medium">
+                      30-Day Return Policy:
+                    </strong>{" "}
+                    Returns and complimentary ring resizing are welcomed within
+                    30 days of delivery.
                   </p>
                 </div>
               )}
@@ -811,12 +905,19 @@ export default function ProductDetail({ params }) {
                 className="w-full px-6 py-4 flex justify-between items-center text-xs font-medium uppercase tracking-wider text-[#111111] hover:bg-[#FAFAFA] transition-colors cursor-pointer"
               >
                 <span>Lifetime Warranty</span>
-                {openAccordions.warranty ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                {openAccordions.warranty ? (
+                  <FaChevronUp size={11} />
+                ) : (
+                  <FaChevronDown size={11} />
+                )}
               </button>
               {openAccordions.warranty && (
                 <div className="px-6 pb-6 pt-3 text-xs text-[#666666] leading-relaxed border-t border-[#ECECEC]/50 space-y-2">
                   <p>
-                    Every piece is backed by our lifetime warranty against manufacturing defects, including complimentary annual ultrasonic cleaning, prong inspections, and polishing services.
+                    Every piece is backed by our lifetime warranty against
+                    manufacturing defects, including complimentary annual
+                    ultrasonic cleaning, prong inspections, and polishing
+                    services.
                   </p>
                 </div>
               )}
@@ -834,7 +935,8 @@ export default function ProductDetail({ params }) {
               </h2>
             </div>
 
-            {rawProduct?.related_products && rawProduct.related_products.length > 0 ? (
+            {rawProduct?.related_products &&
+            rawProduct.related_products.length > 0 ? (
               <Swiper
                 modules={[Navigation, Autoplay]}
                 spaceBetween={24}

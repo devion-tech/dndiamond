@@ -387,7 +387,7 @@ export function StoreProvider({ children }) {
         diamonds,
         coupons,
         goldPricePerGram,
-        cart: cart?.items || [],
+        cart: cart,
         totalItems: cart?.total_items || 0,
         wishlist,
         wishlistTotal,

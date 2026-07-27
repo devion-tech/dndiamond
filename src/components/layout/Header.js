@@ -91,7 +91,8 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
       );
       if (res.ok) {
         const data = await res.json();
-        const orders = data.data || data.orders || (Array.isArray(data) ? data : []);
+        const orders =
+          data.data || data.orders || (Array.isArray(data) ? data : []);
         if (orders.length > 0) {
           const latest = orders[0];
           setRecentOrder({
@@ -152,9 +153,16 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
       try {
         const data = await apiRequest("/api/product/getProduct", {
           method: "POST",
-          body: JSON.stringify({ search: searchQuery.trim(), limit: 5, page: 1 }),
+          body: JSON.stringify({
+            search: searchQuery.trim(),
+            limit: 5,
+            page: 1,
+          }),
         });
-        const items = data?.data?.products || data?.products || (Array.isArray(data?.data) ? data.data : []);
+        const items =
+          data?.data?.products ||
+          data?.products ||
+          (Array.isArray(data?.data) ? data.data : []);
         setApiSearchResults(items);
       } catch (err) {
         console.error("Live API search error:", err);
@@ -268,7 +276,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         : "border-transparent text-neutral-400 hover:text-neutral-600"
                     }`}
                   >
-                    Lab Grown
+                    Lab Grown Diamonds
                   </button>
                   <button
                     onClick={() => handleTabClick("natural")}
@@ -278,12 +286,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         : "border-transparent text-neutral-400 hover:text-neutral-600"
                     }`}
                   >
-                    Natural
+                    Natural Diamonds
                   </button>
                 </div>
 
                 {/* Left Part: 4 columns for categories */}
-                <div className="grid grid-cols-4 gap-8 w-full">
+                <div className="grid grid-cols-5 gap-8 w-full">
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-4">
                       <h4 className="text-[11px] lg:text-xs xl:text-base font-medium tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
@@ -423,7 +431,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             aria-label="View Cart"
           >
             <FaShoppingBag size={16} className="shrink-0" />
-            {cart.length > 0 && (
+            {cart?.items?.length > 0 && (
               <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 text-[9px] font-medium text-white shadow-xs">
                 {totalItems}
               </span>
@@ -609,7 +617,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                           : "border-transparent text-neutral-400"
                       }`}
                     >
-                      Lab Grown
+                      Lab Grown Diamonds
                     </button>
                     <button
                       onClick={() => handleTabClick("natural")}
@@ -619,7 +627,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                           : "border-transparent text-neutral-400"
                       }`}
                     >
-                      Natural
+                      Natural Diamonds
                     </button>
                   </div>
                   <Link

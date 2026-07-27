@@ -296,20 +296,26 @@ export default function CheckoutPage() {
     );
 
     if (createOrder.fulfilled.match(result)) {
-      router.push("/order/success");
+      const checkoutUrl = result.payload?.checkout_url;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      } else {
+        router.push("/order/success");
+      }
     } else {
       router.push("/order/failed");
     }
   };
 
   const inputClass = (fieldName) =>
-    `w-full bg-slate-50 border rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-1 transition-all text-slate-800 font-medium ${fieldErrors[fieldName]
-      ? "border-red-500 focus:ring-red-500"
-      : "border-slate-200 focus:ring-neutral-900 focus:bg-white"
+    `w-full bg-slate-50 border rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-1 transition-all text-slate-800 font-medium ${
+      fieldErrors[fieldName]
+        ? "border-red-500 focus:ring-red-500"
+        : "border-slate-200 focus:ring-neutral-900 focus:bg-white"
     }`;
 
   // If cart is empty
-  if (cart.length === 0) {
+  if (cart?.items?.length === 0) {
     return (
       <Layout>
         <div className="bg-slate-background min-h-screen py-24 px-4 flex flex-col justify-center items-center text-center font-sans">
@@ -386,10 +392,11 @@ export default function CheckoutPage() {
                             {addresses.map((addr) => (
                               <label
                                 key={addr._id}
-                                className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedAddressId === addr._id
-                                  ? "border-neutral-900 bg-neutral-50"
-                                  : "border-slate-200 hover:border-slate-400 bg-white"
-                                  }`}
+                                className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
+                                  selectedAddressId === addr._id
+                                    ? "border-neutral-900 bg-neutral-50"
+                                    : "border-slate-200 hover:border-slate-400 bg-white"
+                                }`}
                               >
                                 <input
                                   type="radio"
@@ -422,10 +429,11 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="flex flex-col items-center gap-2 shrink-0">
                                   <FaMapMarkerAlt
-                                    className={`text-sm ${selectedAddressId === addr._id
-                                      ? "text-neutral-900"
-                                      : "text-slate-300"
-                                      }`}
+                                    className={`text-sm ${
+                                      selectedAddressId === addr._id
+                                        ? "text-neutral-900"
+                                        : "text-slate-300"
+                                    }`}
                                   />
                                   <div className="flex gap-1">
                                     <button
@@ -711,10 +719,11 @@ export default function CheckoutPage() {
                               type="button"
                               onClick={handleSaveAddress}
                               disabled={savingAddress}
-                              className={`w-full py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer transition-all border-0 ${savingAddress
-                                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                : "bg-neutral-900 text-white hover:bg-neutral-800"
-                                }`}
+                              className={`w-full py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer transition-all border-0 ${
+                                savingAddress
+                                  ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                                  : "bg-neutral-900 text-white hover:bg-neutral-800"
+                              }`}
                             >
                               {savingAddress ? (
                                 <>
@@ -742,11 +751,14 @@ export default function CheckoutPage() {
                   {!showAddressForm && selectedAddressId && (
                     <button
                       type="submit"
-                      disabled={addressesLoading || !selectedAddressId || placingOrder}
-                      className={`w-full py-4.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all border-0 ${addressesLoading || !selectedAddressId || placingOrder
-                        ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                        : "bg-neutral-900 text-white hover:bg-neutral-800 hover:scale-[1.01]"
-                        }`}
+                      disabled={
+                        addressesLoading || !selectedAddressId || placingOrder
+                      }
+                      className={`w-full py-4.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all border-0 ${
+                        addressesLoading || !selectedAddressId || placingOrder
+                          ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                          : "bg-neutral-900 text-white hover:bg-neutral-800 hover:scale-[1.01]"
+                      }`}
                     >
                       {placingOrder ? (
                         <>
@@ -759,8 +771,8 @@ export default function CheckoutPage() {
                           {addressesLoading
                             ? "Loading..."
                             : `Confirm inquiry & place order • ${formatConvertedPrice(
-                              getGrandTotal(),
-                            )}`}
+                                cart?.subtotal,
+                              )}`}
                         </>
                       )}
                     </button>
@@ -777,7 +789,7 @@ export default function CheckoutPage() {
 
                   {/* Items */}
                   <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto pr-2 space-y-4">
-                    {cart.map((item, index) => (
+                    {cart?.items?.map((item, index) => (
                       <div
                         key={index}
                         className="flex gap-4 py-3 first:pt-0 last:pb-0"
@@ -878,18 +890,11 @@ export default function CheckoutPage() {
                         Subtotal
                       </span>
                       <span className="font-extrabold text-slate-800">
-                        {formatConvertedPrice(getCartSubtotal())}
+                        {formatConvertedPrice(cart?.subtotal)}
                       </span>
                     </div>
-                    {appliedCoupon && (
-                      <div className="flex justify-between font-bold text-lime-600">
-                        <span className="font-medium">Discount Code</span>
-                        <span>
-                          -${formatConvertedPrice(getDiscountAmount())}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex justify-between">
+
+                    {/* <div className="flex justify-between">
                       <span className="text-slate-400 font-medium">
                         Estimated Tax (
                         {region === "HK"
@@ -902,7 +907,7 @@ export default function CheckoutPage() {
                           ? "Free"
                           : formatConvertedPrice(getTaxAmount())}
                       </span>
-                    </div>
+                    </div> */}
                     <div className="flex justify-between">
                       <span className="text-slate-400 font-medium">
                         Shipping
@@ -914,7 +919,7 @@ export default function CheckoutPage() {
                         Total Invoice Value
                       </span>
                       <span className="text-base font-extrabold text-black">
-                        {formatConvertedPrice(getGrandTotal())}
+                        {formatConvertedPrice(cart?.subtotal)}
                       </span>
                     </div>
                   </div>

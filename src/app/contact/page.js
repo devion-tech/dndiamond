@@ -40,7 +40,7 @@ const SHOWROOMS = [
         address: "D. N. Diamonds (HK) Ltd., Unit 303, 3/F, Chevalier House, 45-51 Chatham Road, T.S.T, Kln., Hong Kong.",
         phone: "+852 3693 4141",
         hours: "Mon - Sat: 10:00 AM - 7:00 PM (By Appointment Only)",
-        email: "dndiamondhk@yahoo.com",
+        email: "dndiamondshk@yahoo.com",
         coords: "22.2988° N, 114.1722° E",
         mapQuery: "Chevalier House, 45-51 Chatham Rd, Tsim Sha Tsui, Hong Kong",
         description: "Located in Tsim Sha Tsui, Chevalier House, our Hong Kong office features high-definition GIA examination suites and custom design commissions.",

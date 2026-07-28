@@ -319,9 +319,9 @@ export default function ProfilePage() {
                       <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">Loading address book...</span>
                     </div>
                   ) : addresses.length > 0 ? (
-                    addresses.map((addr) => (
+                    addresses.map((addr, index) => (
                       <div
-                        key={addr._id}
+                        key={addr._id || addr.id || index}
                         className="flex gap-4 p-4 border border-neutral-100 bg-[#FAFAFA]/50 rounded-xl items-start text-left"
                       >
                         <div className="w-8 h-8 rounded-full bg-white border border-neutral-100 flex items-center justify-center text-neutral-400 shrink-0 mt-0.5">

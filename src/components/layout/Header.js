@@ -14,6 +14,7 @@ import {
   FaBars,
   FaMapMarkerAlt,
   FaShoppingBag,
+  FaHome,
 } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import AuthModal from "../ui/AuthModal";
@@ -81,7 +82,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const fetchRecentOrder = async () => {
     if (!user) return;
     try {
-      const token = localStorage.getItem("dndiamond_token");
+      const token = localStorage.getItem("dndiamonds_token");
       if (!token) return;
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/orders/my-orders`,
@@ -231,13 +232,13 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           </button>
         </div>
       )}
-      <div className="mx-auto flex h-14 items-center justify-between px-2 min-[375px]:px-4 sm:px-6 lg:px-8 relative">
+      <div className="mx-auto w-full max-w-[1760px] flex h-14 items-center justify-between px-4 sm:px-8 lg:px-12 xl:px-16 relative">
         {/* Left Side: Mobile Toggle & Desktop Nav */}
         <div className="flex items-center gap-2 min-[375px]:gap-4 md:gap-6 static h-full">
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1 min-[375px]:p-2 text-neutral-700 hover:text-neutral-900 md:hidden focus:outline-none cursor-pointer"
+            className="p-1 sm:p-2 text-neutral-700 hover:text-neutral-900 md:hidden focus:outline-none cursor-pointer"
             aria-label="Toggle Menu"
           >
             {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
@@ -287,7 +288,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 </div>
 
                 {/* Left Part: 4 columns for categories */}
-                <div className="grid grid-cols-5 gap-8 w-full">
+                <div className="grid grid-cols-6 gap-8 w-full">
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-4">
                       <h4 className="text-[11px] lg:text-xs xl:text-base font-medium tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
@@ -385,13 +386,13 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
         {/* Center: Brand Logo Text */}
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Link href="/">
-            <span className="text-[11px] min-[375px]:text-sm sm:text-lg md:text-2xl font-light tracking-[0.15em] sm:tracking-[0.3em] pl-[0.15em] sm:pl-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
-              DNDIAMOND
+            <span className="text-[10px] min-[375px]:text-xs sm:text-lg md:text-2xl font-light tracking-[0.1em] sm:tracking-[0.3em] pl-[0.1em] sm:pl-[0.3em] text-neutral-900 hover:text-neutral-700 transition-colors uppercase block select-none">
+              DNDIAMONDS
             </span>
           </Link>
         </div>
 
-        <div className="flex items-center gap-1.5 min-[375px]:gap-2.5 md:gap-3">
+        <div className="flex items-center gap-1 sm:gap-2.5 md:gap-3">
           {/* Search Bar */}
           <div className="hidden sm:flex items-center border-b border-neutral-200 py-1 mr-2">
             <input
@@ -412,7 +413,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
           <button
             onClick={() => setSearchOpen(true)}
-            className="sm:hidden p-2 text-neutral-700 hover:text-neutral-900 cursor-pointer"
+            className="sm:hidden p-1 text-neutral-700 hover:text-neutral-900 cursor-pointer"
             aria-label="Search Catalog"
           >
             <FaSearch size={14} />
@@ -421,12 +422,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           {/* 1. Cart */}
           <button
             onClick={onOpenCart}
-            className="relative p-2.5 flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
+            className="relative p-1.5 sm:p-2.5 flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
             aria-label="View Cart"
           >
             <FaShoppingBag size={16} className="shrink-0" />
             {cart?.items?.length > 0 && (
-              <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 text-[9px] font-medium text-white shadow-xs">
+              <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 text-[8px] font-medium text-white shadow-xs">
                 {totalItems}
               </span>
             )}
@@ -435,12 +436,12 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
           {/* 2. Wishlist */}
           <button
             onClick={onOpenWishlist}
-            className="relative p-2.5 flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
+            className="relative p-1.5 sm:p-2.5 flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
             aria-label="View Wishlist"
           >
             <FaHeart size={16} className="shrink-0" />
             {wishlistTotal > 0 && (
-              <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 text-[9px] font-medium text-white shadow-xs">
+              <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 text-[8px] font-medium text-white shadow-xs">
                 {wishlistTotal}
               </span>
             )}
@@ -620,49 +621,35 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       Natural Diamonds
                     </button>
                   </div>
-                  <Link
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setMobileJewelryOpen(false);
-                    }}
-                    href={`/category?origin=${jewelryTab}`}
-                    className="block text-[11px] font-medium text-neutral-600 hover:text-neutral-900 uppercase tracking-widest"
-                  >
-                    Shop All{" "}
-                    {jewelryTab === "labgrown" ? "Lab Grown" : "Natural"}{" "}
-                    Jewelry
-                  </Link>
                   {activeCategories.map((cat) => (
-                    <div key={cat.name} className="space-y-1.5">
-                      <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-widest">
+                    <div key={cat.name} className="space-y-2">
+                      <Link
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setMobileJewelryOpen(false);
+                        }}
+                        href={`/category/${cat?.slug}?origin=${jewelryTab}`}
+                        className="block text-[11px] font-semibold text-neutral-800 hover:text-neutral-950 uppercase tracking-widest"
+                      >
                         {getDisplayCategoryName(cat.name)}
-                      </p>
-                      <div className="grid grid-cols-2 gap-2 pl-2">
-                        <Link
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setMobileJewelryOpen(false);
-                          }}
-                          href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&origin=${jewelryTab}`}
-                          className="text-[10px] font-medium text-neutral-700 hover:text-neutral-950 py-0.5"
-                        >
-                          All {getDisplayCategoryName(cat.name)}
-                        </Link>
+                      </Link>
+                      <ul className="pl-3 space-y-1.5 text-[10px] text-neutral-500 font-light border-l border-neutral-100">
                         {cat.subcategories &&
-                          cat.subcategories.slice(0, 3).map((sub) => (
-                            <Link
-                              key={sub.name}
-                              onClick={() => {
-                                setMobileMenuOpen(false);
-                                setMobileJewelryOpen(false);
-                              }}
-                              href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&style=${encodeURIComponent(sub.name.toLowerCase())}&origin=${jewelryTab}${sub._id ? `&subcategory_id=${sub._id}` : ""}`}
-                              className="text-[10px] font-medium text-neutral-700 hover:text-neutral-955 py-0.5"
-                            >
-                              {sub.name}
-                            </Link>
+                          cat.subcategories.slice(0, 5).map((sub) => (
+                            <li key={sub.name}>
+                              <Link
+                                onClick={() => {
+                                  setMobileMenuOpen(false);
+                                  setMobileJewelryOpen(false);
+                                }}
+                                href={`/category/${cat?.slug}/${sub?.slug}?origin=${jewelryTab}`}
+                                className="hover:text-neutral-900 transition-colors block py-0.5"
+                              >
+                                {sub.name}
+                              </Link>
+                            </li>
                           ))}
-                      </div>
+                      </ul>
                     </div>
                   ))}
                 </div>
@@ -674,8 +661,17 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 href="/diamonds"
                 className="text-[11px] font-medium text-neutral-800 uppercase tracking-widest"
               >
-                Loose Diamonds
+                Diamond
               </Link>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenWishlist();
+                }}
+                className="text-[11px] font-medium text-neutral-800 uppercase tracking-widest text-left cursor-pointer focus:outline-none"
+              >
+                Wishlist {wishlistTotal > 0 ? `(${wishlistTotal})` : ""}
+              </button>
               {/* Mobile About Accordion */}
               <div>
                 <button
@@ -717,7 +713,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                         setMobileMenuOpen(false);
                         setMobileAboutOpen(false);
                       }}
-                      href="/about#certification"
+                      href="/certification"
                       className="text-[10px] font-medium text-neutral-600 hover:text-neutral-900 uppercase tracking-widest py-0.5"
                     >
                       Certification

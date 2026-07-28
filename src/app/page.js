@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import Layout from "@/components/layout/Layout";
 import { useStore } from "@/context/StoreContext";
@@ -11,6 +11,10 @@ import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMainPage } from "@/redux/landingSlice";
 import { fetchCategories } from "@/redux/categorySlice";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const MARQUEE_ITEMS = [
   "Fine Jewellery",
@@ -67,18 +71,83 @@ function MarqueeStrip({ dark }) {
 
 function BestSellersGrid() {
   const { bestProducts } = useSelector((state) => state.landing);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+  const [swiperInitialized, setSwiperInitialized] = useState(false);
+
+  if (!bestProducts || bestProducts.length === 0) return null;
+
   return (
-    <AnimateOnScroll direction="up" delay={150} duration={850}>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-12">
-        {bestProducts?.map((prod) => {
-          return (
-            <div key={prod?._id} className="h-full">
-              <ProductCard item={prod} />
-            </div>
-          );
-        })}
+    <div className="space-y-10">
+      {/* Category-style Section Header with Navigation Arrows on the right */}
+      <div className="flex items-end justify-between border-b border-neutral-100 pb-6">
+        <div className="text-left space-y-2">
+          <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
+            Curated Favorites
+          </span>
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-light tracking-wide text-neutral-900">
+            Best Selling Products
+          </h2>
+        </div>
+
+        {/* Navigation Arrow buttons */}
+        <div className="flex items-center space-x-3">
+          <button
+            ref={prevRef}
+            className="w-10 h-10 rounded-full border border-neutral-900/10 hover:border-neutral-900/30 bg-white text-neutral-900 flex items-center justify-center transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-neutral-50 active:scale-95 shadow-2xs"
+            aria-label="Previous best sellers"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <button
+            ref={nextRef}
+            className="w-10 h-10 rounded-full border border-neutral-900/10 hover:border-neutral-900/30 bg-white text-neutral-900 flex items-center justify-center transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-neutral-50 active:scale-95 shadow-2xs"
+            aria-label="Next best sellers"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
       </div>
-    </AnimateOnScroll>
+
+      <AnimateOnScroll direction="up" delay={150} duration={850}>
+        <div className="relative w-full">
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            onInit={(swiper) => {
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+              swiper.navigation.init();
+              swiper.navigation.update();
+              setSwiperInitialized(true);
+            }}
+            spaceBetween={20}
+            slidesPerView={2}
+            autoplay={{ delay: 6000, disableOnInteraction: false }}
+            breakpoints={{
+              640: { slidesPerView: 2 },
+              768: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
+              1280: { slidesPerView: 6 },
+            }}
+            className="bestsellers-swiper py-2"
+          >
+            {bestProducts.map((prod) => (
+              <SwiperSlide key={prod?._id}>
+                <div className="h-full pb-4">
+                  <ProductCard item={prod} />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </AnimateOnScroll>
+    </div>
   );
 }
 
@@ -101,7 +170,7 @@ const FAQ_ITEMS = [
   {
     question: "What is your return policy?",
     answer:
-      "We offer a 30-day return policy for standard, non-customised jewellery items in their original, unworn condition. Customised and bespoke designs are final sale due to their unique, individual nature, but are covered under our lifetime craftsmanship warranty.",
+      "We offer a 15-day return policy for standard, non-customised jewellery items in their original, unworn condition. Customised and bespoke designs are final sale due to their unique, individual nature, but are covered under our lifetime craftsmanship warranty.",
   },
 ];
 
@@ -251,15 +320,15 @@ export default function Home() {
               <div
                 key={idx}
                 className={`absolute inset-0 w-full h-full flex items-center justify-start transition-all duration-1000 ease-in-out ${isActive
-                    ? "opacity-100 z-10 pointer-events-auto"
-                    : "opacity-0 z-0 pointer-events-none"
+                  ? "opacity-100 z-10 pointer-events-auto"
+                  : "opacity-0 z-0 pointer-events-none"
                   }`}
               >
                 {/* Background Photo with slow scale pan */}
                 <div className="absolute inset-0 overflow-hidden">
                   <img
                     src={slide?.image?.image}
-                    alt={slide?.title || "Dndiamond Hero Image"}
+                    alt={slide?.title || "Dndiamonds Hero Image"}
                     className={`w-full h-full object-cover select-none transition-transform duration-[5500ms] ease-out ${isActive ? "scale-100" : "scale-115"
                       }`}
                   />
@@ -276,8 +345,8 @@ export default function Home() {
                       {slide.label && slide.label.trim() !== "" && (
                         <span
                           className={`inline-block text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase transition-all duration-700 delay-300 ${isActive
-                              ? "translate-y-0 opacity-100"
-                              : "translate-y-6 opacity-0"
+                            ? "translate-y-0 opacity-100"
+                            : "translate-y-6 opacity-0"
                             }`}
                         >
                           {slide.label}
@@ -288,8 +357,8 @@ export default function Home() {
                       {slide.title && slide.title.trim() !== "" && (
                         <h1
                           className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light text-white tracking-wide leading-[1.1] transition-all duration-1000 delay-500 ${isActive
-                              ? "translate-y-0 opacity-100"
-                              : "translate-y-8 opacity-0"
+                            ? "translate-y-0 opacity-100"
+                            : "translate-y-8 opacity-0"
                             }`}
                         >
                           {slide.title.split("\n").map((line, lidx) => (
@@ -304,8 +373,8 @@ export default function Home() {
                       {slide.description && slide.description.trim() !== "" && (
                         <div
                           className={`mt-2 text-neutral-300 transition-all duration-1000 delay-700 ${isActive
-                              ? "translate-y-0 opacity-100"
-                              : "translate-y-8 opacity-0"
+                            ? "translate-y-0 opacity-100"
+                            : "translate-y-8 opacity-0"
                             }`}
                         >
                           {slide.description
@@ -324,8 +393,8 @@ export default function Home() {
                       {/* Call To Action Button */}
                       <div
                         className={`pt-4 transition-all duration-700 delay-[900ms] ${isActive
-                            ? "translate-y-0 opacity-100"
-                            : "translate-y-6 opacity-0"
+                          ? "translate-y-0 opacity-100"
+                          : "translate-y-6 opacity-0"
                           }`}
                       >
                         <Link
@@ -439,25 +508,15 @@ export default function Home() {
         {categoriesList && categoriesList.length > 0 && (
           <section
             id="section-categories"
-            className="py-14 sm:py-16 lg:py-20 bg-neutral-50/30 border-y border-neutral-100/60 overflow-hidden"
+            className="py-10 sm:py-16 lg:py-20 bg-neutral-50/30 border-y border-neutral-100/60 overflow-hidden"
           >
             <CategoryCarousel categories={categoriesList} />
           </section>
         )}
 
         {/* SECTION 3: BEST SELLERS */}
-        <section className="py-14 sm:py-16 lg:py-20">
+        <section className="py-10 sm:py-16 lg:py-20">
           <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
-            <div className="text-center space-y-3 mb-12 lg:mb-16">
-              <AnimateOnScroll direction="up" delay={100}>
-                <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
-                  Curated Favorites
-                </span>
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide text-neutral-900">
-                  Best Selling Creations
-                </h2>
-              </AnimateOnScroll>
-            </div>
             <BestSellersGrid />
           </div>
         </section>

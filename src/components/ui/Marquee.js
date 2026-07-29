@@ -6,7 +6,7 @@ import { FaShieldAlt, FaTruck, FaUndo, FaGem, FaAward, FaCertificate } from "rea
 const trustBadges = [
     { text: "Secure 256-Bit Payments", icon: <FaShieldAlt className="text-primary text-xs" /> },
     { text: "FedEx Insured 2-Day Shipping", icon: <FaTruck className="text-primary text-xs" /> },
-    { text: "30-Day Easy Returns Guarantee", icon: <FaUndo className="text-primary text-xs" /> },
+    { text: "15-Day Easy Returns Guarantee", icon: <FaUndo className="text-primary text-xs" /> },
     { text: "GIA & IGI Certified Diamonds", icon: <FaGem className="text-primary text-xs" /> },
     { text: "Lifetime Bench Workmanship", icon: <FaAward className="text-primary text-xs" /> },
     { text: "100% Hallmarked Fine Gold", icon: <FaCertificate className="text-primary text-xs" /> }

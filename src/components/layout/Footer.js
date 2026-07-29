@@ -104,7 +104,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#0B0B0B] text-white font-sans pt-16 pb-10 text-left">
-      <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
+      <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
         {/* Footer Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 border-b border-[#1A1A1A] pb-16">
           {/* Column 1: Brand Info */}
@@ -112,7 +112,7 @@ export default function Footer() {
             <div className="space-y-3">
               <Link href="/" className="inline-block">
                 <span className="text-xl sm:text-2xl font-light tracking-[0.35em] text-white uppercase">
-                  DNDIAMOND
+                  DNDIAMONDS
                 </span>
               </Link>
               <p className="text-xs font-light leading-relaxed max-w-sm text-neutral-400">
@@ -349,7 +349,7 @@ export default function Footer() {
                 {activeRegion === "HK" && (
                   <div className="text-[11px] font-light text-neutral-500 space-y-1 pt-3.5 mt-3.5 border-t border-[#1A1A1A]">
                     <p>Tel: +852 3693 4141</p>
-                    <p>Email: dndiamondhk@yahoo.com</p>
+                    <p>Email: dndiamondshk@yahoo.com</p>
                   </div>
                 )}
               </div>
@@ -390,7 +390,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-10 text-[9px] font-medium text-neutral-500 tracking-widest uppercase">
           {/* Copyright & Trademark */}
           <div>
-            <span>© DNDIAMOND, LLC. ALL RIGHTS RESERVED.</span>
+            <span>© D.n.diamonds (HK) Ltd. All rights reserved.</span>
           </div>
           {/* Legal and Contact Links */}
           <div className="flex flex-wrap items-center gap-6 justify-center md:justify-end">

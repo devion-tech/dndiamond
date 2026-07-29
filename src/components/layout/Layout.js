@@ -11,7 +11,7 @@ export default function Layout({ children }) {
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F5F5F5] text-primary font-sans">
+    <div className="flex min-h-screen flex-col bg-white text-primary font-sans">
       {/* Header layout */}
       <Header
         onOpenCart={() => setCartOpen(true)}

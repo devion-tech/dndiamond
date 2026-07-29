@@ -275,8 +275,9 @@ function ShopContent() {
     }, 0);
 
   return (
-    <div className="mx-auto w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12 relative font-sans bg-[#FFFFFF] min-h-screen">
-      {/* Page Header */}
+    <div className="w-full bg-white min-h-screen">
+      <div className="mx-auto w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12 relative font-sans">
+        {/* Page Header */}
       <div className="text-center space-y-3 mb-8">
         <span className="text-[10px] font-medium text-[#666666] tracking-widest uppercase">
           {searchQueryParam
@@ -511,6 +512,7 @@ function ShopContent() {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

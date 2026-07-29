@@ -31,7 +31,7 @@ export default function CategoryCarousel({ categories: customCategories }) {
           <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
             Explore Collections
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide text-neutral-900">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-light tracking-wide text-neutral-900">
             Shop by Category
           </h2>
         </div>

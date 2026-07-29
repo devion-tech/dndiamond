@@ -246,7 +246,7 @@ export default function ProductDetail({ params }) {
     return (
       <Layout>
         <div className="flex-1 flex flex-col justify-center items-center py-32 px-4 bg-[#FFFFFF] text-center space-y-5">
-          <span className="text-4xl text-[#C9A227]">✦</span>
+          <span className="text-4xl text-[#111111]">✦</span>
           <h2 className="text-xl font-medium uppercase tracking-widest text-[#111111]">
             Vault Creation
           </h2>
@@ -348,11 +348,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`w-7 h-7 rounded-full border transition-all duration-300 cursor-pointer relative flex items-center justify-center p-0.5 ${
-                    isSelected
-                      ? "border-[#111111] ring-1 ring-[#111111] scale-105"
-                      : "border-[#ECECEC] hover:border-[#999999]"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`w-7 h-7 rounded-full border transition-all duration-300 cursor-pointer relative flex items-center justify-center p-0.5 ${isSelected
+                    ? "border-[#111111] ring-1 ring-[#111111] scale-105"
+                    : "border-[#ECECEC] hover:border-[#999999]"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                   title={val.value}
                   aria-label={val.value}
                 >
@@ -375,11 +374,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`w-9 h-9 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 flex items-center justify-center ${
-                    isSelected
-                      ? "bg-[#111111] text-white border-[#111111]"
-                      : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`w-9 h-9 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 flex items-center justify-center ${isSelected
+                    ? "bg-[#111111] text-white border-[#111111]"
+                    : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -397,11 +395,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-3.5 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 ${
-                    isSelected
-                      ? "bg-[#111111] text-white border-[#111111]"
-                      : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-3.5 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 ${isSelected
+                    ? "bg-[#111111] text-white border-[#111111]"
+                    : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -419,11 +416,10 @@ export default function ProductDetail({ params }) {
                     !val.is_disabled && handleOptionChange(name, val.value)
                   }
                   disabled={val.is_disabled}
-                  className={`px-3.5 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 ${
-                    isSelected
-                      ? "bg-[#111111] text-white border-[#111111]"
-                      : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
-                  } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                  className={`px-3.5 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-300 ${isSelected
+                    ? "bg-[#111111] text-white border-[#111111]"
+                    : "bg-[#FFFFFF] text-[#111111] border-[#ECECEC] hover:border-[#111111]"
+                    } ${val.is_disabled ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {val.value}
                 </button>
@@ -543,11 +539,10 @@ export default function ProductDetail({ params }) {
                     {galleryImages.map((img, idx) => (
                       <SwiperSlide key={idx}>
                         <div
-                          className={`h-20 sm:h-22 rounded-2xl overflow-hidden border bg-[#FAFAFA] p-1 transition-all duration-300 ${
-                            selectedImage === idx
-                              ? "border-[#111111] ring-1 ring-[#111111]"
-                              : "border-[#ECECEC] hover:border-[#999999] opacity-70"
-                          }`}
+                          className={`h-20 sm:h-22 rounded-2xl overflow-hidden border bg-[#FAFAFA] p-1 transition-all duration-300 ${selectedImage === idx
+                            ? "border-[#111111] ring-1 ring-[#111111]"
+                            : "border-[#ECECEC] hover:border-[#999999] opacity-70"
+                            }`}
                         >
                           <img
                             src={img}
@@ -571,7 +566,7 @@ export default function ProductDetail({ params }) {
                     {product.category}
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <div className="flex text-[#C9A227] text-xs">
+                    <div className="flex text-[#111111] text-xs">
                       {[...Array(5)].map((_, i) => (
                         <FaStar key={i} size={11} />
                       ))}
@@ -643,22 +638,20 @@ export default function ProductDetail({ params }) {
                   <button
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
-                    className={`flex-1 h-[54px] rounded-full text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-sm ${
-                      isOutOfStock
-                        ? "bg-[#CCCCCC] text-[#888888] cursor-not-allowed"
-                        : "bg-[#111111] hover:bg-[#333333] text-white cursor-pointer"
-                    }`}
+                    className={`flex-1 h-[54px] rounded-full text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-sm ${isOutOfStock
+                      ? "bg-[#CCCCCC] text-[#888888] cursor-not-allowed"
+                      : "bg-[#111111] hover:bg-[#333333] text-white cursor-pointer"
+                      }`}
                   >
                     <FaShoppingBag size={13} /> {isOutOfStock ? "Out of Stock" : "Add to Bag"}
                   </button>
                   <button
                     onClick={handleBuyNow}
                     disabled={isOutOfStock}
-                    className={`flex-1 h-[54px] rounded-full border text-xs font-medium uppercase tracking-wider flex items-center justify-center transition-all duration-300 ${
-                      isOutOfStock
-                        ? "border-[#CCCCCC] text-[#888888] cursor-not-allowed"
-                        : "border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white cursor-pointer"
-                    }`}
+                    className={`flex-1 h-[54px] rounded-full border text-xs font-medium uppercase tracking-wider flex items-center justify-center transition-all duration-300 ${isOutOfStock
+                      ? "border-[#CCCCCC] text-[#888888] cursor-not-allowed"
+                      : "border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white cursor-pointer"
+                      }`}
                   >
                     Buy Now
                   </button>
@@ -666,7 +659,7 @@ export default function ProductDetail({ params }) {
 
                 {successAdded && (
                   <div className="bg-[#FAFAFA] border border-[#ECECEC] text-[#111111] rounded-2xl p-3 text-xs font-medium flex items-center justify-center gap-2 animate-fade-in">
-                    <FaCheck className="text-[#C9A227]" /> Item added to your
+                    <FaCheck className="text-[#111111]" /> Item added to your
                     shopping bag
                   </div>
                 )}
@@ -675,7 +668,7 @@ export default function ProductDetail({ params }) {
               {/* TRUST CARDS (4 Clean Tiles) */}
               <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-[#ECECEC]">
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
-                  <FaShieldAlt className="text-[#C9A227] text-base shrink-0" />
+                  <FaShieldAlt className="text-[#111111] text-base shrink-0" />
                   <div className="text-left">
                     <p className="text-[11px] font-medium text-[#111111]">
                       Lifetime Warranty
@@ -686,7 +679,7 @@ export default function ProductDetail({ params }) {
                   </div>
                 </div>
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
-                  <FaTruck className="text-[#C9A227] text-base shrink-0" />
+                  <FaTruck className="text-[#111111] text-base shrink-0" />
                   <div className="text-left">
                     <p className="text-[11px] font-medium text-[#111111]">
                       Free Express Shipping
@@ -697,7 +690,7 @@ export default function ProductDetail({ params }) {
                   </div>
                 </div>
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
-                  <FaGem className="text-[#C9A227] text-base shrink-0" />
+                  <FaGem className="text-[#111111] text-base shrink-0" />
                   <div className="text-left">
                     <p className="text-[11px] font-medium text-[#111111]">
                       Certified Diamonds
@@ -708,10 +701,10 @@ export default function ProductDetail({ params }) {
                   </div>
                 </div>
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] rounded-xl p-3 flex items-center gap-3">
-                  <FaUndo className="text-[#C9A227] text-base shrink-0" />
+                  <FaUndo className="text-[#111111] text-base shrink-0" />
                   <div className="text-left">
                     <p className="text-[11px] font-medium text-[#111111]">
-                      30-Day Returns
+                      15-Day Returns
                     </p>
                     <p className="text-[9px] text-[#666666]">
                       Hassle-free Exchange
@@ -889,10 +882,10 @@ export default function ProductDetail({ params }) {
                   </p>
                   <p>
                     <strong className="text-[#111111] font-medium">
-                      30-Day Return Policy:
+                      15-Day Return Policy:
                     </strong>{" "}
                     Returns and complimentary ring resizing are welcomed within
-                    30 days of delivery.
+                    15 days of delivery.
                   </p>
                 </div>
               )}
@@ -936,7 +929,7 @@ export default function ProductDetail({ params }) {
             </div>
 
             {rawProduct?.related_products &&
-            rawProduct.related_products.length > 0 ? (
+              rawProduct.related_products.length > 0 ? (
               <Swiper
                 modules={[Navigation, Autoplay]}
                 spaceBetween={24}
@@ -944,7 +937,7 @@ export default function ProductDetail({ params }) {
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
                 breakpoints={{
                   640: { slidesPerView: 2 },
-                  1024: { slidesPerView: 4 },
+                  1024: { slidesPerView: 5 },
                 }}
                 className="related-swiper py-4"
               >

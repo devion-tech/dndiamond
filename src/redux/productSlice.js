@@ -1,5 +1,6 @@
 import { apiRequest } from "@/utils/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getDiamondType } from "@/utils/diamondType";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
@@ -7,19 +8,14 @@ export const fetchProducts = createAsyncThunk(
     const body = {
       page: params.page || 1,
       limit: params.limit || 10,
+      diamond_type: getDiamondType(),
     };
 
-    if (params.product_type) {
-      body.product_type = params.product_type;
-    }
     if (params.subcategory_slug) {
       body.subcategory_slug = params.subcategory_slug;
     }
     if (params.category_slug) {
       body.category_slug = params.category_slug;
-    }
-    if (params.diamond_type) {
-      body.diamond_type = params.diamond_type;
     }
     if (params.search) {
       body.search = params.search;

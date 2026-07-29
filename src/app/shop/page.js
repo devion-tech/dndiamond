@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { FaFilter, FaSearch, FaTimes } from "react-icons/fa";
 import FilterDrawer from "@/components/ui/FilterDrawer";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,20 +19,17 @@ import { useStore } from "@/context/StoreContext";
 import { apiRequest } from "@/utils/api";
 
 function ShopContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { formatPrice } = useStore();
 
   const searchQueryParam = searchParams.get("search") || "";
   const categoryParam = searchParams.get("category") || "";
-  const originParam = searchParams.get("origin") || "";
   const subcategoryParam = searchParams.get("subcategory_slug") || "";
 
   // Local filter states
   const [search, setSearch] = useState(searchQueryParam);
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
   const [maxPrice, setMaxPrice] = useState(25000);
-  const [selectedOrigin, setSelectedOrigin] = useState(originParam);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [subcategorySlug, setSubcategorySlug] = useState(subcategoryParam);
   const [sortOrder, setSortOrder] = useState("latest");
@@ -102,10 +99,6 @@ function ShopContent() {
     setSelectedCategory(categoryParam);
   }, [categoryParam]);
 
-  useEffect(() => {
-    setSelectedOrigin(originParam);
-  }, [originParam]);
-
   // Build API params from current filter state
   const buildParams = useCallback(
     (pageNum = 1) => {
@@ -122,9 +115,6 @@ function ShopContent() {
       }
       if (subcategorySlug) {
         paramsObj.subcategory_slug = subcategorySlug;
-      }
-      if (selectedOrigin) {
-        paramsObj.product_type = selectedOrigin;
       }
 
       paramsObj.sort_by = sortOrder;
@@ -148,14 +138,13 @@ function ShopContent() {
       search,
       selectedCategory,
       subcategorySlug,
-      selectedOrigin,
       sortOrder,
       maxPrice,
       selectedFilters,
     ],
   );
 
-  // Initial load only
+  // Initial load
   const hasLoaded = useRef(false);
   useEffect(() => {
     if (!hasLoaded.current) {
@@ -165,12 +154,71 @@ function ShopContent() {
     }
   }, [dispatch, buildParams]);
 
+  // Listen for diamond_type changes from Header
+  useEffect(() => {
+    const handleDiamondTypeChange = () => {
+      setPage(1);
+      dispatch(clearProducts());
+      dispatch(fetchProducts(buildParams(1)));
+    };
+    window.addEventListener("diamondTypeChanged", handleDiamondTypeChange);
+    return () =>
+      window.removeEventListener("diamondTypeChanged", handleDiamondTypeChange);
+  }, [dispatch, buildParams]);
+
   // Apply filters (called on View Products click)
   const applyFilters = useCallback(() => {
     setPage(1);
     dispatch(clearProducts());
     dispatch(fetchProducts(buildParams(1)));
   }, [dispatch, buildParams]);
+
+  // Refetch with explicit overrides (avoids stale closure from async setState)
+  const refetchWith = useCallback(
+    (overrides = {}) => {
+      const s = overrides.search !== undefined ? overrides.search : search;
+      const cat =
+        overrides.category_slug !== undefined
+          ? overrides.category_slug
+          : selectedCategory;
+      const sub =
+        overrides.subcategory_slug !== undefined
+          ? overrides.subcategory_slug
+          : subcategorySlug;
+      const sort =
+        overrides.sort_by !== undefined ? overrides.sort_by : sortOrder;
+      const flt =
+        overrides.filters !== undefined ? overrides.filters : selectedFilters;
+      const price =
+        overrides.max_price !== undefined ? overrides.max_price : maxPrice;
+
+      const params = { page: 1, limit: 10 };
+      if (s) params.search = s;
+      if (cat) params.category_slug = cat;
+      if (sub) params.subcategory_slug = sub;
+      params.sort_by = sort;
+
+      const filters = {};
+      if (price && price < 25000) filters.max_price = price;
+      Object.entries(flt).forEach(([key, value]) => {
+        if (Array.isArray(value) && value.length > 0) filters[key] = value;
+      });
+      if (Object.keys(filters).length > 0) params.filters = filters;
+
+      setPage(1);
+      dispatch(clearProducts());
+      dispatch(fetchProducts(params));
+    },
+    [
+      dispatch,
+      search,
+      selectedCategory,
+      subcategorySlug,
+      sortOrder,
+      maxPrice,
+      selectedFilters,
+    ],
+  );
 
   // Load next page function
   const loadMore = useCallback(() => {
@@ -207,13 +255,20 @@ function ShopContent() {
     setSelectedOrigin("");
     setSubcategorySlug("");
     setSortOrder("latest");
-    router.push("/shop");
+    setPage(1);
+    dispatch(clearProducts());
+    dispatch(
+      fetchProducts({
+        page: 1,
+        limit: 10,
+        sort_by: "latest",
+      }),
+    );
   };
 
   const activeFilterCount =
     (search ? 1 : 0) +
     (selectedCategory ? 1 : 0) +
-    (selectedOrigin ? 1 : 0) +
     Object.values(selectedFilters).reduce((count, val) => {
       if (Array.isArray(val)) return count + val.length;
       return count + (val ? 1 : 0);
@@ -228,9 +283,7 @@ function ShopContent() {
             ? `Search Results`
             : selectedCategory
               ? `${selectedCategory} Collection`
-              : selectedOrigin
-                ? `${selectedOrigin === "labgrown" ? "Lab Grown" : "Natural"} Jewelry`
-                : "Fine Jewelry Shop"}
+              : "Fine Jewelry Shop"}
         </span>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#111111] tracking-tight">
           {searchQueryParam
@@ -250,11 +303,9 @@ function ShopContent() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (search.trim()) {
-              router.push(`/shop?search=${encodeURIComponent(search.trim())}`);
-            } else {
-              router.push(`/shop`);
-            }
+            setPage(1);
+            dispatch(clearProducts());
+            dispatch(fetchProducts(buildParams(1)));
           }}
           className="relative flex items-center"
         >
@@ -271,7 +322,9 @@ function ShopContent() {
               type="button"
               onClick={() => {
                 setSearch("");
-                router.push("/shop");
+                setPage(1);
+                dispatch(clearProducts());
+                dispatch(fetchProducts(buildParams(1)));
               }}
               className="absolute right-20 text-[#999999] hover:text-[#111111] p-1"
             >
@@ -312,7 +365,10 @@ function ShopContent() {
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAFAFA] border border-[#ECECEC] rounded-full text-[11px] text-[#111111] lowercase font-normal">
                 "{search}"
                 <button
-                  onClick={() => setSearch("")}
+                  onClick={() => {
+                    setSearch("");
+                    refetchWith({ search: "" });
+                  }}
                   className="hover:text-red-500"
                 >
                   <FaTimes size={10} />
@@ -323,18 +379,10 @@ function ShopContent() {
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAFAFA] border border-[#ECECEC] rounded-full text-[11px] text-[#111111] font-normal">
                 {selectedCategory}
                 <button
-                  onClick={() => setSelectedCategory("")}
-                  className="hover:text-red-500"
-                >
-                  <FaTimes size={10} />
-                </button>
-              </span>
-            )}
-            {selectedOrigin && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAFAFA] border border-[#ECECEC] rounded-full text-[11px] text-[#111111] font-normal">
-                {selectedOrigin}
-                <button
-                  onClick={() => setSelectedOrigin("")}
+                  onClick={() => {
+                    setSelectedCategory("");
+                    refetchWith({ category_slug: "" });
+                  }}
                   className="hover:text-red-500"
                 >
                   <FaTimes size={10} />
@@ -343,27 +391,29 @@ function ShopContent() {
             )}
             {Object.entries(selectedFilters).map(([key, values]) =>
               Array.isArray(values) && values.length > 0
-                ? values.map((val) => (
-                    <span
-                      key={`${key}-${val}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAFAFA] border border-[#ECECEC] rounded-full text-[11px] text-[#111111] font-normal"
-                    >
-                      {val}
-                      <button
-                        onClick={() => {
-                          setSelectedFilters((prev) => ({
-                            ...prev,
-                            [key]: Array.isArray(prev[key])
-                              ? prev[key].filter((v) => v !== val)
-                              : [],
-                          }));
-                        }}
-                        className="hover:text-red-500"
+                ? values.map((val) => {
+                    const updatedFilters = {
+                      ...selectedFilters,
+                      [key]: selectedFilters[key].filter((v) => v !== val),
+                    };
+                    return (
+                      <span
+                        key={`${key}-${val}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAFAFA] border border-[#ECECEC] rounded-full text-[11px] text-[#111111] font-normal"
                       >
-                        <FaTimes size={10} />
-                      </button>
-                    </span>
-                  ))
+                        {val}
+                        <button
+                          onClick={() => {
+                            setSelectedFilters(updatedFilters);
+                            refetchWith({ filters: updatedFilters });
+                          }}
+                          className="hover:text-red-500"
+                        >
+                          <FaTimes size={10} />
+                        </button>
+                      </span>
+                    );
+                  })
                 : null,
             )}
             <button
@@ -402,8 +452,6 @@ function ShopContent() {
         setSelectedCategory={setSelectedCategory}
         maxPrice={maxPrice}
         setMaxPrice={setMaxPrice}
-        selectedOrigin={selectedOrigin}
-        setSelectedOrigin={setSelectedOrigin}
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
         accordions={accordions}
@@ -412,7 +460,7 @@ function ShopContent() {
         onApplyFilters={applyFilters}
         productCount={totalProducts}
         formatPrice={formatPrice}
-        hideCategory={true}
+        hideCategory={false}
         attributes={attributes}
         categories={categories}
       />

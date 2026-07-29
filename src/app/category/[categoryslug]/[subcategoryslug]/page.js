@@ -8,7 +8,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { FaFilter } from "react-icons/fa";
 import FilterDrawer from "@/components/ui/FilterDrawer";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,7 +53,6 @@ function CatalogContent() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [maxPrice, setMaxPrice] = useState(15000);
-  const [selectedOrigin, setSelectedOrigin] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({});
   const [selectedStyle, setSelectedStyle] = useState("");
   const [sortOrder, setSortOrder] = useState("DESC");
@@ -145,6 +144,18 @@ function CatalogContent() {
       dispatch(clearProducts());
       dispatch(fetchProducts(buildParams(1)));
     }
+  }, [dispatch, buildParams]);
+
+  // Listen for diamond_type changes from Header
+  useEffect(() => {
+    const handleDiamondTypeChange = () => {
+      setPage(1);
+      dispatch(clearProducts());
+      dispatch(fetchProducts(buildParams(1)));
+    };
+    window.addEventListener("diamondTypeChanged", handleDiamondTypeChange);
+    return () =>
+      window.removeEventListener("diamondTypeChanged", handleDiamondTypeChange);
   }, [dispatch, buildParams]);
 
   // Apply filters (called on View Products click)
@@ -319,8 +330,6 @@ function CatalogContent() {
         setSelectedCategory={setSelectedCategory}
         maxPrice={maxPrice}
         setMaxPrice={setMaxPrice}
-        selectedOrigin={selectedOrigin}
-        setSelectedOrigin={setSelectedOrigin}
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
         accordions={accordions}

@@ -18,6 +18,7 @@ import {
 import { useStore } from "@/context/StoreContext";
 import AuthModal from "../ui/AuthModal";
 import { apiRequest } from "@/utils/api";
+import { getDiamondType, setDiamondType } from "@/utils/diamondType";
 
 function getDBCategory(apiName) {
   const lower = apiName.toLowerCase();
@@ -73,7 +74,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
   const [isJewelryHovered, setIsJewelryHovered] = useState(false);
   const [isAboutHovered, setIsAboutHovered] = useState(false);
-  const [jewelryTab, setJewelryTab] = useState("labgrown");
+  const [jewelryTab, setJewelryTab] = useState("natural");
   const [promoVisible, setPromoVisible] = useState(true);
   const [authMode, setAuthMode] = useState("login");
   const [recentOrder, setRecentOrder] = useState(null);
@@ -136,7 +137,13 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
 
   const handleTabClick = (tab) => {
     setJewelryTab(tab);
+    setDiamondType(tab);
+    window.dispatchEvent(new Event("diamondTypeChanged"));
   };
+
+  useEffect(() => {
+    setJewelryTab(getDiamondType());
+  }, []);
 
   const activeCategories = categoriesList.length > 0 ? categoriesList : [];
 
@@ -292,7 +299,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                     <div key={cat.name} className="space-y-4">
                       <h4 className="text-[11px] lg:text-xs xl:text-base font-medium tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
                         <Link
-                          href={`/category/${cat?.slug}?origin=${jewelryTab}`}
+                          href={`/category/${cat?.slug}`}
                           onClick={() => setIsJewelryHovered(false)}
                           className="hover:text-neutral-500 transition-colors"
                         >
@@ -305,7 +312,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                             cat.subcategories.slice(0, 5).map((sub) => (
                               <li key={sub.name}>
                                 <Link
-                                  href={`/category/${cat?.slug}/${sub?.slug}?origin=${jewelryTab}`}
+                                  href={`/category/${cat?.slug}/${sub?.slug}`}
                                   onClick={() => setIsJewelryHovered(false)}
                                   className="hover:text-neutral-900 transition-colors block py-0.5"
                                 >
@@ -625,7 +632,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                       setMobileMenuOpen(false);
                       setMobileJewelryOpen(false);
                     }}
-                    href={`/category?origin=${jewelryTab}`}
+                    href="/category"
                     className="block text-[11px] font-medium text-neutral-600 hover:text-neutral-900 uppercase tracking-widest"
                   >
                     Shop All{" "}
@@ -643,7 +650,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                             setMobileMenuOpen(false);
                             setMobileJewelryOpen(false);
                           }}
-                          href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&origin=${jewelryTab}`}
+                          href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}`}
                           className="text-[10px] font-medium text-neutral-700 hover:text-neutral-950 py-0.5"
                         >
                           All {getDisplayCategoryName(cat.name)}
@@ -656,7 +663,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                                 setMobileMenuOpen(false);
                                 setMobileJewelryOpen(false);
                               }}
-                              href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&style=${encodeURIComponent(sub.name.toLowerCase())}&origin=${jewelryTab}${sub._id ? `&subcategory_id=${sub._id}` : ""}`}
+                              href={`/category?category=${encodeURIComponent(getDBCategory(cat.name))}&style=${encodeURIComponent(sub.name.toLowerCase())}${sub._id ? `&subcategory_id=${sub._id}` : ""}`}
                               className="text-[10px] font-medium text-neutral-700 hover:text-neutral-955 py-0.5"
                             >
                               {sub.name}

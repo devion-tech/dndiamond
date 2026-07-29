@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { getDiamondType, setDiamondType } from "@/utils/diamondType";
 
 export default function FilterDrawer({
   isOpen,
@@ -12,8 +13,6 @@ export default function FilterDrawer({
   setSelectedCategory,
   maxPrice,
   setMaxPrice,
-  selectedOrigin,
-  setSelectedOrigin,
   selectedFilters,
   setSelectedFilters,
   accordions,
@@ -26,6 +25,13 @@ export default function FilterDrawer({
   attributes = null,
   categories = [],
 }) {
+  const [diamondType, setDiamondTypeLocal] = useState("natural");
+
+  useEffect(() => {
+    if (isOpen) {
+      setDiamondTypeLocal(getDiamondType());
+    }
+  }, [isOpen]);
   if (!isOpen) return null;
 
   const handleFilterSelect = (key, value) => {
@@ -182,33 +188,32 @@ export default function FilterDrawer({
               className="w-full flex justify-between items-center text-[10px] font-bold tracking-widest text-neutral-700 uppercase mb-3"
             >
               <span>Stones Origin</span>
-              {accordions.origin ? (
+              {accordions.origin ?? true ? (
                 <FaChevronUp size={8} />
               ) : (
                 <FaChevronDown size={8} />
               )}
             </button>
-            {accordions.origin && (
+            {(accordions.origin ?? true) && (
               <div className="space-y-1 mt-2">
                 <button
-                  onClick={() => setSelectedOrigin("")}
-                  className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedOrigin === "" ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
+                  onClick={() => {
+                    setDiamondTypeLocal("natural");
+                    setDiamondType("natural");
+                  }}
+                  className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${diamondType === "natural" ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
                 >
-                  All Stones
+                  Natural Diamonds
                 </button>
-                {(attributes?.diamondTypes || []).map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setSelectedOrigin(opt.value)}
-                    className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${selectedOrigin === opt.value ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
-                  >
-                    {opt.value === "natural"
-                      ? "Natural Diamonds"
-                      : opt.value === "labgrown"
-                        ? "Lab-Grown Diamonds"
-                        : opt.value}
-                  </button>
-                ))}
+                <button
+                  onClick={() => {
+                    setDiamondTypeLocal("labgrown");
+                    setDiamondType("labgrown");
+                  }}
+                  className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${diamondType === "labgrown" ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
+                >
+                  Lab-Grown Diamonds
+                </button>
               </div>
             )}
           </div>
@@ -224,22 +229,34 @@ export default function FilterDrawer({
                       className="w-full flex justify-between items-center text-[10px] font-bold tracking-widest text-neutral-700 uppercase mb-3"
                     >
                       <span>{key.replace(/_/g, " ")}</span>
-                      {accordions[key] ? (
+                      {accordions[key] ?? true ? (
                         <FaChevronUp size={8} />
                       ) : (
                         <FaChevronDown size={8} />
                       )}
                     </button>
-                    {accordions[key] && (
+                    {(accordions[key] ?? true) && (
                       <div className="space-y-1 mt-2">
                         <label className="w-full flex items-center gap-2 py-1 text-[11px] font-medium tracking-wide uppercase transition-colors cursor-pointer">
                           <input
                             type="checkbox"
-                            checked={!selectedFilters[key] || (Array.isArray(selectedFilters[key]) && selectedFilters[key].length === 0)}
+                            checked={
+                              !selectedFilters[key] ||
+                              (Array.isArray(selectedFilters[key]) &&
+                                selectedFilters[key].length === 0)
+                            }
                             onChange={() => handleFilterSelect(key, "")}
                             className="w-3.5 h-3.5 accent-neutral-900 rounded-sm cursor-pointer"
                           />
-                          <span className={!selectedFilters[key] || (Array.isArray(selectedFilters[key]) && selectedFilters[key].length === 0) ? "text-neutral-900 font-bold" : "text-neutral-400"}>
+                          <span
+                            className={
+                              !selectedFilters[key] ||
+                              (Array.isArray(selectedFilters[key]) &&
+                                selectedFilters[key].length === 0)
+                                ? "text-neutral-900 font-bold"
+                                : "text-neutral-400"
+                            }
+                          >
                             All {key.replace(/_/g, " ")}
                           </span>
                         </label>
@@ -255,10 +272,18 @@ export default function FilterDrawer({
                               <input
                                 type="checkbox"
                                 checked={isSelected}
-                                onChange={() => handleFilterSelect(key, opt.value)}
+                                onChange={() =>
+                                  handleFilterSelect(key, opt.value)
+                                }
                                 className="w-3.5 h-3.5 accent-neutral-900 rounded-sm cursor-pointer"
                               />
-                              <span className={isSelected ? "text-neutral-900 font-bold" : "text-neutral-400"}>
+                              <span
+                                className={
+                                  isSelected
+                                    ? "text-neutral-900 font-bold"
+                                    : "text-neutral-400"
+                                }
+                              >
                                 {opt.value}
                               </span>
                             </label>

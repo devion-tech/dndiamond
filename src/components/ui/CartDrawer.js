@@ -40,7 +40,6 @@ export default function CartDrawer({ isOpen, onClose }) {
     openModal,
   } = useStore();
 
-  console.log("cart :>> ", cart);
   const [promoCode, setPromoCode] = useState("");
   const [promoError, setPromoError] = useState("");
   const [promoSuccess, setPromoSuccess] = useState("");
@@ -84,21 +83,21 @@ export default function CartDrawer({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleApplyPromo = (e) => {
-    e.preventDefault();
-    setPromoError("");
-    setPromoSuccess("");
+  // const handleApplyPromo = (e) => {
+  //   e.preventDefault();
+  //   setPromoError("");
+  //   setPromoSuccess("");
 
-    if (promoCode.trim() === "") return;
+  //   if (promoCode.trim() === "") return;
 
-    const res = applyCouponCode(promoCode);
-    if (res.success) {
-      setPromoSuccess(res.message);
-      setPromoCode("");
-    } else {
-      setPromoError(res.message);
-    }
-  };
+  //   const res = applyCouponCode(promoCode);
+  //   if (res.success) {
+  //     setPromoSuccess(res.message);
+  //     setPromoCode("");
+  //   } else {
+  //     setPromoError(res.message);
+  //   }
+  // };
 
   const handleFormChange = (e) => {
     setShippingInfo({

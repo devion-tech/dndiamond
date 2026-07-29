@@ -48,6 +48,18 @@ export const fetchMyOrders = createAsyncThunk(
   },
 );
 
+export const fetchOrderById = createAsyncThunk(
+  "order/fetchOrderById",
+  async (orderId, { rejectWithValue }) => {
+    try {
+      const data = await apiRequest(`/api/order/${orderId}`);
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState: {
@@ -58,11 +70,18 @@ const orderSlice = createSlice({
     myOrdersPagination: null,
     loadingOrders: false,
     ordersError: null,
+    orderDetail: null,
+    loadingOrderDetail: false,
+    orderDetailError: null,
   },
   reducers: {
     clearOrder(state) {
       state.currentOrder = null;
       state.error = null;
+    },
+    clearOrderDetail(state) {
+      state.orderDetail = null;
+      state.orderDetailError = null;
     },
   },
   extraReducers: (builder) => {
@@ -91,9 +110,21 @@ const orderSlice = createSlice({
       .addCase(fetchMyOrders.rejected, (state, action) => {
         state.loadingOrders = false;
         state.ordersError = action.payload;
+      })
+      .addCase(fetchOrderById.pending, (state) => {
+        state.loadingOrderDetail = true;
+        state.orderDetailError = null;
+      })
+      .addCase(fetchOrderById.fulfilled, (state, action) => {
+        state.loadingOrderDetail = false;
+        state.orderDetail = action.payload;
+      })
+      .addCase(fetchOrderById.rejected, (state, action) => {
+        state.loadingOrderDetail = false;
+        state.orderDetailError = action.payload;
       });
   },
 });
 
-export const { clearOrder } = orderSlice.actions;
+export const { clearOrder, clearOrderDetail } = orderSlice.actions;
 export default orderSlice.reducer;

@@ -146,6 +146,14 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
     setJewelryTab(getDiamondType());
   }, []);
 
+  useEffect(() => {
+    const handleDiamondTypeChange = () => {
+      setJewelryTab(getDiamondType());
+    };
+    window.addEventListener("diamondTypeChanged", handleDiamondTypeChange);
+    return () => window.removeEventListener("diamondTypeChanged", handleDiamondTypeChange);
+  }, []);
+
   const activeCategories = categoriesList.length > 0 ? categoriesList : [];
 
   const [apiSearchResults, setApiSearchResults] = useState([]);

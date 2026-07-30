@@ -200,6 +200,7 @@ export default function FilterDrawer({
                   onClick={() => {
                     setDiamondTypeLocal("natural");
                     setDiamondType("natural");
+                    window.dispatchEvent(new Event("diamondTypeChanged"));
                   }}
                   className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${diamondType === "natural" ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
                 >
@@ -209,6 +210,7 @@ export default function FilterDrawer({
                   onClick={() => {
                     setDiamondTypeLocal("labgrown");
                     setDiamondType("labgrown");
+                    window.dispatchEvent(new Event("diamondTypeChanged"));
                   }}
                   className={`w-full text-left py-1 text-[11px] font-medium tracking-wide uppercase transition-colors ${diamondType === "labgrown" ? "text-neutral-900 font-bold" : "text-neutral-400 hover:text-neutral-800"}`}
                 >

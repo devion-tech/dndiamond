@@ -247,6 +247,52 @@ function FAQSection() {
   );
 }
 
+function GoldShowcaseSection() {
+  return (
+    <section className="w-full bg-[#F5F2EB] lg:bg-transparent overflow-hidden my-10">
+      <div className="mx-auto w-full max-w-[1760px] grid grid-cols-1 lg:grid-cols-2">
+        {/* Left Column: Text Content */}
+        <div className=" flex flex-col justify-center items-start px-6 sm:px-12 md:px-20 lg:px-24 py-16 lg:py-24 text-left">
+          <AnimateOnScroll direction="up" delay={100}>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-neutral-900 leading-tight tracking-wide">
+              Diamond Jewellery For Every Event
+            </h2>
+            <p className="mt-4 sm:mt-6 font-sans text-xs sm:text-sm md:text-base font-light text-neutral-600 leading-relaxed max-w-md">
+              We provide elegant, high-quality gold jewelry that speaks to your sense of style and identity.
+            </p>
+            <div className="mt-8">
+              <Link
+                href="/shop"
+                className="inline-flex justify-center items-center px-8 py-3.5 bg-black hover:bg-[#322520] text-white transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] rounded-full shadow-xs cursor-pointer animate-duration-300"
+              >
+                Shop  Collection
+              </Link>
+            </div>
+          </AnimateOnScroll>
+        </div>
+
+        {/* Right Column: Stacked Images */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-1 lg:gap-1.5">
+          <div className="aspect-[3/2] sm:aspect-square lg:aspect-auto lg:h-[350px] xl:h-[400px] rounded-2xl overflow-hidden">
+            <img
+              src="/about/woman-hand-near-lips.jpg"
+              alt="Model wearing golden rings and earrings"
+              className="w-full h-full object-cover transition-transform duration-[8000ms] hover:scale-105"
+            />
+          </div>
+          <div className="aspect-[3/2] sm:aspect-square lg:aspect-auto lg:h-[350px] xl:h-[400px] rounded-2xl overflow-hidden">
+            <img
+              src="/about/Rings.jpg"
+              alt="Gold diamond jewelry collection details"
+              className="w-full h-full  object-cover object-contain o transition-transform duration-[8000ms] hover:scale-105"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const hasSlideText = (slide) => {
   return !!(
     (slide?.title && slide.title.trim() !== "") ||
@@ -306,7 +352,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="w-full flex flex-col overflow-x-hidden select-none">
+      <div className="w-full flex flex-col overflow-x-hidden select-none bg-[#F5F5F5]">
         {/* ==================================================
             SECTION 1: FULLSCREEN HERO CAROUSEL (100dvh)
             ================================================== */}
@@ -524,62 +570,8 @@ export default function Home() {
         {/* SECTION 4: MARQUEE STRIP */}
         <MarqueeStrip />
 
-        {/* SECTION 5: ATELIER PHILOSOPHY */}
-        <section className="py-14 sm:py-16 lg:py-20 bg-[#FAF9F5]/40">
-          <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-12 items-center">
-              {/* Left Column: Portrait Model Photo */}
-              <div className="col-span-1 md:col-span-4 flex justify-center order-2 md:order-1">
-                <AnimateOnScroll direction="left" delay={150}>
-                  <div className="relative aspect-[3/4] w-full max-w-[280px] md:max-w-none mx-auto overflow-hidden border border-neutral-100 shadow-xs select-none rounded-xl">
-                    <img
-                      src="/about/glamour-beauty-jewelry-luxury-concept-close-up-beautiful-woman-with-golden-ring-diamond-earring.jpg"
-                      alt="Luxury jewelry model portrait"
-                      className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105"
-                    />
-                  </div>
-                </AnimateOnScroll>
-              </div>
-
-              {/* Middle Column: Central Heading & CTA */}
-              <div className="col-span-1 md:col-span-4 text-center space-y-6 px-2 sm:px-4 order-1 md:order-2">
-                <AnimateOnScroll direction="up" delay={100}>
-                  <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
-                    Atelier Philosophy
-                  </span>
-                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight font-light text-neutral-900 tracking-wide mt-2">
-                    Jewelry That Speaks Before You Do
-                  </h2>
-                  <p className="text-neutral-500 font-sans text-xs sm:text-sm md:text-base font-light leading-relaxed max-w-sm mx-auto mt-4">
-                    Designed to carry emotion, confidence, and individuality,
-                    each piece becomes a reflection of who you are—crafted to feel
-                    personal, powerful, and timeless.
-                  </p>
-                  <div className="pt-6">
-                    <Link href="/diamonds" passHref>
-                      <button className="inline-flex items-center justify-center px-8 py-3.5 border border-neutral-900 bg-neutral-900 text-white hover:bg-transparent hover:text-neutral-900 text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] transition-all duration-300 cursor-pointer rounded-xl shadow-xs">
-                        Shop Collection
-                      </button>
-                    </Link>
-                  </div>
-                </AnimateOnScroll>
-              </div>
-
-              {/* Right Column: Close-up Jewelry Detail Photo */}
-              <div className="col-span-1 md:col-span-4 flex justify-center order-3">
-                <AnimateOnScroll direction="right" delay={150}>
-                  <div className="relative aspect-[3/4] w-full max-w-[280px] md:max-w-none mx-auto overflow-hidden border border-neutral-100 shadow-xs select-none rounded-xl">
-                    <img
-                      src="/about/luxury-white-gold-diamond-necklace-dark-background.jpg"
-                      alt="Gold pendant necklace detail"
-                      className="h-full w-full object-cover transition-transform duration-10000 hover:scale-105"
-                    />
-                  </div>
-                </AnimateOnScroll>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* SECTION 4.5: GOLD SHOWCASE */}
+        <GoldShowcaseSection />
 
         {/* SECTION 6: EXPLORE DIAMONDS */}
         <ExploreDiamonds />

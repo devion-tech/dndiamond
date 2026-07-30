@@ -25,7 +25,7 @@ export default function ExploreDiamonds() {
           <div className="lg:col-span-5 flex justify-center w-full order-2 lg:order-1">
             <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-neutral-50 border border-neutral-100 shadow-sm group">
               <img
-                src="/about/about-diamond.png"
+                src="/about/close-up-vintage-car-table.jpg"
                 alt="Exquisite loose diamonds in a luxury box"
                 className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 rounded-2xl"
               />

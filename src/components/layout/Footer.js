@@ -178,8 +178,8 @@ export default function Footer() {
               </button>
               <div
                 className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.shop
-                    ? "max-h-96 opacity-100 mt-4"
-                    : "max-h-0 opacity-0 md:mt-5"
+                  ? "max-h-96 opacity-100 mt-4"
+                  : "max-h-0 opacity-0 md:mt-5"
                   }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
@@ -220,8 +220,8 @@ export default function Footer() {
               </button>
               <div
                 className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.about
-                    ? "max-h-96 opacity-100 mt-4"
-                    : "max-h-0 opacity-0 md:mt-5"
+                  ? "max-h-96 opacity-100 mt-4"
+                  : "max-h-0 opacity-0 md:mt-5"
                   }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
@@ -276,8 +276,8 @@ export default function Footer() {
               </button>
               <div
                 className={`overflow-hidden transition-all duration-300 md:max-h-none md:opacity-100 ${openSections.services
-                    ? "max-h-96 opacity-100 mt-4"
-                    : "max-h-0 opacity-0 md:mt-5"
+                  ? "max-h-96 opacity-100 mt-4"
+                  : "max-h-0 opacity-0 md:mt-5"
                   }`}
               >
                 <ul className="space-y-3.5 text-xs font-light">
@@ -335,8 +335,8 @@ export default function Footer() {
               </button>
               <div
                 className={`overflow-hidden transition-all duration-300 lg:max-h-none lg:opacity-100 ${openSections.locations
-                    ? "max-h-96 opacity-100 mt-4"
-                    : "max-h-0 opacity-0 lg:mt-5"
+                  ? "max-h-96 opacity-100 mt-4"
+                  : "max-h-0 opacity-0 lg:mt-5"
                   }`}
               >
                 <ul className="space-y-2.5 text-xs font-light text-neutral-400">
@@ -353,35 +353,6 @@ export default function Footer() {
                   </div>
                 )}
               </div>
-            </div>
-
-            {/* Newsletter Subscription */}
-            <div className="space-y-4 pt-2">
-              <div className="space-y-1.5">
-                <h4 className="text-xs font-medium tracking-wider text-white">
-                  Join the Inner Circle
-                </h4>
-                <p className="text-[11px] text-neutral-500 font-light leading-relaxed">
-                  Subscribe to receive updates on collections, design
-                  inspiration, and private boutique events.
-                </p>
-              </div>
-
-              <form className="relative flex items-center border-b border-neutral-800 py-1.5 w-full">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="bg-transparent text-xs w-full focus:outline-none text-white placeholder-neutral-600 font-light pr-16"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="absolute right-0 text-white hover:text-neutral-300 text-[10px] font-bold tracking-widest transition-colors cursor-pointer"
-                  aria-label="Subscribe"
-                >
-                  SIGN UP
-                </button>
-              </form>
             </div>
           </div>
         </div>

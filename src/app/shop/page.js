@@ -25,7 +25,6 @@ function ShopContent() {
   const searchQueryParam = searchParams.get("search") || "";
   const categoryParam = searchParams.get("category") || "";
   const subcategoryParam = searchParams.get("subcategory_slug") || "";
-
   // Local filter states
   const [search, setSearch] = useState(searchQueryParam);
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);

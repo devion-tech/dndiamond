@@ -138,8 +138,8 @@ function BestSellersGrid() {
             className="bestsellers-swiper py-2"
           >
             {bestProducts.map((prod) => (
-              <SwiperSlide key={prod?._id}>
-                <div className="h-full pb-4">
+              <SwiperSlide key={prod?._id} className="!h-auto flex">
+                <div className="h-full w-full pb-4 flex flex-col">
                   <ProductCard item={prod} />
                 </div>
               </SwiperSlide>
@@ -178,69 +178,46 @@ function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section
-      id="faq"
-      className="py-14 sm:py-16 lg:py-20 border-t border-neutral-100"
-    >
-      <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16 grid grid-cols-1 md:grid-cols-12 gap-12 sm:gap-16">
-        {/* Left Column */}
-        <div className="md:col-span-5 space-y-6 text-left">
-          <AnimateOnScroll direction="up" delay={100}>
-            <span className="text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
-              Need Help?
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight font-light text-neutral-900 tracking-wide mt-2">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-xs sm:text-sm md:text-base font-light text-neutral-500 leading-relaxed max-w-sm mt-4">
-              Everything you need to know about our jewellery, customisation,
-              certifications, and after-sales care.
-            </p>
-            <div className="pt-4">
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-3.5 border border-neutral-900 bg-neutral-900 text-white hover:bg-transparent hover:text-neutral-900 text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] rounded-xl transition-all duration-300 shadow-xs cursor-pointer"
-              >
-                <span>View all questions</span>
-                <span className="text-sm">→</span>
-              </Link>
-            </div>
-          </AnimateOnScroll>
+    <section className="w-full bg-[#FAFAFA] border-y border-neutral-100 py-16 lg:py-24 px-4 sm:px-8 lg:px-16">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="text-center space-y-3 mb-12">
+          <span className="block text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
+            Frequently Asked Questions
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-wide text-neutral-900">
+            Client Guidance &amp; Policies
+          </h2>
         </div>
 
-        {/* Right Column */}
-        <div className="md:col-span-7 space-y-4">
-          <AnimateOnScroll direction="up" delay={200}>
-            {FAQ_ITEMS.map((item, idx) => {
-              const isOpen = openIndex === idx;
-              return (
-                <div
-                  key={idx}
-                  className="border-b border-neutral-200/60 pb-4 transition-all duration-300"
+        <div className="space-y-4 max-w-3xl mx-auto text-left">
+          {FAQ_ITEMS.map((item, idx) => {
+            const isOpen = openIndex === idx;
+            return (
+              <div
+                key={idx}
+                className="bg-white border border-neutral-200/80 rounded-xl overflow-hidden shadow-2xs transition-all duration-300"
+              >
+                <button
+                  onClick={() => setOpenIndex(isOpen ? -1 : idx)}
+                  className="w-full p-5 sm:p-6 text-left flex justify-between items-center gap-4 cursor-pointer focus:outline-none"
                 >
-                  <button
-                    onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                    className="w-full flex items-center justify-between py-3 text-left focus:outline-none cursor-pointer"
+                  <span className="font-serif text-base sm:text-lg text-neutral-900 font-normal">
+                    {item.question}
+                  </span>
+                  <span
+                    className={`text-neutral-400 text-sm transform transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180 text-neutral-900" : ""}`}
                   >
-                    <span className="font-serif text-sm sm:text-base font-medium text-neutral-900 tracking-wide pr-4">
-                      {item.question}
-                    </span>
-                    <span className="text-lg sm:text-xl font-light text-neutral-400 select-none">
-                      {isOpen ? "−" : "+"}
-                    </span>
-                  </button>
-                  <div
-                    className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
-                      }`}
-                  >
-                    <p className="text-xs sm:text-sm font-light text-neutral-500 leading-relaxed pl-1 pb-2 max-w-2xl">
-                      {item.answer}
-                    </p>
+                    ▼
+                  </span>
+                </button>
+                {isOpen && (
+                  <div className="px-5 sm:px-6 pb-6 pt-0 border-t border-neutral-100/60 text-xs sm:text-sm text-neutral-600 font-light leading-relaxed">
+                    {item.answer}
                   </div>
-                </div>
-              );
-            })}
-          </AnimateOnScroll>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -249,10 +226,10 @@ function FAQSection() {
 
 function GoldShowcaseSection() {
   return (
-    <section className="w-full bg-[#F5F2EB] lg:bg-transparent overflow-hidden my-10">
-      <div className="mx-auto w-full max-w-[1760px] grid grid-cols-1 lg:grid-cols-2">
+    <section className="w-full bg-[#F5F2EB] lg:bg-transparent overflow-hidden my-6 sm:my-10 px-4 sm:px-8 lg:px-0">
+      <div className="mx-auto w-full max-w-[1760px] grid grid-cols-1 lg:grid-cols-2 rounded-2xl bg-[#F5F2EB] overflow-hidden">
         {/* Left Column: Text Content */}
-        <div className=" flex flex-col justify-center items-start px-6 sm:px-12 md:px-20 lg:px-24 py-16 lg:py-24 text-left">
+        <div className="flex flex-col justify-center items-start px-6 sm:px-12 md:px-20 lg:px-24 py-12 sm:py-16 lg:py-24 text-left">
           <AnimateOnScroll direction="up" delay={100}>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-neutral-900 leading-tight tracking-wide">
               Diamond Jewellery For Every Event
@@ -265,26 +242,26 @@ function GoldShowcaseSection() {
                 href="/shop"
                 className="inline-flex justify-center items-center px-8 py-3.5 bg-black hover:bg-[#322520] text-white transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] rounded-full shadow-xs cursor-pointer animate-duration-300"
               >
-                Shop  Collection
+                Shop Collection
               </Link>
             </div>
           </AnimateOnScroll>
         </div>
 
         {/* Right Column: Stacked Images */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-1 lg:gap-1.5">
-          <div className="aspect-[3/2] sm:aspect-square lg:aspect-auto lg:h-[350px] xl:h-[400px] rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-2 p-2 sm:p-4 lg:p-0">
+          <div className="aspect-[3/2] sm:aspect-square lg:aspect-auto lg:h-[350px] xl:h-[400px] rounded-xl sm:rounded-2xl overflow-hidden">
             <img
               src="/about/woman-hand-near-lips.jpg"
               alt="Model wearing golden rings and earrings"
               className="w-full h-full object-cover transition-transform duration-[8000ms] hover:scale-105"
             />
           </div>
-          <div className="aspect-[3/2] sm:aspect-square lg:aspect-auto lg:h-[350px] xl:h-[400px] rounded-2xl overflow-hidden">
+          <div className="aspect-[3/2] sm:aspect-square lg:aspect-auto lg:h-[350px] xl:h-[400px] rounded-xl sm:rounded-2xl overflow-hidden">
             <img
               src="/about/Rings.jpg"
               alt="Gold diamond jewelry collection details"
-              className="w-full h-full  object-cover object-contain o transition-transform duration-[8000ms] hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-[8000ms] hover:scale-105"
             />
           </div>
         </div>

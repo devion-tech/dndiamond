@@ -12,9 +12,10 @@ export default function OurStoryPage() {
       <div className="w-full bg-[#FAFAFA] text-[#121212] font-secondary selection:bg-[#121212]/10 selection:text-[#121212] overflow-x-hidden">
 
         {/* ==================================================
+        {/* ==================================================
             SECTION 1: THE ATELIER HERO (Spacious & Refined)
             ================================================== */}
-        <section className="relative py-12 sm:py-20 md:py-28 lg:py-36 px-4 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
+        <section className="relative py-8 sm:py-14 lg:py-20 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto border-b border-neutral-100">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
             {/* Left Column - Typography */}
             <div className="lg:col-span-6 space-y-4 sm:space-y-6 text-left">
@@ -58,7 +59,7 @@ export default function OurStoryPage() {
         {/* ==================================================
             SECTION 2: CORE VALUES (Asymmetrical Grid)
             ================================================== */}
-        <section className="py-24 sm:py-32 lg:py-40 px-6 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
+        <section className="py-10 sm:py-16 lg:py-24 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto border-b border-neutral-100">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 sm:mb-24">
             <AnimateOnScroll direction="up" delay={100}>
               <span className="text-[10px] font-sans font-bold tracking-[0.35em] text-neutral-400 uppercase block">
@@ -117,7 +118,7 @@ export default function OurStoryPage() {
         {/* ==================================================
             SECTION 3: THE CHRONICLE (Minimal Hairline Timeline)
             ================================================== */}
-        <section className="py-24 sm:py-32 lg:py-40 bg-[#F8F9FA] px-6 sm:px-12 lg:px-20 border-b border-neutral-100">
+        <section className="py-10 sm:py-16 lg:py-24 bg-[#F8F9FA] px-4 sm:px-8 lg:px-16 border-b border-neutral-100">
           <div className="max-w-[1200px] mx-auto">
             {/* Header */}
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 sm:mb-24">
@@ -193,7 +194,7 @@ export default function OurStoryPage() {
         {/* ==================================================
             SECTION 4: FINAL CALL TO ACTION (Elegant Minimal)
             ================================================== */}
-        <section className="bg-white py-24 sm:py-36 text-center relative overflow-hidden">
+        <section className="bg-white py-12 sm:py-20 text-center relative overflow-hidden">
           <div className="relative z-10 max-w-3xl mx-auto px-6 space-y-6 sm:space-y-8">
             <AnimateOnScroll direction="up" delay={100}>
               <span className="text-[10px] font-sans font-bold tracking-[0.35em] text-neutral-400 uppercase block">

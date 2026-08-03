@@ -26,7 +26,7 @@ import {
   fetchWishlist,
   toggleWishlist as toggleWishlistThunk,
 } from "@/redux/wishlistSlice";
-// import { setCurrency } from "@/utils/api";
+import { apiRequest } from "@/utils/api";
 
 const StoreContext = createContext();
 
@@ -266,17 +266,10 @@ export function StoreProvider({ children }) {
     if (registerUserThunk.fulfilled.match(result)) {
       const authState = result.payload;
       // Trigger cart merge and fetches
-      await fetch(
-        "/api/cart/merge",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authState.token}`,
-          },
-          body: JSON.stringify({ guest_id: guestId }),
-        },
-      );
+      await apiRequest("/api/cart/merge", {
+        method: "POST",
+        body: JSON.stringify({ guest_id: guestId }),
+      });
       dispatch(fetchCart({ guestId }));
       dispatch(fetchWishlist({ token: authState.token }));
       return { success: true };
@@ -292,17 +285,10 @@ export function StoreProvider({ children }) {
     if (loginUserThunk.fulfilled.match(result)) {
       const authState = result.payload;
       // Trigger cart merge and fetches
-      await fetch(
-        "/api/cart/merge",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authState.token}`,
-          },
-          body: JSON.stringify({ guest_id: guestId }),
-        },
-      );
+      await apiRequest("/api/cart/merge", {
+        method: "POST",
+        body: JSON.stringify({ guest_id: guestId }),
+      });
       dispatch(fetchCart({ guestId }));
       dispatch(fetchWishlist({ token: authState.token }));
       return { success: true };

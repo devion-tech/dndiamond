@@ -250,10 +250,10 @@ export default function ContactPage() {
             <div className="w-full bg-[#FAF9F6] text-[#111111] font-sans selection:bg-neutral-900/10 selection:text-[#111111] overflow-x-hidden font-light">
 
                 {/* HERO BLOCK */}
-                <section className="bg-black text-white py-20 lg:py-28 relative overflow-hidden">
+                <section className="bg-black text-white py-10 lg:py-18 relative overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-white/5 rounded-full blur-[140px] pointer-events-none" />
 
-                    <div className="relative z-10 max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 text-center space-y-4 js-contact-hero">
+                    <div className="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-16 text-center space-y-4 js-contact-hero">
                         <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-400 uppercase block">
                             RESERVATIONS
                         </span>
@@ -268,7 +268,7 @@ export default function ContactPage() {
                 </section>
 
                 {/* SHOWROOM DIRECTORY */}
-                <section className="py-24 sm:py-32 max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24">
+                <section className="py-12 sm:py-20 max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-16">
                     <div className="text-center space-y-3 mb-16">
                         <span className="text-[11px] font-bold tracking-[0.3em] text-neutral-500 uppercase block">
                             LOCATIONS
@@ -341,9 +341,9 @@ export default function ContactPage() {
                 {/* DUAL COLUMN: INTAKE FORM & FLAGSHIP HIGHLIGHT (MAP) */}
                 <section
                     id="consultation-form-section"
-                    className="py-24 sm:py-32 bg-white border-y border-neutral-100"
+                    className="py-12 sm:py-20 bg-white border-y border-neutral-100"
                 >
-                    <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+                    <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
 
                         {/* LEFT COLUMN: CONCIERGE BOOKING FORM */}
                         <div ref={formRef} className="lg:col-span-7 w-full">

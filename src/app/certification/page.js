@@ -89,7 +89,7 @@ export default function CertificationPage() {
         {/* ==================================================
             SECTION 1: HERO HEADER (Spacious & Refined)
             ================================================== */}
-        <section className="relative py-20 sm:py-28 lg:py-36 px-6 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
+        <section className="relative py-10 sm:py-16 lg:py-24 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto border-b border-neutral-100">
           <div className="max-w-4xl text-left space-y-6">
             <AnimateOnScroll direction="up" delay={100}>
               <div className="flex items-center gap-3">
@@ -112,7 +112,7 @@ export default function CertificationPage() {
         {/* ==================================================
             SECTION 2: INTERACTIVE GIA REPORT CHECKER (Minimal luxury)
             ================================================== */}
-        <section className="py-24 sm:py-32 px-6 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
+        <section className="py-10 sm:py-16 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto border-b border-neutral-100">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
             {/* Left side: Form input & Info */}
@@ -254,7 +254,7 @@ export default function CertificationPage() {
         {/* ==================================================
             SECTION 3: LABORATORY DIRECTORY (Minimal light grid)
             ================================================== */}
-        <section className="py-24 sm:py-32 px-6 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
+        <section className="py-10 sm:py-16 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto border-b border-neutral-100">
           <div className="text-left max-w-3xl space-y-4 mb-16 sm:mb-24">
             <AnimateOnScroll direction="up" delay={100}>
               <span className="text-[10px] font-sans font-bold tracking-[0.3em] text-neutral-400 uppercase">
@@ -309,7 +309,7 @@ export default function CertificationPage() {
         {/* ==================================================
             SECTION 4: ETHICAL ORIGIN & COMPLIANCE
             ================================================== */}
-        <section className="py-24 sm:py-32 px-6 sm:px-12 lg:px-20 max-w-[1600px] mx-auto border-b border-neutral-100">
+        <section className="py-10 sm:py-16 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto border-b border-neutral-100">
           <AnimateOnScroll direction="up" delay={150}>
             <div className="bg-neutral-950 text-white rounded-sm p-8 sm:p-12 md:p-16 shadow-lg text-left flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
               <div className="space-y-4 max-w-3xl">
@@ -339,7 +339,7 @@ export default function CertificationPage() {
         {/* ==================================================
             SECTION 5: SHOWROOM CONSULTATION CTA (Elegant Minimal)
             ================================================== */}
-        <section className="bg-white py-24 sm:py-36 text-center relative overflow-hidden">
+        <section className="bg-white py-12 sm:py-20 text-center relative overflow-hidden">
           <div className="relative z-10 max-w-3xl mx-auto px-6 space-y-6 sm:space-y-8">
             <AnimateOnScroll direction="up" delay={100}>
               <span className="text-[10px] font-sans font-bold tracking-[0.35em] text-neutral-400 uppercase block">

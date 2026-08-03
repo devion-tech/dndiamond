@@ -163,7 +163,7 @@ function AuthModal() {
             onClick={() => closeModal(false)}
             className="fixed inset-0 bg-neutral-900/40 backdrop-blur-xs z-50 transition-opacity duration-300"
           />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md p-8 shadow-2xl z-50 rounded-xs border border-neutral-100 text-left animate-fade-in font-sans">
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[92%] sm:w-full max-w-md p-5 sm:p-8 max-h-[90vh] overflow-y-auto shadow-2xl z-50 rounded-sm border border-neutral-100 text-left animate-fade-in font-sans">
             <div className="flex justify-between items-center border-b border-neutral-100 pb-4 mb-6">
               <span className="text-xs font-bold tracking-[0.25em] text-neutral-800 uppercase">
                 {authMode === "login" ? "Sign In" : "Register Profile"}
@@ -192,8 +192,8 @@ function AuthModal() {
             {authMode === "login" ? (
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Email Address
+                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
+                    Email Address <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="email"
@@ -211,8 +211,8 @@ function AuthModal() {
                   )}
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Password
+                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
+                    Password <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="password"
@@ -256,8 +256,8 @@ function AuthModal() {
             ) : (
               <form onSubmit={handleRegisterSubmit} className="space-y-4">
                 <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Full Name
+                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
+                    Full Name <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="text"
@@ -275,8 +275,8 @@ function AuthModal() {
                   )}
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Email Address
+                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
+                    Email Address <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="email"
@@ -294,8 +294,8 @@ function AuthModal() {
                   )}
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Phone Number
+                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
+                    Phone Number <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="text"
@@ -313,8 +313,8 @@ function AuthModal() {
                   )}
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">
-                    Password
+                  <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
+                    Password <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="password"

@@ -1,9 +1,12 @@
 "use client";
 
 import { getAuthHeaders } from "@/common/token";
+import { useStore } from "@/context/StoreContext";
 import toast from "react-hot-toast";
 
-const baseUrl = (process.env.NEXT_PUBLIC_BACKEND_URL || "https://dndiamond-backend.onrender.com").replace(/\/$/, "");
+const baseUrl = (
+  process.env.NEXT_PUBLIC_API_URL || "https://dndiamond-backend.onrender.com"
+).replace(/\/$/, "");
 
 const getCurrency = () => {
   if (typeof window === "undefined") return "HKD";
@@ -36,9 +39,10 @@ export const apiRequest = async (url, options = {}) => {
 
   if (res.status === 401) {
     const { store } = await import("@/redux/store");
-    const { openModal } = await import("@/redux/authSlice");
+    const { openModal, logoutUser } = await import("@/redux/authSlice");
     toast.error(data?.message);
     store.dispatch(openModal());
+    store.dispatch(logoutUser());
     throw new Error("Unauthorized");
   }
 

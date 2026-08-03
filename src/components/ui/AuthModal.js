@@ -87,6 +87,7 @@ function AuthModal() {
     setAuthLoading(true);
     try {
       const data = await loginUser(fields.email, fields.password);
+      console.log("data", data);
       if (data && data.success) {
         setAuthSuccess("Vault access granted. Welcome.");
         setTimeout(() => {
@@ -193,7 +194,10 @@ function AuthModal() {
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
-                    Email Address <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
+                    Email Address{" "}
+                    <span className="text-red-500 font-bold text-xs ml-0.5">
+                      *
+                    </span>
                   </label>
                   <input
                     type="email"
@@ -212,7 +216,10 @@ function AuthModal() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
-                    Password <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
+                    Password{" "}
+                    <span className="text-red-500 font-bold text-xs ml-0.5">
+                      *
+                    </span>
                   </label>
                   <input
                     type="password"
@@ -257,7 +264,10 @@ function AuthModal() {
               <form onSubmit={handleRegisterSubmit} className="space-y-4">
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
-                    Full Name <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
+                    Full Name{" "}
+                    <span className="text-red-500 font-bold text-xs ml-0.5">
+                      *
+                    </span>
                   </label>
                   <input
                     type="text"
@@ -276,7 +286,10 @@ function AuthModal() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
-                    Email Address <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
+                    Email Address{" "}
+                    <span className="text-red-500 font-bold text-xs ml-0.5">
+                      *
+                    </span>
                   </label>
                   <input
                     type="email"
@@ -295,7 +308,10 @@ function AuthModal() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
-                    Phone Number <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
+                    Phone Number{" "}
+                    <span className="text-red-500 font-bold text-xs ml-0.5">
+                      *
+                    </span>
                   </label>
                   <input
                     type="text"
@@ -314,7 +330,10 @@ function AuthModal() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
-                    Password <span className="text-red-500 font-bold text-xs ml-0.5">*</span>
+                    Password{" "}
+                    <span className="text-red-500 font-bold text-xs ml-0.5">
+                      *
+                    </span>
                   </label>
                   <input
                     type="password"

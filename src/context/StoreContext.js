@@ -285,12 +285,20 @@ export function StoreProvider({ children }) {
     if (loginUserThunk.fulfilled.match(result)) {
       const authState = result.payload;
       // Trigger cart merge and fetches
-      await apiRequest("/api/cart/merge", {
-        method: "POST",
-        body: JSON.stringify({ guest_id: guestId }),
-      });
-      dispatch(fetchCart({ guestId }));
-      dispatch(fetchWishlist({ token: authState.token }));
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080"}/api/cart/merge`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authState.token}`,
+          },
+          body: JSON.stringify({ guest_id: guestId }),
+        },
+      );
+      window.location.reload();
+      // dispatch(fetchCart({ guestId }));
+      // dispatch(fetchWishlist({ token: authState.token }));
       return { success: true };
     }
     return {

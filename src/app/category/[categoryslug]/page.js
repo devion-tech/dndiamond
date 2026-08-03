@@ -204,7 +204,6 @@ function CatalogContent() {
     setSelectedCategory("");
     setMaxPrice(15000);
     setSelectedFilters({});
-    setSelectedOrigin("");
     setSelectedStyle("");
     setSubcategoryId("");
   };

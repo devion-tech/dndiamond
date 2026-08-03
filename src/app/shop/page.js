@@ -252,7 +252,6 @@ function ShopContent() {
     setSelectedCategory("");
     setMaxPrice(25000);
     setSelectedFilters({});
-    setSelectedOrigin("");
     setSubcategorySlug("");
     setSortOrder("latest");
     setPage(1);
@@ -431,7 +430,11 @@ function ShopContent() {
           <span className="text-[#666666] font-normal">Sort:</span>
           <select
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
+            onChange={(e) => {
+              const newSort = e.target.value;
+              setSortOrder(newSort);
+              refetchWith({ sort_by: newSort });
+            }}
             className="bg-transparent text-[#111111] border-none font-medium focus:outline-none cursor-pointer text-xs"
           >
             <option value="latest">Latest</option>

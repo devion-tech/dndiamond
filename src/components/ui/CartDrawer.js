@@ -207,12 +207,12 @@ export default function CartDrawer({ isOpen, onClose }) {
         onClick={onClose}
       ></div>
 
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
+      <div className="absolute inset-y-0 right-0 max-w-full flex">
         <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col glass-drawer">
           {/* Drawer Header */}
-          <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+          <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 flex items-center justify-between">
             <div className="flex flex-col text-left">
-              <h2 className="text-sm font-bold tracking-[0.2em] text-slate-800 uppercase">
+              <h2 className="text-xs sm:text-sm font-bold tracking-[0.2em] text-slate-800 uppercase">
                 Shopping Cart
               </h2>
               <span className="text-[10px] text-slate-400 font-semibold tracking-wider mt-0.5">
@@ -232,7 +232,7 @@ export default function CartDrawer({ isOpen, onClose }) {
           {/* Order Confirmation Screen */}
           {cart?.items?.length === 0 ? (
             // Empty State
-            <div className="flex-1 flex flex-col justify-center items-center text-center p-8 space-y-4">
+            <div className="flex-1 flex flex-col justify-center items-center text-center p-6 space-y-4">
               <div className="h-16 w-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-2">
                 <FaLock size={20} />
               </div>
@@ -243,12 +243,13 @@ export default function CartDrawer({ isOpen, onClose }) {
                 Explore our custom ring builders and loose GIA-certified
                 diamonds to find your perfect pieces.
               </p>
-              <button
-                onClick={onClose}
-                className="bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300"
-              >
-                Browse Collections
-              </button>
+              <Link href="/shop" onClick={onClose}>
+                <button
+                  className="bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300"
+                >
+                  Browse Collections
+                </button>
+              </Link>
             </div>
           ) : (
             // Content State

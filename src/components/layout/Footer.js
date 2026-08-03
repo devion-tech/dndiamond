@@ -291,22 +291,6 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      href="/orders"
-                      className="hover:text-white transition-colors duration-300 block py-0.5"
-                    >
-                      Track Order
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/profile"
-                      className="hover:text-white transition-colors duration-300 block py-0.5"
-                    >
-                      My Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="/#faq"
                       className="hover:text-white transition-colors duration-300 block py-0.5"
                     >

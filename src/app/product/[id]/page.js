@@ -487,12 +487,12 @@ export default function ProductDetail({ params }) {
                   {galleryImages.map((img, idx) => (
                     <SwiperSlide
                       key={idx}
-                      className="flex items-center justify-center p-8 h-full"
+                      className="flex items-center justify-center p-2 sm:p-6 h-full"
                     >
                       <img
                         src={img}
                         alt={`${product.title} - View ${idx + 1}`}
-                        className="w-full h-full object-contain select-none max-h-[580px] transition-transform duration-500 hover:scale-105"
+                        className="w-full h-full object-contain select-none max-h-[350px] sm:max-h-[580px] transition-transform duration-500 hover:scale-105"
                       />
                     </SwiperSlide>
                   ))}
@@ -500,7 +500,7 @@ export default function ProductDetail({ params }) {
 
                 {/* Offer Tag */}
                 {product.discount > 0 && (
-                  <span className="absolute top-5 left-5 z-20 px-3 py-1 bg-[#111111] text-[10px] font-medium text-white rounded-full tracking-wider uppercase">
+                  <span className="absolute top-3 left-3 sm:top-5 sm:left-5 z-20 px-3 py-1 bg-[#111111] text-[10px] font-medium text-white rounded-full tracking-wider uppercase">
                     {product.discount}% OFF
                   </span>
                 )}
@@ -509,13 +509,13 @@ export default function ProductDetail({ params }) {
                 {galleryImages.length > 1 && (
                   <>
                     <button
-                      className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-[#111111] shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer"
+                      className="swiper-button-prev-custom absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-[#111111] shadow-sm flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 cursor-pointer"
                       aria-label="Previous Slide"
                     >
                       <FaChevronLeft size={12} />
                     </button>
                     <button
-                      className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-[#111111] shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer"
+                      className="swiper-button-next-custom absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-[#111111] shadow-sm flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 cursor-pointer"
                       aria-label="Next Slide"
                     >
                       <FaChevronRight size={12} />
@@ -530,7 +530,7 @@ export default function ProductDetail({ params }) {
                   <Swiper
                     onSwiper={setThumbsSwiper}
                     slidesPerView={5}
-                    spaceBetween={12}
+                    spaceBetween={8}
                     freeMode={true}
                     watchSlidesProgress={true}
                     modules={[FreeMode, Navigation, Thumbs]}
@@ -539,7 +539,7 @@ export default function ProductDetail({ params }) {
                     {galleryImages.map((img, idx) => (
                       <SwiperSlide key={idx}>
                         <div
-                          className={`h-20 sm:h-22 rounded-2xl overflow-hidden border bg-[#FAFAFA] p-1 transition-all duration-300 ${selectedImage === idx
+                          className={`h-16 sm:h-22 rounded-xl sm:rounded-2xl overflow-hidden border bg-[#FAFAFA] p-1 transition-all duration-300 ${selectedImage === idx
                             ? "border-[#111111] ring-1 ring-[#111111]"
                             : "border-[#ECECEC] hover:border-[#999999] opacity-70"
                             }`}
@@ -559,22 +559,12 @@ export default function ProductDetail({ params }) {
 
             {/* RIGHT COLUMN: STICKY PURCHASING PANE */}
             <div className="lg:col-span-5 text-left sticky top-[90px] space-y-5">
-              {/* Product Header & Rating */}
+              {/* Product Header */}
               <div className="space-y-2 border-b border-[#ECECEC] pb-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-medium uppercase tracking-widest text-[#666666]">
                     {product.category}
                   </span>
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex text-[#111111] text-xs">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} size={11} />
-                      ))}
-                    </div>
-                    <span className="text-xs text-[#666666] font-normal">
-                      5.0 (48 Reviews)
-                    </span>
-                  </div>
                 </div>
 
                 <div className="flex justify-between items-start gap-4 pt-1">
@@ -638,7 +628,7 @@ export default function ProductDetail({ params }) {
                   <button
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
-                    className={`flex-1 h-[54px] rounded-full text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-sm ${isOutOfStock
+                    className={`flex-1 py-3 rounded-full text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-sm ${isOutOfStock
                       ? "bg-[#CCCCCC] text-[#888888] cursor-not-allowed"
                       : "bg-[#111111] hover:bg-[#333333] text-white cursor-pointer"
                       }`}
@@ -648,7 +638,7 @@ export default function ProductDetail({ params }) {
                   <button
                     onClick={handleBuyNow}
                     disabled={isOutOfStock}
-                    className={`flex-1 h-[54px] rounded-full border text-xs font-medium uppercase tracking-wider flex items-center justify-center transition-all duration-300 ${isOutOfStock
+                    className={`flex-1 py-2 rounded-full border text-xs font-medium uppercase tracking-wider flex items-center justify-center transition-all duration-300 ${isOutOfStock
                       ? "border-[#CCCCCC] text-[#888888] cursor-not-allowed"
                       : "border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white cursor-pointer"
                       }`}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Layout from "@/components/layout/Layout";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
+import Link from "next/link";
 import {
     FaChevronDown,
     FaChevronLeft,
@@ -310,8 +311,8 @@ export default function AboutPage() {
                 {/* ==================================================
                     SECTION 1: EDITORIAL MINIMALIST HERO (Discover World's Best Jewelry)
                     ================================================== */}
-                <section className="relative w-full pt-16 pb-20 sm:pt-24 sm:pb-28">
-                    <div className="container mx-auto px-6 sm:px-12 lg:px-24 flex flex-col items-center">
+                <section className="relative w-full pt-8 pb-12 sm:pt-16 sm:pb-20">
+                    <div className="container mx-auto px-4 sm:px-8 lg:px-16 flex flex-col items-center">
 
                         {/* Title Header with inline oval image */}
                         <div className="w-full text-center space-y-4 js-about-hero-content">
@@ -347,11 +348,11 @@ export default function AboutPage() {
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-xl"
                                     />
                                 </div>
-                                <a href="/jewelry" className="inline-block">
+                                <Link href="/shop" className="inline-block">
                                     <button className="px-6 py-2 border border-neutral-800 rounded-xl text-xs font-semibold uppercase tracking-widest text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all duration-300 flex items-center gap-2 cursor-pointer bg-transparent">
                                         Shop Now <span className="text-sm">→</span>
                                     </button>
-                                </a>
+                                </Link>
                             </div>
 
                             {/* Middle Column: Dominant Portrait Necklaces Image */}
@@ -413,9 +414,9 @@ export default function AboutPage() {
                     ================================================== */}
                 <section
                     ref={orbitSectionRef}
-                    className="py-24 sm:py-32 bg-[#FAF9F6] relative border-t border-neutral-200 overflow-hidden"
+                    className="py-12 sm:py-20 bg-[#FAF9F6] relative border-t border-neutral-200 overflow-hidden"
                 >
-                    <div className="max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                    <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
                         {/* Left Column: Interactive Circular Orbit Widget */}
                         <div className="lg:col-span-7 flex justify-center items-center h-[420px] sm:h-[600px] relative">
                             {/* Circular Track Line */}
@@ -499,8 +500,8 @@ export default function AboutPage() {
                 {/* ==================================================
                     SECTION: OUR PROMISE
                     ================================================== */}
-                <section className="py-20 sm:py-28 bg-[#FAF9F6] border-t border-neutral-200 text-center">
-                    <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 space-y-12">
+                <section className="py-12 sm:py-20 bg-[#FAF9F6] border-t border-neutral-200 text-center">
+                    <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-16 space-y-8">
                         <div className="max-w-2xl mx-auto space-y-4">
                             <AnimateOnScroll direction="up" delay={100}>
                                 <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-wide text-neutral-900">
@@ -569,7 +570,7 @@ export default function AboutPage() {
                 {/* ==================================================
                     SECTION 8: FINAL CTA (Luxury Dark Section)
                     ================================================== */}
-                <section className="bg-[#0B0B0B] py-24 sm:py-32 lg:py-40 text-center relative overflow-hidden">
+                <section className="bg-[#0B0B0B] py-14 sm:py-24 lg:py-28 text-center relative overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
 
                     <div className="relative z-10 max-w-3xl mx-auto px-6 js-cta-content space-y-6 sm:space-y-8">
@@ -584,22 +585,22 @@ export default function AboutPage() {
                         </p>
 
                         <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <a href="/jewelry">
+                            <Link href="/shop">
                                 <button className="group relative rounded-xl overflow-hidden px-10 py-4 bg-white border border-white text-black text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer">
                                     <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                                         Explore Collection
                                     </span>
                                     <span className="absolute inset-0 bg-neutral-900 origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                                 </button>
-                            </a>
-                            <a href="/contact">
+                            </Link>
+                            <Link href="/contact">
                                 <button className="group relative overflow-hidden rounded-xl px-10 py-4 border border-white text-white text-xs font-bold uppercase tracking-[0.25em] transition-colors duration-500 focus:outline-none cursor-pointer bg-transparent">
                                     <span className="relative z-10 group-hover:text-[#111111] transition-colors duration-500">
                                         Book Atelier Visit
                                     </span>
                                     <span className="absolute inset-0 bg-white origin-bottom scale-y-0 transition-transform duration-500 ease-out group-hover:scale-y-100 -z-0" />
                                 </button>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </section>

@@ -347,10 +347,10 @@ export default function CheckoutPage() {
   return (
     <>
       <Layout>
-        <div className="bg-slate-background min-h-screen py-10 md:py-16 px-4 md:px-8 font-sans">
+        <div className="bg-slate-background min-h-screen py-6 sm:py-10 md:py-16 px-3 sm:px-6 md:px-8 font-sans">
           <div className="max-w-7xl mx-auto flex flex-col gap-4">
             {/* Back Navigation Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+            <div className="flex flex-wrap items-center justify-between pb-4 border-b border-slate-200 gap-2">
               <Link
                 href="/"
                 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition-colors"
@@ -362,12 +362,12 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start mt-2 sm:mt-4">
               {/* Left Side: Address Section */}
-              <div className="lg:col-span-7 space-y-8">
-                <form onSubmit={handlePlaceOrder} className="space-y-8">
+              <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+                <form onSubmit={handlePlaceOrder} className="space-y-6 sm:space-y-8">
                   {/* Shipping Address Card */}
-                  <div className="bg-white border border-slate-100 shadow-md rounded-3xl p-6 md:p-8 space-y-6">
+                  <div className="bg-white border border-slate-100 shadow-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
                     <div className="flex items-center gap-2.5 pb-4 border-b border-slate-100">
                       <span className="h-6 w-6 rounded-full bg-neutral-900 text-white font-bold text-[10px] flex items-center justify-center">
                         1

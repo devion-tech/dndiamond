@@ -556,7 +556,6 @@ export default function ProductDetail({ params }) {
                 </div>
               )}
             </div>
-
             {/* RIGHT COLUMN: STICKY PURCHASING PANE */}
             <div className="lg:col-span-5 text-left sticky top-[90px] space-y-5">
               {/* Product Header */}

@@ -280,7 +280,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 <div className="flex justify-center border-b border-neutral-100 pb-4 mb-6 gap-8 w-full">
                   <button
                     onClick={() => handleTabClick("labgrown")}
-                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
+                    className={`nav-link-animated text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
                       jewelryTab === "labgrown"
                         ? "border-neutral-900 text-neutral-900 font-medium"
                         : "border-transparent text-neutral-400 hover:text-neutral-600"
@@ -290,7 +290,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                   </button>
                   <button
                     onClick={() => handleTabClick("natural")}
-                    className={`text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
+                    className={`nav-link-animated text-[11px] font-medium tracking-[0.2em] uppercase transition-all pb-2 border-b-2 cursor-pointer ${
                       jewelryTab === "natural"
                         ? "border-neutral-900 text-neutral-900 font-medium"
                         : "border-transparent text-neutral-400 hover:text-neutral-600"
@@ -304,11 +304,11 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                 <div className="grid grid-cols-6 gap-8 w-full">
                   {activeCategories.map((cat) => (
                     <div key={cat.name} className="space-y-4">
-                      <h4 className="text-[11px] lg:text-xs xl:text-base font-medium tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
+                      <h4 className="w-fit text-[11px] lg:text-xs xl:text-base font-medium tracking-wider text-neutral-900 uppercase border-b border-neutral-100 pb-1">
                         <Link
                           href={`/category/${cat?.slug}`}
                           onClick={() => setIsJewelryHovered(false)}
-                          className="hover:text-neutral-500 transition-colors"
+                          className="nav-link-animated hover:text-neutral-500 transition-colors"
                         >
                           {getDisplayCategoryName(cat.name)}
                         </Link>
@@ -321,7 +321,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
                                 <Link
                                   href={`/category/${cat?.slug}/${sub?.slug}`}
                                   onClick={() => setIsJewelryHovered(false)}
-                                  className="hover:text-neutral-900 transition-colors block py-0.5"
+                                  className="nav-link-animated w-fit hover:text-neutral-900 transition-colors block py-0.5"
                                 >
                                   {sub.name}
                                 </Link>

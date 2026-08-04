@@ -260,7 +260,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-all duration-300 cursor-pointer">
+              <button className="nav-link-animated flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-all duration-300 cursor-pointer pb-1">
                 <span>Jewelry</span>
                 <FaChevronDown
                   size={7}
@@ -337,7 +337,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
             {/* Diamond */}
             <Link
               href="/diamonds"
-              className="text-[11px] sm:text-xs xl:text-xs font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-colors"
+              className="nav-link-animated text-[11px] sm:text-xs xl:text-xs font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-colors pb-1"
             >
               Diamond
             </Link>
@@ -348,7 +348,7 @@ export default function Header({ onOpenCart, onOpenWishlist }) {
               onMouseEnter={handleAboutMouseEnter}
               onMouseLeave={handleAboutMouseLeave}
             >
-              <button className="flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-all duration-300 cursor-pointer">
+              <button className="nav-link-animated flex items-center gap-1 text-[11px] sm:text-xs xl:text-[12px] font-medium tracking-widest text-neutral-800 hover:text-neutral-950 uppercase transition-all duration-300 cursor-pointer pb-1">
                 <span>About</span>
                 <FaChevronDown
                   size={7}

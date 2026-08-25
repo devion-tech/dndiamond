@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa";
 import { useStore } from "@/context/StoreContext";
 import confetti from "canvas-confetti";
+import Link from "next/link";
 
 export default function CartDrawer({ isOpen, onClose }) {
   const router = useRouter();
@@ -244,9 +245,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                 diamonds to find your perfect pieces.
               </p>
               <Link href="/shop" onClick={onClose}>
-                <button
-                  className="bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300"
-                >
+                <button className="bg-neutral-900 text-white border border-neutral-900 hover:bg-white hover:text-neutral-900 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300">
                   Browse Collections
                 </button>
               </Link>
